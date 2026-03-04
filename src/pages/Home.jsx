@@ -1,40 +1,41 @@
 import { Link } from 'react-router-dom';
+import { Dumbbell, Apple, Brain, TrendingUp, Target, Users, Moon } from 'lucide-react';
 import Card from '../components/ui/Card';
 
 const Home = () => {
     const features = [
         {
-            icon: '💪',
+            Icon: Dumbbell,
             title: 'Personal Training',
             description: 'Customized workout programs designed for your specific goals and fitness level.',
         },
         {
-            icon: '🍎',
+            Icon: Apple,
             title: 'Nutrition Plans',
             description: 'Science-backed diet plans that fuel your body and support your transformation.',
         },
         {
-            icon: '🧠',
+            Icon: Brain,
             title: 'Mind-Body Balance',
             description: 'Holistic approach combining physical training with mental wellness.',
         },
         {
-            icon: '📊',
+            Icon: TrendingUp,
             title: 'Progress Tracking',
             description: 'Regular assessments and adjustments to ensure continuous improvement.',
         },
         {
-            icon: '🎯',
+            Icon: Target,
             title: 'Goal Setting',
             description: 'Strategic planning to help you achieve sustainable results.',
         },
         {
-            icon: '🤝',
+            Icon: Users,
             title: 'Community Support',
             description: 'Join the Tatva Tribe and connect with like-minded fitness enthusiasts.',
         },
         {
-            icon: '😴',
+            Icon: Moon,
             title: 'Rest & Recovery',
             description: 'Restorative sleep and active recovery to rebuild stronger and prevent burnout.',
         },
@@ -107,7 +108,9 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {features.map((feature, index) => (
                             <Card key={index} className="text-center">
-                                <div className="text-4xl mb-4">{feature.icon}</div>
+                                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <feature.Icon className="w-8 h-8 text-gold-400" />
+                                </div>
                                 <h3 className="heading-sm text-cream mb-2">{feature.title}</h3>
                                 <p className="text-cream/70 text-sm">{feature.description}</p>
                             </Card>

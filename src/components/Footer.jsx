@@ -24,7 +24,13 @@ const Footer = () => {
                     {/* Brand */}
                     <div className="space-y-4">
                         <Link to="/" className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gold-400 rounded-full flex items-center justify-center">
+                            <img
+                                src="/tatva-tribe-website/images/logo.png"
+                                alt="The Tatva Tribe"
+                                className="w-10 h-10 rounded-full object-cover"
+                                onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                            />
+                            <div className="w-10 h-10 bg-gold-400 rounded-full items-center justify-center hidden">
                                 <span className="text-dark font-heading font-bold text-lg">T</span>
                             </div>
                             <span className="font-heading font-bold text-xl text-cream">

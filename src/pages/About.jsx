@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target, Flame, TrendingDown, RefreshCw } from 'lucide-react';
 import Card from '../components/ui/Card';
 
 const About = () => {
@@ -8,65 +9,65 @@ const About = () => {
             english: 'Body Discipline',
             description: 'Anything which promotes Movement.',
             examples: 'Strength training, Endurance, Yoga, Aerobics',
-            icon: '💪',
+            Icon: Dumbbell,
         },
         {
             hindi: 'आहार',
             english: 'Nutrition',
             description: 'Mindful eating, balancing macros, staying hydrated.',
             examples: 'Real food = Real energy',
-            icon: '🍎',
+            Icon: Apple,
         },
         {
             hindi: 'मानस',
             english: 'Mental Toughness',
             description: 'Meditation, Breathwork, Journaling.',
             examples: 'Mental resilience > Digital Chaos',
-            icon: '🧠',
+            Icon: Brain,
         },
         {
             hindi: 'निद्रा',
             english: 'Rest & Recovery',
             description: 'Restorative sleep, active recovery, mobility.',
             examples: 'Good rest = Better mood, strength and health span',
-            icon: '😴',
+            Icon: Moon,
         },
         {
             hindi: 'समाज',
             english: 'Community & Connections',
             description: 'Building good relations, socialising.',
             examples: 'Growing together',
-            icon: '🤝',
+            Icon: Users,
         },
         {
             hindi: 'प्रकृति',
             english: 'Nature',
             description: 'Aligning with nature, seasonal rhythms in diet & activity.',
             examples: 'Sunlight, fresh air = Natural healers',
-            icon: '🌿',
+            Icon: Leaf,
         },
         {
             hindi: 'उद्देश्य',
             english: 'Purpose',
             description: 'Keeping the Right intention, setting a goal.',
             examples: 'No purpose = No Growth',
-            icon: '🎯',
+            Icon: Target,
         },
     ];
 
     const audienceTypes = [
         {
-            icon: '🔥',
+            Icon: Flame,
             title: 'The Motivated Beginner',
             description: 'Highly motivated, but don\'t know where to start.',
         },
         {
-            icon: '📉',
+            Icon: TrendingDown,
             title: 'The Inconsistent Learner',
             description: 'Know a little, but struggle to stay consistent.',
         },
         {
-            icon: '🔄',
+            Icon: RefreshCw,
             title: 'The Plateau Warrior',
             description: 'Stuck in the same routine for years.',
         },
@@ -151,13 +152,26 @@ const About = () => {
                             </a>
                         </div>
                         <div className="order-1 lg:order-2 relative">
-                            <div className="aspect-square max-w-md mx-auto rounded-2xl bg-gradient-to-br from-forest-500 to-forest-700 flex items-center justify-center overflow-hidden">
-                                <div className="text-center p-8">
-                                    <div className="w-32 h-32 bg-gold-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold-400/30">
-                                        <span className="text-5xl">🏋️</span>
+                            <div className="aspect-square max-w-md mx-auto rounded-2xl overflow-hidden shadow-xl shadow-black/40">
+                                {/*
+                                  TRAINER PHOTO:
+                                  1. Drop your photo into public/images/trainer.jpg
+                                  2. Remove the fallback <div> below — the <img> will show automatically
+                                */}
+                                <img
+                                    src="/tatva-tribe-website/images/trainer.jpg"
+                                    alt="Advay Shidhaye — Master Trainer"
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                                />
+                                <div className="w-full h-full bg-gradient-to-br from-forest-500 to-forest-700 items-center justify-center hidden">
+                                    <div className="text-center p-8">
+                                        <div className="w-32 h-32 bg-gold-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold-400/30">
+                                            <Dumbbell className="w-14 h-14 text-dark" />
+                                        </div>
+                                        <p className="text-cream font-heading font-bold text-xl">@advayshidhaye</p>
+                                        <p className="text-cream/60 text-sm mt-2">Master Trainer</p>
                                     </div>
-                                    <p className="text-cream font-heading font-bold text-xl">@advayshidhaye</p>
-                                    <p className="text-cream/60 text-sm mt-2">Master Trainer</p>
                                 </div>
                             </div>
                             <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold-400/20 rounded-full blur-xl" />
@@ -190,8 +204,8 @@ const About = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         {tatvas.slice(0, 6).map((tatva, index) => (
                             <Card key={index} className="text-center group">
-                                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    {tatva.icon}
+                                <div className="w-14 h-14 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                    <tatva.Icon className="w-7 h-7 text-gold-400" />
                                 </div>
                                 <div className="mb-3">
                                     <span className="text-3xl font-bold text-gold-400 font-heading">
@@ -210,8 +224,8 @@ const About = () => {
                     {/* 7th Tatva - Featured */}
                     <div className="max-w-md mx-auto">
                         <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30">
-                            <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                                {tatvas[6].icon}
+                            <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <tatvas[6].Icon className="w-8 h-8 text-gold-400" />
                             </div>
                             <div className="mb-3">
                                 <span className="text-4xl font-bold text-gold-400 font-heading">
@@ -244,7 +258,9 @@ const About = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                         {audienceTypes.map((type, index) => (
                             <Card key={index} className="text-center">
-                                <div className="text-4xl mb-4">{type.icon}</div>
+                                <div className="w-14 h-14 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <type.Icon className="w-7 h-7 text-gold-400" />
+                                </div>
                                 <h3 className="heading-sm text-cream mb-3">{type.title}</h3>
                                 <p className="text-cream/70 text-sm">{type.description}</p>
                             </Card>

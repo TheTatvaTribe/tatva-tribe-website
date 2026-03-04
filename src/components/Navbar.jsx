@@ -35,9 +35,19 @@ const Navbar = () => {
         >
             <div className="container">
                 <div className="flex items-center justify-between">
-                    {/* Logo */}
+                    {/* Logo
+                        To use a custom logo image:
+                        1. Drop your logo file into public/images/logo.png (PNG with transparent bg works best)
+                        2. The <img> below will load it automatically; on error it falls back to the gold "T"
+                    */}
                     <Link to="/" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 bg-gold-400 rounded-full flex items-center justify-center">
+                        <img
+                            src="/tatva-tribe-website/images/logo.png"
+                            alt="The Tatva Tribe"
+                            className="w-10 h-10 rounded-full object-cover"
+                            onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                        />
+                        <div className="w-10 h-10 bg-gold-400 rounded-full items-center justify-center hidden">
                             <span className="text-dark font-heading font-bold text-lg">T</span>
                         </div>
                         <span className="font-heading font-bold text-xl text-cream group-hover:text-gold-400 transition-colors">

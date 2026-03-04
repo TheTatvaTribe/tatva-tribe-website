@@ -33,6 +33,11 @@ const Home = () => {
             title: 'Community Support',
             description: 'Join the Tatva Tribe and connect with like-minded fitness enthusiasts.',
         },
+        {
+            icon: '😴',
+            title: 'Rest & Recovery',
+            description: 'Restorative sleep and active recovery to rebuild stronger and prevent burnout.',
+        },
     ];
 
     const testimonials = [

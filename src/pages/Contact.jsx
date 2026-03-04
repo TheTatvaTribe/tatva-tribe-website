@@ -2,9 +2,10 @@ import { useState } from 'react';
 import emailjs from '@emailjs/browser';
 import Card from '../components/ui/Card';
 
-// ⚠️ REPLACE THESE WITH YOUR EMAILJS CREDENTIALS
+// ⚠️ REPLACE EMAILJS_SERVICE_ID with your real service ID from emailjs.com dashboard
+// It should look like: 'service_abc1234'  (Dashboard → Email Services → Service ID)
 const EMAILJS_SERVICE_ID = 'demo_gmail_service1';
-const EMAILJS_TEMPLATE_ID = 'template_ulajsyq';
+const EMAILJS_TEMPLATE_ID = 'template_57zmbr7';
 const EMAILJS_PUBLIC_KEY = '8JhoU9RtBGUidcTuP';
 
 const Contact = () => {

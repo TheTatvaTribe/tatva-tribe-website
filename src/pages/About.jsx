@@ -55,6 +55,8 @@ const About = () => {
         },
     ];
 
+    const SeventhTatvaIcon = tatvas[6].Icon;
+
     const audienceTypes = [
         {
             Icon: Flame,
@@ -225,7 +227,7 @@ const About = () => {
                     <div className="max-w-md mx-auto">
                         <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30">
                             <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                                <tatvas[6].Icon className="w-8 h-8 text-gold-400" />
+                                <SeventhTatvaIcon className="w-8 h-8 text-gold-400" />
                             </div>
                             <div className="mb-3">
                                 <span className="text-4xl font-bold text-gold-400 font-heading">

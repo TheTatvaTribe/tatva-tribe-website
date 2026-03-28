@@ -79,6 +79,7 @@ const Navbar = () => {
                         onClick={() => setIsOpen(!isOpen)}
                         className="md:hidden p-2 text-cream hover:text-gold-400 transition-colors"
                         aria-label="Toggle menu"
+                        aria-expanded={isOpen}
                     >
                         <svg
                             className="w-6 h-6"

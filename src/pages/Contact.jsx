@@ -46,8 +46,14 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
         setError('');
+
+        if (!formData.fitnessLevel) {
+            setError('Please select your current fitness level.');
+            return;
+        }
+
+        setIsSubmitting(true);
 
         try {
             await emailjs.send(

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@100;200;300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -23,17 +23,20 @@
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Antonio', system-ui, sans-serif;
     background-color: var(--color-dark);
     color: var(--color-cream);
     min-height: 100vh;
-    line-height: 1.6;
+    line-height: 1.65;
+    font-weight: 400;
+    letter-spacing: 0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', system-ui, sans-serif;
-    font-weight: 700;
-    line-height: 1.2;
+    font-family: 'Antonio', system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
   }
 
   a {
@@ -54,7 +57,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg transition-all duration-300 cursor-pointer;
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg transition-all duration-300 cursor-pointer tracking-widest uppercase text-sm;
   }
 
   .btn-primary {
@@ -78,19 +81,19 @@
   }
 
   .heading-xl {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+    @apply text-5xl md:text-6xl lg:text-7xl font-semibold tracking-wide;
   }
 
   .heading-lg {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold;
+    @apply text-4xl md:text-5xl lg:text-6xl font-semibold tracking-wide;
   }
 
   .heading-md {
-    @apply text-2xl md:text-3xl font-bold;
+    @apply text-3xl md:text-4xl font-semibold tracking-wide;
   }
 
   .heading-sm {
-    @apply text-xl md:text-2xl font-semibold;
+    @apply text-2xl md:text-3xl font-medium tracking-wide;
   }
 
   .text-gradient {

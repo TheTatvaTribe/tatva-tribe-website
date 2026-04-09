@@ -10,6 +10,12 @@ const About = () => {
             description: 'Anything which promotes Movement.',
             examples: 'Strength training, Endurance, Yoga, Aerobics',
             Icon: Dumbbell,
+            /*
+             * TATVA IMAGE — Sharira (Body Discipline)
+             * Drop your image into public/images/tatvas/sharira.jpg
+             * Then uncomment the line below:
+             */
+            // image: '/tatva-tribe-website/images/tatvas/sharira.jpg',
         },
         {
             hindi: 'आहार',
@@ -17,6 +23,12 @@ const About = () => {
             description: 'Mindful eating, balancing macros, staying hydrated.',
             examples: 'Real food = Real energy',
             Icon: Apple,
+            /*
+             * TATVA IMAGE — Aahaar (Nutrition)
+             * Drop your image into public/images/tatvas/aahaar.jpg
+             * Then uncomment the line below:
+             */
+            // image: '/tatva-tribe-website/images/tatvas/aahaar.jpg',
         },
         {
             hindi: 'मानस',
@@ -24,6 +36,12 @@ const About = () => {
             description: 'Meditation, Breathwork, Journaling.',
             examples: 'Mental resilience > Digital Chaos',
             Icon: Brain,
+            /*
+             * TATVA IMAGE — Manas (Mental Toughness)
+             * Drop your image into public/images/tatvas/manas.jpg
+             * Then uncomment the line below:
+             */
+            // image: '/tatva-tribe-website/images/tatvas/manas.jpg',
         },
         {
             hindi: 'निद्रा',
@@ -31,6 +49,12 @@ const About = () => {
             description: 'Restorative sleep, active recovery, mobility.',
             examples: 'Good rest = Better mood, strength and health span',
             Icon: Moon,
+            /*
+             * TATVA IMAGE — Nidra (Rest & Recovery)
+             * Drop your image into public/images/tatvas/nidra.jpg
+             * Then uncomment the line below:
+             */
+            // image: '/tatva-tribe-website/images/tatvas/nidra.jpg',
         },
         {
             hindi: 'समाज',
@@ -38,6 +62,12 @@ const About = () => {
             description: 'Building good relations, socialising.',
             examples: 'Growing together',
             Icon: Users,
+            /*
+             * TATVA IMAGE — Samaaj (Community)
+             * Drop your image into public/images/tatvas/samaaj.jpg
+             * Then uncomment the line below:
+             */
+            // image: '/tatva-tribe-website/images/tatvas/samaaj.jpg',
         },
         {
             hindi: 'प्रकृति',
@@ -45,6 +75,12 @@ const About = () => {
             description: 'Aligning with nature, seasonal rhythms in diet & activity.',
             examples: 'Sunlight, fresh air = Natural healers',
             Icon: Leaf,
+            /*
+             * TATVA IMAGE — Prakriti (Nature)
+             * Drop your image into public/images/tatvas/prakriti.jpg
+             * Then uncomment the line below:
+             */
+            // image: '/tatva-tribe-website/images/tatvas/prakriti.jpg',
         },
         {
             hindi: 'उद्देश्य',
@@ -52,6 +88,12 @@ const About = () => {
             description: 'Keeping the Right intention, setting a goal.',
             examples: 'No purpose = No Growth',
             Icon: Target,
+            /*
+             * TATVA IMAGE — Uddeshya (Purpose)
+             * Drop your image into public/images/tatvas/uddeshya.jpg
+             * Then uncomment the line below:
+             */
+            // image: '/tatva-tribe-website/images/tatvas/uddeshya.jpg',
         },
     ];
 
@@ -156,7 +198,8 @@ const About = () => {
                                 {/*
                                   TRAINER PHOTO:
                                   1. Drop your photo into public/images/trainer.jpg
-                                  2. Remove the fallback <div> below — the <img> will show automatically
+                                     (supported formats: .jpg, .jpeg, .png, .webp)
+                                  2. The fallback placeholder auto-hides when the image loads
                                 */}
                                 <img
                                     src="/tatva-tribe-website/images/trainer.jpg"
@@ -203,40 +246,68 @@ const About = () => {
                     {/* Tatva Cards Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         {tatvas.slice(0, 6).map((tatva, index) => (
-                            <Card key={index} className="text-center group">
-                                <div className="w-14 h-14 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    <tatva.Icon className="w-7 h-7 text-gold-400" />
+                            <Card key={index} className="text-center group overflow-hidden !p-0">
+                                {tatva.image ? (
+                                    <div className="w-full h-44 overflow-hidden">
+                                        <img
+                                            src={tatva.image}
+                                            alt={tatva.english}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="w-full h-44 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center">
+                                        <div className="w-14 h-14 bg-gold-400/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                            <tatva.Icon className="w-7 h-7 text-gold-400" />
+                                        </div>
+                                    </div>
+                                )}
+                                <div className="p-6">
+                                    <div className="mb-2">
+                                        <span className="text-3xl font-semibold text-gold-400 font-heading tracking-wide">
+                                            {tatva.hindi}
+                                        </span>
+                                    </div>
+                                    <h3 className="heading-sm text-cream mb-3">{tatva.english}</h3>
+                                    <p className="text-cream/70 text-sm mb-2">{tatva.description}</p>
+                                    <p className="text-gold-400/80 text-xs italic">
+                                        ({tatva.examples})
+                                    </p>
                                 </div>
-                                <div className="mb-3">
-                                    <span className="text-3xl font-bold text-gold-400 font-heading">
-                                        {tatva.hindi}
-                                    </span>
-                                </div>
-                                <h3 className="heading-sm text-cream mb-3">{tatva.english}</h3>
-                                <p className="text-cream/70 text-sm mb-2">{tatva.description}</p>
-                                <p className="text-gold-400/80 text-xs italic">
-                                    ({tatva.examples})
-                                </p>
                             </Card>
                         ))}
                     </div>
 
                     {/* 7th Tatva - Featured */}
                     <div className="max-w-md mx-auto">
-                        <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30">
-                            <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                                <tatvas[6].Icon className="w-8 h-8 text-gold-400" />
+                        <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30 overflow-hidden !p-0">
+                            {tatvas[6].image ? (
+                                <div className="w-full h-52 overflow-hidden">
+                                    <img
+                                        src={tatvas[6].image}
+                                        alt={tatvas[6].english}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="w-full h-52 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center">
+                                    <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <tatvas[6].Icon className="w-8 h-8 text-gold-400" />
+                                    </div>
+                                </div>
+                            )}
+                            <div className="p-6">
+                                <div className="mb-2">
+                                    <span className="text-4xl font-semibold text-gold-400 font-heading tracking-wide">
+                                        {tatvas[6].hindi}
+                                    </span>
+                                </div>
+                                <h3 className="heading-sm text-cream mb-3">{tatvas[6].english}</h3>
+                                <p className="text-cream/70 mb-2">{tatvas[6].description}</p>
+                                <p className="text-gold-400/80 text-sm italic">
+                                    ({tatvas[6].examples})
+                                </p>
                             </div>
-                            <div className="mb-3">
-                                <span className="text-4xl font-bold text-gold-400 font-heading">
-                                    {tatvas[6].hindi}
-                                </span>
-                            </div>
-                            <h3 className="heading-sm text-cream mb-3">{tatvas[6].english}</h3>
-                            <p className="text-cream/70 mb-2">{tatvas[6].description}</p>
-                            <p className="text-gold-400/80 text-sm italic">
-                                ({tatvas[6].examples})
-                            </p>
                         </Card>
                     </div>
                 </div>

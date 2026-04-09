@@ -36,8 +36,8 @@ export default {
         dark: '#0A0A0A',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Outfit', 'system-ui', 'sans-serif'],
+        sans: ['Antonio', 'system-ui', 'sans-serif'],
+        heading: ['Antonio', 'system-ui', 'sans-serif'],
       },
     },
   },

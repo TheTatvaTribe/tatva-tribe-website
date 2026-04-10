@@ -114,14 +114,22 @@ const Footer = () => {
                     <p className="text-cream/50 text-sm">
                         © {currentYear} The Tatva Tribe. All rights reserved.
                     </p>
-                    <a
-                        href="https://www.instagram.com/advayshidhaye/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-cream/50 text-sm hover:text-gold-400 transition-colors"
-                    >
-                        🧠 @advayshidhaye
-                    </a>
+                    <div className="flex items-center gap-4">
+                        <Link
+                            to="/terms"
+                            className="text-cream/50 text-sm hover:text-gold-400 transition-colors"
+                        >
+                            Terms & Conditions
+                        </Link>
+                        <a
+                            href="https://www.instagram.com/advayshidhaye/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cream/50 text-sm hover:text-gold-400 transition-colors"
+                        >
+                            🧠 @advayshidhaye
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>

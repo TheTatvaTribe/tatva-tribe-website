@@ -33,10 +33,10 @@ const CertificationsCarousel = () => {
     };
 
     return (
-        <div className="mt-6 max-w-md mx-auto">
+        <div className="mt-12 max-w-2xl mx-auto">
             <p className="text-cream/60 text-xs uppercase tracking-wider text-center mb-3">Certifications</p>
-            <div className="relative group">
-                <div className="overflow-hidden rounded-xl border border-forest-500/30 bg-forest-600/30">
+            <div className="relative group border-2 border-gold-400/30 rounded-2xl p-4 bg-forest-600/20">
+                <div className="overflow-hidden rounded-xl">
                     <div
                         className="flex transition-transform duration-500 ease-in-out"
                         style={{ transform: `translateX(-${current * 100}%)` }}
@@ -281,14 +281,13 @@ const About = () => {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-
-                            {/* Certifications Carousel */}
-                            <CertificationsCarousel />
-
                             <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold-400/20 rounded-full blur-xl" />
                             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-forest-400/30 rounded-full blur-xl" />
                         </div>
                     </div>
+
+                    {/* Certifications Carousel */}
+                    <CertificationsCarousel />
                 </div>
             </section>
 

@@ -1,6 +1,86 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target, Flame, TrendingDown, RefreshCw } from 'lucide-react';
+import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target, Flame, TrendingDown, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import Card from '../components/ui/Card';
+
+const certifications = [
+    { src: '/tatva-tribe-website/images/certifications/certified_personal_trainer.jpeg', alt: 'Certified Personal Trainer' },
+    { src: '/tatva-tribe-website/images/certifications/kettlebell_training_specialist.PNG', alt: 'Kettlebell Training Specialist' },
+    { src: '/tatva-tribe-website/images/certifications/olympic_weightlifting_training_specialist.PNG', alt: 'Olympic Weightlifting Training Specialist' },
+    { src: '/tatva-tribe-website/images/certifications/postureandfunctional_corrective_exercise_specialist.PNG', alt: 'Posture & Functional Corrective Exercise Specialist' },
+    { src: '/tatva-tribe-website/images/certifications/resistance_band_training_specialist.PNG', alt: 'Resistance Band Training Specialist' },
+    { src: '/tatva-tribe-website/images/certifications/weight_loss_training_specialist.PNG', alt: 'Weight Loss Training Specialist' },
+];
+
+const CertificationsCarousel = () => {
+    const [current, setCurrent] = useState(0);
+    const timeoutRef = useRef(null);
+
+    const resetTimer = useCallback(() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            setCurrent((prev) => (prev + 1) % certifications.length);
+        }, 3000);
+    }, []);
+
+    useEffect(() => {
+        resetTimer();
+        return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
+    }, [current, resetTimer]);
+
+    const go = (dir) => {
+        setCurrent((prev) => (prev + dir + certifications.length) % certifications.length);
+    };
+
+    return (
+        <div className="mt-6 max-w-md mx-auto">
+            <p className="text-cream/60 text-xs uppercase tracking-wider text-center mb-3">Certifications</p>
+            <div className="relative group">
+                <div className="overflow-hidden rounded-xl border border-forest-500/30 bg-forest-600/30">
+                    <div
+                        className="flex transition-transform duration-500 ease-in-out"
+                        style={{ transform: `translateX(-${current * 100}%)` }}
+                    >
+                        {certifications.map((cert, i) => (
+                            <div key={i} className="w-full flex-shrink-0">
+                                <img
+                                    src={cert.src}
+                                    alt={cert.alt}
+                                    className="w-full h-auto object-contain bg-white"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <button
+                    onClick={() => go(-1)}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-dark/70 hover:bg-dark/90 rounded-full flex items-center justify-center text-cream opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label="Previous certificate"
+                >
+                    <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                    onClick={() => go(1)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-dark/70 hover:bg-dark/90 rounded-full flex items-center justify-center text-cream opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label="Next certificate"
+                >
+                    <ChevronRight className="w-4 h-4" />
+                </button>
+            </div>
+            <div className="flex justify-center gap-1.5 mt-3">
+                {certifications.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setCurrent(i)}
+                        className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-gold-400 w-4' : 'bg-cream/30 hover:bg-cream/50'}`}
+                        aria-label={`Go to certificate ${i + 1}`}
+                    />
+                ))}
+            </div>
+            <p className="text-cream/50 text-xs text-center mt-2">{certifications[current].alt}</p>
+        </div>
+    );
+};
 
 const About = () => {
     const tatvas = [
@@ -195,28 +275,16 @@ const About = () => {
                         </div>
                         <div className="order-1 lg:order-2 relative">
                             <div className="aspect-square max-w-md mx-auto rounded-2xl overflow-hidden shadow-xl shadow-black/40">
-                                {/*
-                                  TRAINER PHOTO:
-                                  1. Drop your photo into public/images/trainer.jpg
-                                     (supported formats: .jpg, .jpeg, .png, .webp)
-                                  2. The fallback placeholder auto-hides when the image loads
-                                */}
                                 <img
-                                    src="/tatva-tribe-website/images/trainer.jpg"
+                                    src="/tatva-tribe-website/images/trainer.jpeg"
                                     alt="Advay Shidhaye — Master Trainer"
                                     className="w-full h-full object-cover"
-                                    onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
                                 />
-                                <div className="w-full h-full bg-gradient-to-br from-forest-500 to-forest-700 items-center justify-center hidden">
-                                    <div className="text-center p-8">
-                                        <div className="w-32 h-32 bg-gold-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold-400/30">
-                                            <Dumbbell className="w-14 h-14 text-dark" />
-                                        </div>
-                                        <p className="text-cream font-heading font-bold text-xl">@advayshidhaye</p>
-                                        <p className="text-cream/60 text-sm mt-2">Master Trainer</p>
-                                    </div>
-                                </div>
                             </div>
+
+                            {/* Certifications Carousel */}
+                            <CertificationsCarousel />
+
                             <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold-400/20 rounded-full blur-xl" />
                             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-forest-400/30 rounded-full blur-xl" />
                         </div>

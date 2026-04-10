@@ -280,6 +280,7 @@ const About = () => {
 
                     {/* 7th Tatva - Featured */}
                     <div className="max-w-md mx-auto">
+                        {(() => { const FeaturedIcon = tatvas[6].Icon; return (
                         <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30 overflow-hidden !p-0">
                             {tatvas[6].image ? (
                                 <div className="w-full h-52 overflow-hidden">
@@ -292,7 +293,7 @@ const About = () => {
                             ) : (
                                 <div className="w-full h-52 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center">
                                     <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                        <tatvas[6].Icon className="w-8 h-8 text-gold-400" />
+                                        <FeaturedIcon className="w-8 h-8 text-gold-400" />
                                     </div>
                                 </div>
                             )}
@@ -309,6 +310,7 @@ const About = () => {
                                 </p>
                             </div>
                         </Card>
+                        ); })()}
                     </div>
                 </div>
             </section>

@@ -115,12 +115,6 @@ const Footer = () => {
                         © {currentYear} The Tatva Tribe. All rights reserved.
                     </p>
                     <div className="flex items-center gap-4">
-                        <Link
-                            to="/terms"
-                            className="text-cream/50 text-sm hover:text-gold-400 transition-colors"
-                        >
-                            Terms & Conditions
-                        </Link>
                         <a
                             href="https://www.instagram.com/advayshidhaye/"
                             target="_blank"

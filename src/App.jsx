@@ -7,7 +7,6 @@ import About from './pages/About';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
-import Terms from './pages/Terms';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -29,7 +28,6 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

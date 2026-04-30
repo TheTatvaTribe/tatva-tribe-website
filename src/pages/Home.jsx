@@ -1,43 +1,64 @@
 import { Link } from 'react-router-dom';
-import { Dumbbell, Apple, Brain, TrendingUp, Target, Users, Moon } from 'lucide-react';
+import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target } from 'lucide-react';
 import Card from '../components/ui/Card';
 
 const Home = () => {
-    const features = [
+    const tatvas = [
         {
+            hindi: 'शरीर',
+            english: 'Body Discipline',
+            description: 'Anything which promotes Movement.',
+            examples: 'Strength training, Endurance, Yoga, Aerobics',
             Icon: Dumbbell,
-            title: 'Personal Training',
-            description: 'Customized workout programs designed for your specific goals and fitness level.',
+            image: '/tatva-tribe-website/images/tatvas/sharira.png',
         },
         {
+            hindi: 'आहार',
+            english: 'Nutrition',
+            description: 'Mindful eating, balancing macros, staying hydrated.',
+            examples: 'Real food = Real energy',
             Icon: Apple,
-            title: 'Nutrition Plans',
-            description: 'Science-backed diet plans that fuel your body and support your transformation.',
+            image: '/tatva-tribe-website/images/tatvas/aahaar.png',
         },
         {
+            hindi: 'मानस',
+            english: 'Mental Toughness',
+            description: 'Meditation, Breathwork, Journaling.',
+            examples: 'Mental resilience > Digital Chaos',
             Icon: Brain,
-            title: 'Mind-Body Balance',
-            description: 'Holistic approach combining physical training with mental wellness.',
+            image: '/tatva-tribe-website/images/tatvas/manas.png',
         },
         {
-            Icon: TrendingUp,
-            title: 'Progress Tracking',
-            description: 'Regular assessments and adjustments to ensure continuous improvement.',
-        },
-        {
-            Icon: Target,
-            title: 'Goal Setting',
-            description: 'Strategic planning to help you achieve sustainable results.',
-        },
-        {
-            Icon: Users,
-            title: 'Community Support',
-            description: 'Join the Tatva Tribe and connect with like-minded fitness enthusiasts.',
-        },
-        {
+            hindi: 'निद्रा',
+            english: 'Rest & Recovery',
+            description: 'Restorative sleep, active recovery, mobility.',
+            examples: 'Good rest = Better mood, strength and health span',
             Icon: Moon,
-            title: 'Rest & Recovery',
-            description: 'Restorative sleep and active recovery to rebuild stronger and prevent burnout.',
+            image: '/tatva-tribe-website/images/tatvas/nidra.png',
+        },
+        {
+            hindi: 'समाज',
+            english: 'Community & Connections',
+            description: 'Building good relations, socialising.',
+            examples: 'Growing together',
+            Icon: Users,
+            image: '/tatva-tribe-website/images/tatvas/samaaj.png',
+        },
+        {
+            hindi: 'प्रकृति',
+            english: 'Nature',
+            description: 'Aligning with nature, seasonal rhythms in diet & activity.',
+            examples: 'Sunlight, fresh air = Natural healers',
+            Icon: Leaf,
+            image: '/tatva-tribe-website/images/tatvas/prakriti.png',
+        },
+        {
+            hindi: 'उद्देश्य',
+            english: 'Purpose',
+            description: 'Keeping the Right intention, setting a goal.',
+            examples: 'No purpose = No Growth',
+            Icon: Target,
+            image: '/tatva-tribe-website/images/tatvas/uddeshya.png',
         },
     ];
 
@@ -69,7 +90,7 @@ const Home = () => {
                 <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-forest-500/20 rounded-full blur-3xl" />
 
                 <div className="container relative z-10">
-                    <div className="max-w-3xl">
+                    <div className="max-w-3xl mx-auto text-center">
                         <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6 animate-fade-in">
                             🌟 Holistic Health Coaching
                         </span>
@@ -81,7 +102,7 @@ const Home = () => {
                             SMARTWORK {">"} hardwork is the key. Join The Tatva Tribe and discover
                             a holistic approach to fitness that balances body and mind.
                         </p>
-                        <div className="flex flex-wrap gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                        <div className="flex flex-wrap gap-4 justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
                             <Link to="/contact" className="btn btn-primary">
                                 Get Free Consultation
                             </Link>
@@ -93,28 +114,84 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Features Section */}
+            {/* The 7 Tatvas Section */}
             <section className="section bg-forest-600/30">
                 <div className="container">
-                    <div className="text-center max-w-2xl mx-auto mb-16">
-                        <h2 className="heading-lg text-cream mb-4">
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <span className="text-gold-400 text-sm font-medium uppercase tracking-wider">
+                            About the Community
+                        </span>
+                        <h2 className="heading-lg text-cream mt-2 mb-4">
                             The <span className="text-gradient">7 Tatvas</span> of Transformation
                         </h2>
-                        <p className="text-cream/70">
-                            Our comprehensive approach covers every aspect of your health journey.
+                        <p className="text-cream/70 text-lg">
+                            <strong className="text-cream">'Tatva'</strong> simply means the ultimate truth, the core essence of life.
+                        </p>
+                        <p className="text-cream/70 mt-4">
+                            The Tatva Tribe is based on <span className="text-gold-400 font-semibold">7 TATVAS</span>
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {features.map((feature, index) => (
-                            <Card key={index} className="text-center">
-                                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <feature.Icon className="w-8 h-8 text-gold-400" />
+                    {/* Tatva Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        {tatvas.slice(0, 6).map((tatva, index) => (
+                            <Card key={index} className="text-center group overflow-hidden !p-0">
+                                <div className="w-full h-44 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative">
+                                    <img
+                                        src={tatva.image}
+                                        alt={tatva.english}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                                    />
+                                    <div className="w-14 h-14 bg-gold-400/20 rounded-full items-center justify-center group-hover:scale-110 transition-transform duration-300 hidden absolute inset-0 m-auto">
+                                        <tatva.Icon className="w-7 h-7 text-gold-400" />
+                                    </div>
                                 </div>
-                                <h3 className="heading-sm text-cream mb-2">{feature.title}</h3>
-                                <p className="text-cream/70 text-sm">{feature.description}</p>
+                                <div className="p-6">
+                                    <div className="mb-2">
+                                        <span className="text-3xl font-semibold text-gold-400 font-heading tracking-wide">
+                                            {tatva.hindi}
+                                        </span>
+                                    </div>
+                                    <h3 className="heading-sm text-cream mb-3">{tatva.english}</h3>
+                                    <p className="text-cream/70 text-sm mb-2">{tatva.description}</p>
+                                    <p className="text-gold-400/80 text-xs italic">
+                                        ({tatva.examples})
+                                    </p>
+                                </div>
                             </Card>
                         ))}
+                    </div>
+
+                    {/* 7th Tatva - Featured */}
+                    <div className="max-w-md mx-auto">
+                        {(() => { const FeaturedIcon = tatvas[6].Icon; return (
+                        <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30 overflow-hidden !p-0">
+                            <div className="w-full h-52 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative">
+                                <img
+                                    src={tatvas[6].image}
+                                    alt={tatvas[6].english}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
+                                />
+                                <div className="w-16 h-16 bg-gold-400/20 rounded-full items-center justify-center group-hover:scale-110 transition-transform duration-300 hidden absolute inset-0 m-auto">
+                                    <FeaturedIcon className="w-8 h-8 text-gold-400" />
+                                </div>
+                            </div>
+                            <div className="p-6">
+                                <div className="mb-2">
+                                    <span className="text-4xl font-semibold text-gold-400 font-heading tracking-wide">
+                                        {tatvas[6].hindi}
+                                    </span>
+                                </div>
+                                <h3 className="heading-sm text-cream mb-3">{tatvas[6].english}</h3>
+                                <p className="text-cream/70 mb-2">{tatvas[6].description}</p>
+                                <p className="text-gold-400/80 text-sm italic">
+                                    ({tatvas[6].examples})
+                                </p>
+                            </div>
+                        </Card>
+                        ); })()}
                     </div>
                 </div>
             </section>

@@ -1,6 +1,34 @@
 import { Link } from 'react-router-dom';
 import Card from '../components/ui/Card';
 
+const tribeCode = [
+    {
+        title: 'Your Sankalpa',
+        content:
+            'Much like a sacred vow, your commitment to a plan is final. All memberships are non-refundable and non-transferable.',
+    },
+    {
+        title: 'The Path is Yours',
+        content:
+            'We provide the "Smartwork" blueprints, but the Karma is yours to perform. Results are proportional to your devotion.',
+    },
+    {
+        title: 'The Law of Karma (Respectful Conduct)',
+        content:
+            'We maintain a high-vibe environment built on mutual respect and integrity. Any form of misconduct, disrespect, or breach of our community ethics will end coaching without refund. Smartwork begins with a disciplined mind.',
+    },
+    {
+        title: 'A Moment of Zen',
+        content:
+            'Life can be unpredictable. We offer a one-time "Pause" period for our Tapasya and Ghor Tapasya practitioners, provided you give us a heads-up at least 1 week prior.',
+    },
+    {
+        title: 'The Temple Disclosure (Medical Disclaimer)',
+        content:
+            'Your body is your temple, and we treat it with the highest regard. Before embarking on any physical Tapasya, it is your responsibility to consult with a medical professional. You must disclose your full medical history and any physical limitations honestly.',
+    },
+];
+
 const plans = [
     {
         hindi: 'प्रारंभ',
@@ -101,6 +129,38 @@ const Pricing = () => {
                                 </div>
 
                             </Card>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* The Tribe's Code (Terms & Conditions) */}
+            <section className="section bg-forest-600/20">
+                <div className="container">
+                    <div className="text-center max-w-3xl mx-auto mb-12">
+                        <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6">
+                            Terms &amp; Conditions
+                        </span>
+                        <h2 className="heading-lg text-cream mb-4">
+                            The Tribe's <span className="text-gradient">Code</span>
+                        </h2>
+                        <p className="text-cream/70">
+                            Before you begin your Tapasya, please read the principles that govern our tribe.
+                        </p>
+                    </div>
+
+                    <div className="max-w-3xl mx-auto space-y-6">
+                        {tribeCode.map((term, index) => (
+                            <div
+                                key={index}
+                                className="p-6 bg-forest-600/30 rounded-xl border border-forest-500/30"
+                            >
+                                <h3 className="heading-sm text-cream mb-3">
+                                    <span className="text-gold-400 mr-2">{index + 1}.</span>
+                                    {term.title}
+                                </h3>
+                                <p className="text-cream/70 leading-relaxed">{term.content}</p>
+                            </div>
                         ))}
                     </div>
                 </div>

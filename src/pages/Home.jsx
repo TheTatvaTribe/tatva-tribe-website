@@ -118,11 +118,11 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         {tatvas.slice(0, 6).map((tatva, index) => (
                             <Card key={index} className="text-center group overflow-hidden !p-0">
-                                <div className="w-full h-44 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative p-4">
+                                <div className="w-full h-44 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative">
                                     <img
                                         src={tatva.image}
                                         alt={tatva.english}
-                                        className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                        className="absolute inset-0 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
                                         onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
                                     />
                                     <div className="w-14 h-14 bg-gold-400/20 rounded-full items-center justify-center group-hover:scale-110 transition-transform duration-300 hidden absolute inset-0 m-auto">
@@ -149,11 +149,11 @@ const Home = () => {
                     <div className="max-w-md mx-auto">
                         {(() => { const FeaturedIcon = tatvas[6].Icon; return (
                         <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30 overflow-hidden !p-0">
-                            <div className="w-full h-52 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative p-4">
+                            <div className="w-full h-52 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative">
                                 <img
                                     src={tatvas[6].image}
                                     alt={tatvas[6].english}
-                                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                                    className="absolute inset-0 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
                                     onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
                                 />
                                 <div className="w-16 h-16 bg-gold-400/20 rounded-full items-center justify-center group-hover:scale-110 transition-transform duration-300 hidden absolute inset-0 m-auto">

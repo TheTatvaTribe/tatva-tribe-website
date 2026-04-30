@@ -274,7 +274,7 @@ const About = () => {
                             </a>
                         </div>
                         <div className="order-1 lg:order-2 relative">
-                            <div className="aspect-square max-w-md mx-auto rounded-2xl overflow-hidden shadow-xl shadow-black/40">
+                            <div className="aspect-square max-w-md mx-auto rounded-full overflow-hidden shadow-xl shadow-black/40">
                                 <img
                                     src="/tatva-tribe-website/images/trainer.jpeg"
                                     alt="Advay Shidhaye — Master Trainer"

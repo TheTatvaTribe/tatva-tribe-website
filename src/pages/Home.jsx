@@ -62,24 +62,6 @@ const Home = () => {
         },
     ];
 
-    const testimonials = [
-        {
-            name: 'Priya S.',
-            text: 'The holistic approach changed my life. Not just physically, but mentally too!',
-            result: 'Lost 15kg in 4 months',
-        },
-        {
-            name: 'Rahul M.',
-            text: 'Smart work really is the key. Best decision I made for my health.',
-            result: 'Built lean muscle mass',
-        },
-        {
-            name: 'Anita K.',
-            text: 'The personalized diet plan was a game changer. Finally found what works for me.',
-            result: 'Transformed lifestyle',
-        },
-    ];
-
     return (
         <div className="pt-20">
             {/* Hero Section */}
@@ -140,7 +122,7 @@ const Home = () => {
                                     <img
                                         src={tatva.image}
                                         alt={tatva.english}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        className="absolute inset-0 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
                                         onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
                                     />
                                     <div className="w-14 h-14 bg-gold-400/20 rounded-full items-center justify-center group-hover:scale-110 transition-transform duration-300 hidden absolute inset-0 m-auto">
@@ -171,7 +153,7 @@ const Home = () => {
                                 <img
                                     src={tatvas[6].image}
                                     alt={tatvas[6].english}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="absolute inset-0 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
                                     onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
                                 />
                                 <div className="w-16 h-16 bg-gold-400/20 rounded-full items-center justify-center group-hover:scale-110 transition-transform duration-300 hidden absolute inset-0 m-auto">
@@ -192,79 +174,6 @@ const Home = () => {
                             </div>
                         </Card>
                         ); })()}
-                    </div>
-                </div>
-            </section>
-
-            {/* About Preview */}
-            <section className="section">
-                <div className="container">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <h2 className="heading-lg text-cream mb-6">
-                                More Than Just <span className="text-gradient">Fitness</span>
-                            </h2>
-                            <p className="text-cream/70 mb-6">
-                                At The Tatva Tribe, we believe in a holistic approach to health.
-                                Our programs combine cutting-edge training techniques with mindfulness
-                                practices to help you achieve sustainable results.
-                            </p>
-                            <ul className="space-y-3 mb-8">
-                                {['Personalized training programs', 'Custom diet plans', 'Mental wellness coaching', 'Ongoing support & community'].map((item) => (
-                                    <li key={item} className="flex items-center gap-3 text-cream/80">
-                                        <span className="w-6 h-6 bg-gold-400/20 rounded-full flex items-center justify-center">
-                                            <span className="text-gold-400 text-sm">✓</span>
-                                        </span>
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
-                            <Link to="/about" className="btn btn-secondary">
-                                Our Story
-                            </Link>
-                        </div>
-                        <div className="relative">
-                            <div className="aspect-square rounded-2xl bg-gradient-to-br from-forest-500 to-forest-700 flex items-center justify-center">
-                                <div className="text-center">
-                                    <div className="w-32 h-32 bg-gold-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <span className="text-dark font-heading font-bold text-5xl">T</span>
-                                    </div>
-                                    <p className="text-cream font-heading font-bold text-xl">The Tatva Tribe</p>
-                                </div>
-                            </div>
-                            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gold-400/20 rounded-full blur-2xl" />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Testimonials */}
-            <section className="section bg-forest-600/30">
-                <div className="container">
-                    <div className="text-center max-w-2xl mx-auto mb-16">
-                        <h2 className="heading-lg text-cream mb-4">
-                            Customer <span className="text-gradient">Love</span>
-                        </h2>
-                        <p className="text-cream/70">
-                            Real transformations from real people in The Tatva Tribe.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {testimonials.map((testimonial, index) => (
-                            <Card key={index}>
-                                <div className="flex items-center gap-1 text-gold-400 mb-4">
-                                    {'★★★★★'.split('').map((star, i) => (
-                                        <span key={i}>{star}</span>
-                                    ))}
-                                </div>
-                                <p className="text-cream/80 mb-4">"{testimonial.text}"</p>
-                                <div className="border-t border-forest-500/30 pt-4">
-                                    <p className="font-semibold text-cream">{testimonial.name}</p>
-                                    <p className="text-gold-400 text-sm">{testimonial.result}</p>
-                                </div>
-                            </Card>
-                        ))}
                     </div>
                 </div>
             </section>

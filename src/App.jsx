@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -16,9 +16,13 @@ function ScrollToTop() {
   return null;
 }
 
+// Vite injects BASE_URL with a trailing slash (e.g. "/tatva-tribe-website/").
+// react-router expects a basename without a trailing slash.
+const ROUTER_BASENAME = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 function App() {
   return (
-    <Router>
+    <Router basename={ROUTER_BASENAME || undefined}>
       <ScrollToTop />
       <div className="min-h-screen bg-dark flex flex-col">
         <Navbar />

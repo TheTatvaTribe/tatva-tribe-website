@@ -5,7 +5,7 @@ const Button = ({
     className = '',
     ...props
 }) => {
-    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
+    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark';
 
     const variants = {
         primary: 'bg-gold-400 text-dark hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-400/25',

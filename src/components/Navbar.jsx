@@ -41,14 +41,15 @@ const Navbar = () => {
                         2. The <img> below will load it automatically; on error it falls back to the gold "T"
                     */}
                     <Link to="/" className="flex items-center gap-3 group">
-                        <img
-                            src="/tatva-tribe-website/images/logo.png"
-                            alt="The Tatva Tribe"
-                            className="w-10 h-10 rounded-full object-cover"
-                            onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
-                        />
-                        <div className="w-10 h-10 bg-gold-400 rounded-full items-center justify-center hidden">
-                            <span className="text-dark font-heading font-bold text-lg">T</span>
+                        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gold-400 flex items-center justify-center">
+                            <span className="absolute inset-0 flex items-center justify-center text-dark font-heading font-bold text-lg" aria-hidden="true">T</span>
+                            <img
+                                src={`${import.meta.env.BASE_URL}images/logo.png`}
+                                alt=""
+                                className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300"
+                                onLoad={(e) => { e.currentTarget.style.opacity = '1'; }}
+                                onError={(e) => { e.currentTarget.remove(); }}
+                            />
                         </div>
                         <span className="font-heading font-bold text-xl text-cream group-hover:text-gold-400 transition-colors">
                             The Tatva Tribe
@@ -61,7 +62,7 @@ const Navbar = () => {
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                className={`font-medium transition-colors ${location.pathname === link.path
+                                className={`font-medium transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark ${location.pathname === link.path
                                     ? 'text-gold-400'
                                     : 'text-cream hover:text-gold-400'
                                     }`}
@@ -77,7 +78,7 @@ const Navbar = () => {
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2 text-cream hover:text-gold-400 transition-colors"
+                        className="md:hidden p-2 text-cream hover:text-gold-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
                         aria-label="Toggle menu"
                         aria-expanded={isOpen}
                     >

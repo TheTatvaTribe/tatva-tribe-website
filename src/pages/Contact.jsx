@@ -3,10 +3,11 @@ import Card from '../components/ui/Card';
 const Contact = () => {
     return (
         <div className="pt-20">
-            {/* Hero */}
+            {/* Hero — welcoming "open door" motif: a centered top glow with a soft floor reflection */}
             <section className="section relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-forest-600 via-dark to-dark" />
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold-400/10 rounded-full blur-3xl" />
+                <div className="absolute inset-0 bg-gradient-to-b from-forest-600/80 via-dark to-dark" />
+                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] bg-gold-300/15 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-forest-500/15 to-transparent blur-2xl" />
 
                 <div className="container relative z-10">
                     <div className="max-w-3xl mx-auto text-center">

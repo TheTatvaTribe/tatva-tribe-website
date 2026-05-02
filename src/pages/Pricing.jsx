@@ -71,11 +71,13 @@ const plans = [
 const Pricing = () => {
     return (
         <div className="pt-20">
-            {/* Hero */}
+            {/* Hero — symmetrical "temple" motif: two mirrored columns of light flanking the title */}
             <section className="section relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-forest-600 via-dark to-dark" />
-                <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gold-400/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-forest-500/20 rounded-full blur-3xl" />
+                <div className="absolute inset-0 bg-gradient-to-b from-dark via-forest-700 to-dark" />
+                <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-gold-500/15 to-transparent blur-2xl" />
+                <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-gold-500/15 to-transparent blur-2xl" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28rem] h-[28rem] border border-gold-400/10 rounded-full" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] h-[20rem] border border-gold-400/5 rounded-full" />
 
                 <div className="container relative z-10">
                     <div className="max-w-3xl mx-auto text-center">

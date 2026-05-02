@@ -1,32 +1,35 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target, Flame, TrendingDown, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target, Flame, TrendingDown, RefreshCw, ChevronLeft, ChevronRight, Pause, Play, ExternalLink } from 'lucide-react';
 import Card from '../components/ui/Card';
 
+const BASE = import.meta.env.BASE_URL;
+
 const certifications = [
-    { src: '/tatva-tribe-website/images/certifications/certified_personal_trainer.jpeg', alt: 'Certified Personal Trainer' },
-    { src: '/tatva-tribe-website/images/certifications/kettlebell_training_specialist.PNG', alt: 'Kettlebell Training Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/olympic_weightlifting_training_specialist.PNG', alt: 'Olympic Weightlifting Training Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/postureandfunctional_corrective_exercise_specialist.PNG', alt: 'Posture & Functional Corrective Exercise Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/resistance_band_training_specialist.PNG', alt: 'Resistance Band Training Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/weight_loss_training_specialist.PNG', alt: 'Weight Loss Training Specialist' },
+    { src: `${BASE}images/certifications/certified_personal_trainer.jpeg`, alt: 'Certified Personal Trainer' },
+    { src: `${BASE}images/certifications/kettlebell_training_specialist.PNG`, alt: 'Kettlebell Training Specialist' },
+    { src: `${BASE}images/certifications/olympic_weightlifting_training_specialist.PNG`, alt: 'Olympic Weightlifting Training Specialist' },
+    { src: `${BASE}images/certifications/postureandfunctional_corrective_exercise_specialist.PNG`, alt: 'Posture & Functional Corrective Exercise Specialist' },
+    { src: `${BASE}images/certifications/resistance_band_training_specialist.PNG`, alt: 'Resistance Band Training Specialist' },
+    { src: `${BASE}images/certifications/weight_loss_training_specialist.PNG`, alt: 'Weight Loss Training Specialist' },
 ];
 
 const CertificationsCarousel = () => {
     const [current, setCurrent] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
     const timeoutRef = useRef(null);
 
-    const resetTimer = useCallback(() => {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-            setCurrent((prev) => (prev + 1) % certifications.length);
-        }, 3000);
-    }, []);
+    const shouldAutoplay = !isPaused && !isHovered && !isFocused;
 
     useEffect(() => {
-        resetTimer();
+        if (!shouldAutoplay) return;
+        timeoutRef.current = setTimeout(() => {
+            setCurrent((prev) => (prev + 1) % certifications.length);
+        }, 4500);
         return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
-    }, [current, resetTimer]);
+    }, [current, shouldAutoplay]);
 
     const go = (dir) => {
         setCurrent((prev) => (prev + dir + certifications.length) % certifications.length);
@@ -34,18 +37,50 @@ const CertificationsCarousel = () => {
 
     return (
         <div className="mt-12 max-w-2xl mx-auto">
-            <p className="text-cream/60 text-xs uppercase tracking-wider text-center mb-3">Certifications</p>
-            <div className="relative group border-2 border-gold-400/30 rounded-2xl p-4 bg-forest-600/20">
+            <div className="flex items-center justify-between mb-3">
+                <p className="text-cream/60 text-xs uppercase tracking-wider">Certifications</p>
+                <button
+                    type="button"
+                    onClick={() => setIsPaused((p) => !p)}
+                    className="inline-flex items-center gap-2 text-cream/70 hover:text-gold-400 text-xs uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark rounded-md px-2 py-1"
+                    aria-pressed={isPaused}
+                    aria-label={isPaused ? 'Play certificate carousel' : 'Pause certificate carousel'}
+                >
+                    {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
+                    <span>{isPaused ? 'Play' : 'Pause'}</span>
+                </button>
+            </div>
+            <div
+                className="relative border-2 border-gold-400/30 rounded-2xl p-4 bg-forest-600/20"
+                role="region"
+                aria-roledescription="carousel"
+                aria-label="Trainer certifications"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onFocusCapture={() => setIsFocused(true)}
+                onBlurCapture={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget)) setIsFocused(false);
+                }}
+            >
                 <div className="overflow-hidden rounded-xl">
                     <div
                         className="flex transition-transform duration-500 ease-in-out"
                         style={{ transform: `translateX(-${current * 100}%)` }}
+                        aria-live={shouldAutoplay ? 'off' : 'polite'}
                     >
                         {certifications.map((cert, i) => (
-                            <div key={i} className="w-full flex-shrink-0">
+                            <div
+                                key={i}
+                                className="w-full flex-shrink-0"
+                                role="group"
+                                aria-roledescription="slide"
+                                aria-label={`${i + 1} of ${certifications.length}: ${cert.alt}`}
+                                aria-hidden={i !== current}
+                            >
                                 <img
                                     src={cert.src}
                                     alt={cert.alt}
+                                    loading="lazy"
                                     className="w-full h-auto object-contain bg-white"
                                 />
                             </div>
@@ -53,31 +88,37 @@ const CertificationsCarousel = () => {
                     </div>
                 </div>
                 <button
+                    type="button"
                     onClick={() => go(-1)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-dark/70 hover:bg-dark/90 rounded-full flex items-center justify-center text-cream opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 bg-dark/80 hover:bg-dark rounded-full flex items-center justify-center text-cream transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-forest-700"
                     aria-label="Previous certificate"
                 >
-                    <ChevronLeft className="w-4 h-4" />
+                    <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
+                    type="button"
                     onClick={() => go(1)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-dark/70 hover:bg-dark/90 rounded-full flex items-center justify-center text-cream opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 bg-dark/80 hover:bg-dark rounded-full flex items-center justify-center text-cream transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-forest-700"
                     aria-label="Next certificate"
                 >
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-5 h-5" />
                 </button>
             </div>
-            <div className="flex justify-center gap-1.5 mt-3">
+            <p className="text-cream/80 text-sm text-center mt-3 font-medium" aria-live="polite">
+                {certifications[current].alt}
+            </p>
+            <div className="flex justify-center gap-1.5 mt-2">
                 {certifications.map((_, i) => (
                     <button
                         key={i}
+                        type="button"
                         onClick={() => setCurrent(i)}
-                        className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-gold-400 w-4' : 'bg-cream/30 hover:bg-cream/50'}`}
+                        className={`h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark ${i === current ? 'bg-gold-400 w-6' : 'bg-cream/40 hover:bg-cream/60 w-2'}`}
                         aria-label={`Go to certificate ${i + 1}`}
+                        aria-current={i === current ? 'true' : undefined}
                     />
                 ))}
             </div>
-            <p className="text-cream/50 text-xs text-center mt-2">{certifications[current].alt}</p>
         </div>
     );
 };
@@ -95,7 +136,7 @@ const About = () => {
              * Drop your image into public/images/tatvas/sharira.jpg
              * Then uncomment the line below:
              */
-            // image: '/tatva-tribe-website/images/tatvas/sharira.jpg',
+            // image: `${BASE}images/tatvas/sharira.jpg`,
         },
         {
             hindi: 'आहार',
@@ -108,7 +149,7 @@ const About = () => {
              * Drop your image into public/images/tatvas/aahaar.jpg
              * Then uncomment the line below:
              */
-            // image: '/tatva-tribe-website/images/tatvas/aahaar.jpg',
+            // image: `${BASE}images/tatvas/aahaar.jpg`,
         },
         {
             hindi: 'मानस',
@@ -121,7 +162,7 @@ const About = () => {
              * Drop your image into public/images/tatvas/manas.jpg
              * Then uncomment the line below:
              */
-            // image: '/tatva-tribe-website/images/tatvas/manas.jpg',
+            // image: `${BASE}images/tatvas/manas.jpg`,
         },
         {
             hindi: 'निद्रा',
@@ -134,7 +175,7 @@ const About = () => {
              * Drop your image into public/images/tatvas/nidra.jpg
              * Then uncomment the line below:
              */
-            // image: '/tatva-tribe-website/images/tatvas/nidra.jpg',
+            // image: `${BASE}images/tatvas/nidra.jpg`,
         },
         {
             hindi: 'समाज',
@@ -147,7 +188,7 @@ const About = () => {
              * Drop your image into public/images/tatvas/samaaj.jpg
              * Then uncomment the line below:
              */
-            // image: '/tatva-tribe-website/images/tatvas/samaaj.jpg',
+            // image: `${BASE}images/tatvas/samaaj.jpg`,
         },
         {
             hindi: 'प्रकृति',
@@ -160,7 +201,7 @@ const About = () => {
              * Drop your image into public/images/tatvas/prakriti.jpg
              * Then uncomment the line below:
              */
-            // image: '/tatva-tribe-website/images/tatvas/prakriti.jpg',
+            // image: `${BASE}images/tatvas/prakriti.jpg`,
         },
         {
             hindi: 'उद्देश्य',
@@ -173,7 +214,7 @@ const About = () => {
              * Drop your image into public/images/tatvas/uddeshya.jpg
              * Then uncomment the line below:
              */
-            // image: '/tatva-tribe-website/images/tatvas/uddeshya.jpg',
+            // image: `${BASE}images/tatvas/uddeshya.jpg`,
         },
     ];
 
@@ -197,11 +238,11 @@ const About = () => {
 
     return (
         <div className="pt-20">
-            {/* Hero Section */}
+            {/* Hero Section — soft "horizon" motif: a wide warm band suggesting sunrise */}
             <section className="section relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-forest-600 via-dark to-dark" />
-                <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-gold-400/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-forest-500/20 rounded-full blur-3xl" />
+                <div className="absolute inset-0 bg-gradient-to-b from-forest-700 via-dark to-dark" />
+                <div className="absolute top-1/2 left-0 right-0 h-48 bg-gradient-to-r from-transparent via-gold-300/10 to-transparent blur-3xl" />
+                <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[40rem] h-40 bg-forest-400/15 rounded-full blur-3xl" />
 
                 <div className="container relative z-10">
                     <div className="max-w-4xl mx-auto text-center">
@@ -268,16 +309,19 @@ const About = () => {
                                 href="https://www.instagram.com/advayshidhaye/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn btn-secondary mt-8"
+                                className="btn btn-secondary mt-8 gap-2"
                             >
                                 Connect on Instagram
+                                <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                                <span className="sr-only">(opens in new tab)</span>
                             </a>
                         </div>
                         <div className="order-1 lg:order-2 relative">
                             <div className="aspect-square max-w-md mx-auto rounded-full overflow-hidden shadow-xl shadow-black/40">
                                 <img
-                                    src="/tatva-tribe-website/images/trainer.jpeg"
+                                    src={`${BASE}images/trainer.jpeg`}
                                     alt="Advay Shidhaye — Master Trainer"
+                                    loading="lazy"
                                     className="w-full h-full object-cover"
                                 />
                             </div>

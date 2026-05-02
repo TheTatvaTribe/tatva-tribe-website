@@ -121,8 +121,8 @@ const Home = () => {
                         {tatvas.slice(0, 6).map((tatva, index) => (
                             <Card key={index} className="text-center group overflow-hidden !p-0">
                                 <div className="w-full h-44 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative">
-                                    {/* Stable fallback: always rendered behind the image, revealed only if the image errors out. Prevents layout pop. */}
-                                    <div className="absolute inset-0 m-auto w-14 h-14 bg-gold-400/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
+                                    {/* Icon fallback: hidden once the image loads; revealed only if the image errors out. */}
+                                    <div data-tatva-fallback className="absolute inset-0 m-auto w-14 h-14 bg-gold-400/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
                                         <tatva.Icon className="w-7 h-7 text-gold-400" />
                                     </div>
                                     <img
@@ -130,7 +130,11 @@ const Home = () => {
                                         alt={tatva.english}
                                         loading="lazy"
                                         className="absolute inset-0 w-full h-full object-contain p-4 opacity-0 group-hover:scale-105 transition-[opacity,transform] duration-500"
-                                        onLoad={(e) => { e.currentTarget.style.opacity = '1'; }}
+                                        onLoad={(e) => {
+                                            e.currentTarget.style.opacity = '1';
+                                            const fb = e.currentTarget.parentElement?.querySelector('[data-tatva-fallback]');
+                                            if (fb) fb.style.display = 'none';
+                                        }}
                                         onError={(e) => { e.currentTarget.remove(); }}
                                     />
                                 </div>
@@ -155,7 +159,7 @@ const Home = () => {
                         {(() => { const FeaturedIcon = tatvas[6].Icon; return (
                         <Card className="text-center group bg-gradient-to-br from-forest-600/80 to-forest-700/80 border-gold-400/30 overflow-hidden !p-0">
                             <div className="w-full h-52 bg-gradient-to-br from-forest-500/40 to-forest-700/40 flex items-center justify-center relative">
-                                <div className="absolute inset-0 m-auto w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
+                                <div data-tatva-fallback className="absolute inset-0 m-auto w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
                                     <FeaturedIcon className="w-8 h-8 text-gold-400" />
                                 </div>
                                 <img
@@ -163,7 +167,11 @@ const Home = () => {
                                     alt={tatvas[6].english}
                                     loading="lazy"
                                     className="absolute inset-0 w-full h-full object-contain p-4 opacity-0 group-hover:scale-105 transition-[opacity,transform] duration-500"
-                                    onLoad={(e) => { e.currentTarget.style.opacity = '1'; }}
+                                    onLoad={(e) => {
+                                        e.currentTarget.style.opacity = '1';
+                                        const fb = e.currentTarget.parentElement?.querySelector('[data-tatva-fallback]');
+                                        if (fb) fb.style.display = 'none';
+                                    }}
                                     onError={(e) => { e.currentTarget.remove(); }}
                                 />
                             </div>

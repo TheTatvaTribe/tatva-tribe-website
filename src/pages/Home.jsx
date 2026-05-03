@@ -89,9 +89,6 @@ const Home = () => {
                             <Link to="/contact" className="btn btn-primary">
                                 Get Free Consultation
                             </Link>
-                            <Link to="/about" className="btn btn-secondary">
-                                Learn More
-                            </Link>
                         </div>
                     </div>
                 </div>
@@ -188,6 +185,13 @@ const Home = () => {
                             </div>
                         </Card>
                         ); })()}
+                    </div>
+
+                    {/* Learn More CTA below all tatvas */}
+                    <div className="text-center mt-12">
+                        <Link to="/about" className="btn btn-secondary">
+                            Learn More
+                        </Link>
                     </div>
                 </div>
             </section>

@@ -50,7 +50,7 @@ const Contact = () => {
                                 <h3 className="heading-sm text-cream mb-3">What to Expect</h3>
                                 <ul className="space-y-3">
                                     {[
-                                        'Free 30-min discovery call',
+                                        'Free 10 minutes assessment call with Master Trainer',
                                         'Goal assessment',
                                         'Personalized recommendations',
                                         'No obligation to sign up',

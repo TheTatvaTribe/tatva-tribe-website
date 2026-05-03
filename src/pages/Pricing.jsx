@@ -136,7 +136,7 @@ const Pricing = () => {
                 </div>
             </section>
 
-            {/* The Tribe's Code (Terms & Conditions) */}
+            {/* The Tatva-Achaar (Terms & Conditions) */}
             <section className="section bg-forest-600/20">
                 <div className="container">
                     <div className="text-center max-w-3xl mx-auto mb-12">
@@ -144,10 +144,10 @@ const Pricing = () => {
                             Terms &amp; Conditions
                         </span>
                         <h2 className="heading-lg text-cream mb-4">
-                            The Tribe's <span className="text-gradient">Code</span>
+                            The <span className="text-gradient">Tatva-Achaar</span>
                         </h2>
                         <p className="text-cream/70">
-                            Before you begin your Tapasya, please read the principles that govern our tribe.
+                            Before you begin, please read the Tatvas that govern our tribe.
                         </p>
                     </div>
 

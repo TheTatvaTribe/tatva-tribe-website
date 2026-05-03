@@ -79,12 +79,11 @@ const Home = () => {
                             🌟 Holistic Health Coaching
                         </span>
                         <h1 className="heading-xl text-cream mb-6 animate-slide-up">
-                            Transform Your Body,{' '}
-                            <span className="text-gradient">Elevate Your Mind</span>
+                            <span className="text-gradient">SMARTWORK</span> over Hardwork
                         </h1>
                         <p className="text-xl text-cream/70 mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                            SMARTWORK {">"} hardwork is the key. Join The Tatva Tribe and discover
-                            a holistic approach to fitness that balances body and mind.
+                            Be the difference between looking fit and{' '}
+                            <span className="text-gradient font-semibold">actually being fit</span>.
                         </p>
                         <div className="flex flex-wrap gap-4 justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
                             <Link to="/contact" className="btn btn-primary">

@@ -8,9 +8,9 @@ const tribeCode = [
             'Much like a sacred vow, your commitment to a plan is final. All memberships are non-refundable and non-transferable.',
     },
     {
-        title: 'The Path is Yours',
+        title: "It's your Marga",
         content:
-            'We provide the "Smartwork" blueprints, but the Karma is yours to perform. Results are proportional to your devotion.',
+            'Your SMARTWORK blueprint is built exclusively for your transformation tailored to your body, your goals, and your journey. The more you commit to your plan, the stronger your results.',
     },
     {
         title: 'The Law of Karma (Respectful Conduct)',
@@ -82,10 +82,10 @@ const Pricing = () => {
                 <div className="container relative z-10">
                     <div className="max-w-3xl mx-auto text-center">
                         <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6">
-                            The Tatva Path
+                            The Tatva Marga
                         </span>
                         <h1 className="heading-xl text-cream mb-6">
-                            Choose Your <span className="text-gradient">Path</span>
+                            Choose Your <span className="text-gradient">Marga</span>
                         </h1>
                         <p className="text-xl text-cream/70 italic">
                             "Transformation is a journey of the self, through the self."

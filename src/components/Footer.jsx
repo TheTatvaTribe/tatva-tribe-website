@@ -41,7 +41,8 @@ const Footer = () => {
                         </Link>
                         <p className="text-cream/70 text-sm">
                             Holistic Health Coaching & Personal Training.
-                            SMARTWORK {">"} hardwork is 🔑
+                            <br />
+                            <span className="text-gold-400 font-semibold">SMARTWORK</span> over Hardwork is 🔑
                         </p>
                         {/* Social Links */}
                         <div className="flex gap-4">

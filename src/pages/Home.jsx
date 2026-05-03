@@ -102,16 +102,16 @@ const Home = () => {
                 <div className="container">
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <span className="text-gold-400 text-sm font-medium uppercase tracking-wider">
-                            About the Community
+                            About the Tribe
                         </span>
                         <h2 className="heading-lg text-cream mt-2 mb-4">
                             The <span className="text-gradient">7 Tatvas</span> of Transformation
                         </h2>
                         <p className="text-cream/70 text-lg">
-                            <strong className="text-cream">'Tatva'</strong> simply means the ultimate truth, the core essence of life.
+                            <strong className="text-cream">'Tatva'</strong> simply means one's core principles, the core essence of life.
                         </p>
                         <p className="text-cream/70 mt-4">
-                            The Tatva Tribe is based on <span className="text-gold-400 font-semibold">7 TATVAS</span>
+                            The Tatva Tribe is based on the <span className="text-gold-400 font-semibold">7 TATVAS</span>
                         </p>
                     </div>
 

@@ -10,7 +10,7 @@ const tribeCode = [
     {
         title: "It's your Marga",
         content:
-            'Your SMARTWORK blueprint is built exclusively for your transformation tailored to your body, your goals, and your journey. The more you commit to your plan, the stronger your results.',
+            "Your blueprint is for your personal progress, towards the results you're aiming for. Hence, you're not allowed to share plans.",
     },
     {
         title: 'The Law of Karma (Respectful Conduct)',

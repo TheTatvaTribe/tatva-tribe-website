@@ -13,9 +13,10 @@ const Footer = () => {
 
     const services = [
         'Personal Training',
+        'Online Coaching',
         'Diet Plans',
-        'Holistic Coaching',
-        'Online Consultation',
+        'Workout Blueprints',
+        'Outdoor Experiences',
     ];
 
     return (
@@ -99,7 +100,6 @@ const Footer = () => {
                             Get In Touch
                         </h3>
                         <div className="space-y-3 text-cream/70 text-sm">
-                            <p>DM "TATVA" for FREE consultation!</p>
                             <a
                                 href="https://www.instagram.com/thetatvatribe._/"
                                 target="_blank"
@@ -110,6 +110,7 @@ const Footer = () => {
                                 <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
                                 <span className="sr-only">(opens in new tab)</span>
                             </a>
+                            <p>DM "TATVA" for FREE consultation!</p>
                         </div>
                     </div>
                 </div>

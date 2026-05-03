@@ -15,7 +15,7 @@ const tribeCode = [
     {
         title: 'The Law of Karma (Respectful Conduct)',
         content:
-            'We maintain a high-vibe environment built on mutual respect and integrity. Any form of misconduct, disrespect, or breach of our community ethics will end coaching without refund. Smartwork begins with a disciplined mind.',
+            'We maintain an environment built on mutual respect and integrity. Any form of misconduct, disrespect or breach of our tribe ethics will end coaching without refund.',
     },
     {
         title: 'A Moment of Zen',

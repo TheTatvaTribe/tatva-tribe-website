@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@100;200;300;400;500;600;700&display=swap');
+/* Antonio is loaded via <link rel="preconnect"> + <link rel="stylesheet"> in
+ * index.html. That path is faster than @import here because the browser can
+ * begin the font fetch before parsing this CSS. */
 
 @tailwind base;
 @tailwind components;

@@ -36,6 +36,7 @@ const Contact = () => {
                                     frameBorder="0"
                                     marginHeight="0"
                                     marginWidth="0"
+                                    loading="lazy"
                                     title="Free Consultation Form"
                                     className="w-full min-h-[800px]"
                                 >

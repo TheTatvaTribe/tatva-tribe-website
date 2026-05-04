@@ -95,7 +95,6 @@ tatva-tribe-website/
 │   ├── favicon.svg
 │   └── images/
 │       ├── logo.png            ← Round "T" emblem (navbar/footer)
-│       ├── wordmark.png        ← "The Tatva Tribe" wordmark
 │       ├── trainer.jpeg        ← Master Trainer photo (About page)
 │       ├── certifications/     ← Trainer credentials (carousel)
 │       └── tatvas/             ← Illustrations for each of the 7 Tatvas (Home page)
@@ -223,7 +222,7 @@ Small, presentational components in `src/components/ui/`. All are free of busine
 
 | Primitive | What it does | Used in |
 |---|---|---|
-| `<BrandMark />` | Renders the round "T" emblem + wordmark image. Both have graceful fallbacks: emblem falls back to the gold "T", wordmark falls back to the text "The Tatva Tribe". | Navbar, Footer |
+| `<BrandMark />` | Renders the round "T" emblem + bold-italic "TheTatvaTribe" text wordmark. Emblem image falls back to the gold "T" if missing. | Navbar, Footer |
 | `<EyebrowPill>` | Gold-on-translucent pill above hero headings. | Every page hero |
 | `<ExternalLink>` | Outbound `<a>` with `target="_blank"`, `rel="noopener noreferrer"`, an external-link icon, and a screen-reader hint. | Footer (Instagram), About (trainer Instagram) |
 | `<Card>` | Glass-style card with optional hover lift. | Tatva grid (Home), audience types (About), pricing tiers (Pricing) |
@@ -335,7 +334,7 @@ Pages takes ~1–2 minutes to surface the new build. There is **no preview envir
 | Carousel autoplay won't pause | Verify the `Pause` button toggles `isPaused`, and that the parent `<div>` still has `onMouseEnter` / `onFocusCapture` |
 | New route added but Navbar doesn't show it | Add the route to `src/content/navigation.js`, not to `Navbar.jsx` directly |
 | Custom domain still routes to old GH Pages URL | DNS propagation — wait up to a few hours; verify with `dig thetatvatribe.in +short` |
-| Wordmark image renders with white background | Either replace `public/images/wordmark.png` with a transparent PNG, or keep the `invert mix-blend-screen` Tailwind classes that handle white backgrounds on the dark theme |
+| Bundle bigger than expected | Confirm the `lazy()` imports in `App.jsx` weren't accidentally converted back to static imports — that would re-merge every page into the main chunk |
 | Lint fails after copy edits | Most likely a stray apostrophe in JSX text — wrap the string in `{"..."}` or use `&apos;` |
 
 ---

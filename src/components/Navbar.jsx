@@ -51,9 +51,20 @@ const Navbar = () => {
                                 onError={(e) => { e.currentTarget.remove(); }}
                             />
                         </div>
-                        <span className="font-heading font-bold text-xl text-cream group-hover:text-gold-400 transition-colors">
-                            The Tatva Tribe
-                        </span>
+                        {/* Wordmark — drop public/images/wordmark.png (transparent PNG preferred). */}
+                        {/* `invert` + `mix-blend-screen` keep a white-BG image readable on the dark theme. */}
+                        <img
+                            src={`${import.meta.env.BASE_URL}images/wordmark.png`}
+                            alt="The Tatva Tribe"
+                            className="h-7 w-auto invert mix-blend-screen group-hover:opacity-80 transition-opacity"
+                            onError={(e) => {
+                                // Fallback to the text wordmark if the image isn't available yet.
+                                const fallback = document.createElement('span');
+                                fallback.className = 'font-heading font-bold text-xl text-cream group-hover:text-gold-400 transition-colors';
+                                fallback.textContent = 'The Tatva Tribe';
+                                e.currentTarget.replaceWith(fallback);
+                            }}
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}

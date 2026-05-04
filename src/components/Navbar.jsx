@@ -52,7 +52,7 @@ const Navbar = () => {
         >
             <div className="container">
                 <div className="flex items-center justify-between">
-                    <BrandMark wordmarkClassName="group-hover:opacity-80" />
+                    <BrandMark />
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-8">

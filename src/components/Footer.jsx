@@ -26,7 +26,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {/* Brand */}
                     <div className="space-y-4">
-                        <BrandMark />
+                        <BrandMark wordmarkClassName="h-12" />
                         <p className="text-cream/70 text-sm">
                             Holistic Health Coaching & Personal Training.
                             <br />

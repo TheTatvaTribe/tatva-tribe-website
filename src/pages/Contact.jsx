@@ -1,4 +1,5 @@
 import Card from '../components/ui/Card';
+import EyebrowPill from '../components/ui/EyebrowPill';
 
 const Contact = () => {
     return (
@@ -11,9 +12,7 @@ const Contact = () => {
 
                 <div className="container relative z-10">
                     <div className="max-w-3xl mx-auto text-center">
-                        <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6">
-                            Start Your Journey
-                        </span>
+                        <EyebrowPill className="mb-6">Start Your Journey</EyebrowPill>
                         <h1 className="heading-xl text-cream mb-6">
                             Get Your <span className="text-gradient">Free Consultation</span>
                         </h1>

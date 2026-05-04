@@ -3,24 +3,25 @@ import { Link } from 'react-router-dom';
 const BASE = import.meta.env.BASE_URL;
 
 /**
- * Brand emblem (gold "T" disc with logo image overlay) + wordmark image,
- * each with a graceful fallback. Shared by Navbar and Footer so the brand
- * block stays consistent.
+ * Brand emblem (gold "T" disc with logo image overlay) + text wordmark.
+ * Shared by Navbar and Footer so the brand block stays consistent.
  *
- * The emblem image and wordmark image are independent — either can fail
- * without affecting the other. The wordmark fallback re-renders the
- * "The Tatva Tribe" text.
+ * The wordmark is a bold-italic "TheTatvaTribe" rendered in the heading
+ * font (Antonio). Was previously an <img> referencing wordmark.png — that
+ * was reverted because the image rendered poorly at small sizes on the
+ * dark theme.
  *
- * `pointer-events-none` on the wordmark/emblem images sends clicks through
- * to the parent <Link> so the entire brand block is one big home-page link.
+ * The wordmark <span> uses `pointer-events-none` so clicks anywhere in the
+ * brand block bubble to the parent <Link>, keeping the whole area as one
+ * home-page link target.
  *
- * Default wordmark height is h-10 (40 px); pass `wordmarkClassName="h-12"`
- * etc. to override per surface (e.g. footer wants a larger wordmark).
+ * Pass `wordmarkClassName` (e.g. `"text-2xl"`) to override the size per
+ * surface. Footer uses a larger size since it has more vertical room.
  */
 const BrandMark = ({ wordmarkClassName = '', linkClassName = '' }) => (
     <Link
         to="/"
-        aria-label="The Tatva Tribe — home"
+        aria-label="TheTatvaTribe — home"
         className={`flex items-center gap-3 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark rounded-md ${linkClassName}`}
     >
         {/* Gold disc with "T" fallback that the logo image covers when loaded. */}
@@ -40,19 +41,11 @@ const BrandMark = ({ wordmarkClassName = '', linkClassName = '' }) => (
             />
         </div>
 
-        {/* Wordmark image; falls back to text if the image is missing. */}
-        {/* `invert` + `mix-blend-screen` keep a white-BG image readable on the dark theme. */}
-        <img
-            src={`${BASE}images/wordmark.png`}
-            alt="The Tatva Tribe"
-            className={`h-10 w-auto invert mix-blend-screen transition-opacity pointer-events-none group-hover:opacity-80 ${wordmarkClassName}`}
-            onError={(e) => {
-                const fallback = document.createElement('span');
-                fallback.className = 'font-heading font-bold text-xl text-cream group-hover:text-gold-400 transition-colors';
-                fallback.textContent = 'The Tatva Tribe';
-                e.currentTarget.replaceWith(fallback);
-            }}
-        />
+        <span
+            className={`font-heading font-bold italic text-xl text-cream group-hover:text-gold-400 transition-colors pointer-events-none ${wordmarkClassName}`}
+        >
+            TheTatvaTribe
+        </span>
     </Link>
 );
 

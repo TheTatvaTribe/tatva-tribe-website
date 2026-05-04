@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Card from '../components/ui/Card';
+import EyebrowPill from '../components/ui/EyebrowPill';
 
 const tribeCode = [
     {
@@ -81,9 +82,7 @@ const Pricing = () => {
 
                 <div className="container relative z-10">
                     <div className="max-w-3xl mx-auto text-center">
-                        <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6">
-                            The Tatva Marga
-                        </span>
+                        <EyebrowPill className="mb-6">The Tatva Marga</EyebrowPill>
                         <h1 className="heading-xl text-cream mb-6">
                             Choose Your <span className="text-gradient">Marga</span>
                         </h1>
@@ -140,9 +139,7 @@ const Pricing = () => {
             <section className="section bg-forest-600/20">
                 <div className="container">
                     <div className="text-center max-w-3xl mx-auto mb-12">
-                        <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6">
-                            Terms &amp; Conditions
-                        </span>
+                        <EyebrowPill className="mb-6">Terms &amp; Conditions</EyebrowPill>
                         <h2 className="heading-lg text-cream mb-4">
                             The <span className="text-gradient">Tatva-Achaar</span>
                         </h2>

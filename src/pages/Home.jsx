@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target } from 'lucide-react';
 import Card from '../components/ui/Card';
+import EyebrowPill from '../components/ui/EyebrowPill';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -75,9 +76,9 @@ const Home = () => {
 
                 <div className="container relative z-10">
                     <div className="max-w-3xl mx-auto text-center">
-                        <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6 animate-fade-in">
+                        <EyebrowPill className="mb-6 animate-fade-in">
                             🌟 Holistic Health Coaching
-                        </span>
+                        </EyebrowPill>
                         <h1 className="heading-xl text-cream mb-6 animate-slide-up">
                             <span className="text-gradient">SMARTWORK</span> over Hardwork
                         </h1>

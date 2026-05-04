@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target, Flame, TrendingDown, RefreshCw, ChevronLeft, ChevronRight, Pause, Play, ExternalLink } from 'lucide-react';
+import { Flame, TrendingDown, RefreshCw, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import Card from '../components/ui/Card';
+import EyebrowPill from '../components/ui/EyebrowPill';
+import ExternalLink from '../components/ui/ExternalLink';
+import { socialLinks } from '../content/navigation';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -124,100 +127,6 @@ const CertificationsCarousel = () => {
 };
 
 const About = () => {
-    const tatvas = [
-        {
-            hindi: 'शरीर',
-            english: 'Body Discipline',
-            description: 'Anything which promotes Movement.',
-            examples: 'Strength training, Endurance, Yoga, Aerobics',
-            Icon: Dumbbell,
-            /*
-             * TATVA IMAGE — Sharira (Body Discipline)
-             * Drop your image into public/images/tatvas/sharira.jpg
-             * Then uncomment the line below:
-             */
-            // image: `${BASE}images/tatvas/sharira.jpg`,
-        },
-        {
-            hindi: 'आहार',
-            english: 'Nutrition',
-            description: 'Mindful eating, balancing macros, staying hydrated.',
-            examples: 'Real food = Real energy',
-            Icon: Apple,
-            /*
-             * TATVA IMAGE — Aahaar (Nutrition)
-             * Drop your image into public/images/tatvas/aahaar.jpg
-             * Then uncomment the line below:
-             */
-            // image: `${BASE}images/tatvas/aahaar.jpg`,
-        },
-        {
-            hindi: 'मानस',
-            english: 'Mental Toughness',
-            description: 'Meditation, Breathwork, Journaling.',
-            examples: 'Mental resilience > Digital Chaos',
-            Icon: Brain,
-            /*
-             * TATVA IMAGE — Manas (Mental Toughness)
-             * Drop your image into public/images/tatvas/manas.jpg
-             * Then uncomment the line below:
-             */
-            // image: `${BASE}images/tatvas/manas.jpg`,
-        },
-        {
-            hindi: 'निद्रा',
-            english: 'Rest & Recovery',
-            description: 'Restorative sleep, active recovery, mobility.',
-            examples: 'Good rest = Better mood, strength and health span',
-            Icon: Moon,
-            /*
-             * TATVA IMAGE — Nidra (Rest & Recovery)
-             * Drop your image into public/images/tatvas/nidra.jpg
-             * Then uncomment the line below:
-             */
-            // image: `${BASE}images/tatvas/nidra.jpg`,
-        },
-        {
-            hindi: 'समाज',
-            english: 'Community & Connections',
-            description: 'Building good relations, socialising.',
-            examples: 'Growing together',
-            Icon: Users,
-            /*
-             * TATVA IMAGE — Samaaj (Community)
-             * Drop your image into public/images/tatvas/samaaj.jpg
-             * Then uncomment the line below:
-             */
-            // image: `${BASE}images/tatvas/samaaj.jpg`,
-        },
-        {
-            hindi: 'प्रकृति',
-            english: 'Nature',
-            description: 'Aligning with nature, seasonal rhythms in diet & activity.',
-            examples: 'Sunlight, fresh air = Natural healers',
-            Icon: Leaf,
-            /*
-             * TATVA IMAGE — Prakriti (Nature)
-             * Drop your image into public/images/tatvas/prakriti.jpg
-             * Then uncomment the line below:
-             */
-            // image: `${BASE}images/tatvas/prakriti.jpg`,
-        },
-        {
-            hindi: 'उद्देश्य',
-            english: 'Purpose',
-            description: 'Keeping the Right intention, setting a goal.',
-            examples: 'No purpose = No Growth',
-            Icon: Target,
-            /*
-             * TATVA IMAGE — Uddeshya (Purpose)
-             * Drop your image into public/images/tatvas/uddeshya.jpg
-             * Then uncomment the line below:
-             */
-            // image: `${BASE}images/tatvas/uddeshya.jpg`,
-        },
-    ];
-
     const audienceTypes = [
         {
             Icon: Flame,
@@ -246,9 +155,7 @@ const About = () => {
 
                 <div className="container relative z-10">
                     <div className="max-w-4xl mx-auto text-center">
-                        <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6 animate-fade-in">
-                            Our Philosophy
-                        </span>
+                        <EyebrowPill className="mb-6 animate-fade-in">Our Philosophy</EyebrowPill>
                         <h1 className="heading-xl text-cream mb-6 animate-slide-up">
                             Beyond Just Workouts —{' '}
                             <span className="text-gradient">Towards Wholeness</span>
@@ -305,16 +212,13 @@ const About = () => {
                                 Today, as a fitness professional, my aim is to build a tribe (a community) of people who have discovered what fitness truly is — <strong className="text-cream">a sustainable lifestyle, not just a temporary goal.</strong>
                             </p>
 
-                            <a
-                                href="https://www.instagram.com/advayshidhaye/"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <ExternalLink
+                                href={socialLinks.trainerInstagram.url}
                                 className="btn btn-secondary mt-8 gap-2"
+                                iconClassName="w-4 h-4"
                             >
                                 Connect on Instagram
-                                <ExternalLink className="w-4 h-4" aria-hidden="true" />
-                                <span className="sr-only">(opens in new tab)</span>
-                            </a>
+                            </ExternalLink>
                         </div>
                         <div className="order-1 lg:order-2 relative">
                             <div className="aspect-square max-w-md mx-auto rounded-full overflow-hidden shadow-xl shadow-black/40">

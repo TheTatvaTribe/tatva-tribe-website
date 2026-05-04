@@ -5,66 +5,68 @@ import EyebrowPill from '../components/ui/EyebrowPill';
 
 const BASE = import.meta.env.BASE_URL;
 
-const Home = () => {
-    const tatvas = [
-        {
-            hindi: 'शरीर',
-            english: 'Body Discipline',
-            description: 'Anything which promotes Movement.',
-            examples: 'Strength training, Endurance, Yoga, Aerobics',
-            Icon: Dumbbell,
-            image: `${BASE}images/tatvas/sharira.png`,
-        },
-        {
-            hindi: 'आहार',
-            english: 'Nutrition',
-            description: 'Mindful eating, balancing macros, staying hydrated.',
-            examples: 'Real food = Real energy',
-            Icon: Apple,
-            image: `${BASE}images/tatvas/aahaar.png`,
-        },
-        {
-            hindi: 'मानस',
-            english: 'Mental Toughness',
-            description: 'Meditation, Breathwork, Journaling.',
-            examples: 'Mental resilience > Digital Chaos',
-            Icon: Brain,
-            image: `${BASE}images/tatvas/manas.png`,
-        },
-        {
-            hindi: 'निद्रा',
-            english: 'Rest & Recovery',
-            description: 'Restorative sleep, active recovery, mobility.',
-            examples: 'Good rest = Better mood, strength and health span',
-            Icon: Moon,
-            image: `${BASE}images/tatvas/nidra.png`,
-        },
-        {
-            hindi: 'समाज',
-            english: 'Community & Connections',
-            description: 'Building good relations, socialising.',
-            examples: 'Growing together',
-            Icon: Users,
-            image: `${BASE}images/tatvas/samaaj.png`,
-        },
-        {
-            hindi: 'प्रकृति',
-            english: 'Nature',
-            description: 'Aligning with nature, seasonal rhythms in diet & activity.',
-            examples: 'Sunlight, fresh air = Natural healers',
-            Icon: Leaf,
-            image: `${BASE}images/tatvas/prakriti.png`,
-        },
-        {
-            hindi: 'उद्देश्य',
-            english: 'Purpose',
-            description: 'Keeping the Right intention, setting a goal.',
-            examples: 'No purpose = No Growth',
-            Icon: Target,
-            image: `${BASE}images/tatvas/uddeshya.png`,
-        },
-    ];
+// Module-scope so we don't reallocate on every render. Pure data; no
+// reactive concerns warrant having this inside the component.
+const tatvas = [
+    {
+        hindi: 'शरीर',
+        english: 'Body Discipline',
+        description: 'Anything which promotes Movement.',
+        examples: 'Strength training, Endurance, Yoga, Aerobics',
+        Icon: Dumbbell,
+        image: `${BASE}images/tatvas/sharira.png`,
+    },
+    {
+        hindi: 'आहार',
+        english: 'Nutrition',
+        description: 'Mindful eating, balancing macros, staying hydrated.',
+        examples: 'Real food = Real energy',
+        Icon: Apple,
+        image: `${BASE}images/tatvas/aahaar.png`,
+    },
+    {
+        hindi: 'मानस',
+        english: 'Mental Toughness',
+        description: 'Meditation, Breathwork, Journaling.',
+        examples: 'Mental resilience > Digital Chaos',
+        Icon: Brain,
+        image: `${BASE}images/tatvas/manas.png`,
+    },
+    {
+        hindi: 'निद्रा',
+        english: 'Rest & Recovery',
+        description: 'Restorative sleep, active recovery, mobility.',
+        examples: 'Good rest = Better mood, strength and health span',
+        Icon: Moon,
+        image: `${BASE}images/tatvas/nidra.png`,
+    },
+    {
+        hindi: 'समाज',
+        english: 'Community & Connections',
+        description: 'Building good relations, socialising.',
+        examples: 'Growing together',
+        Icon: Users,
+        image: `${BASE}images/tatvas/samaaj.png`,
+    },
+    {
+        hindi: 'प्रकृति',
+        english: 'Nature',
+        description: 'Aligning with nature, seasonal rhythms in diet & activity.',
+        examples: 'Sunlight, fresh air = Natural healers',
+        Icon: Leaf,
+        image: `${BASE}images/tatvas/prakriti.png`,
+    },
+    {
+        hindi: 'उद्देश्य',
+        english: 'Purpose',
+        description: 'Keeping the Right intention, setting a goal.',
+        examples: 'No purpose = No Growth',
+        Icon: Target,
+        image: `${BASE}images/tatvas/uddeshya.png`,
+    },
+];
 
+const Home = () => {
     return (
         <div className="pt-20">
             {/* Hero Section */}
@@ -126,6 +128,7 @@ const Home = () => {
                                         src={tatva.image}
                                         alt={tatva.english}
                                         loading="lazy"
+                                        decoding="async"
                                         className="absolute inset-0 w-full h-full object-contain p-4 opacity-0 group-hover:scale-105 transition-[opacity,transform] duration-500"
                                         onLoad={(e) => {
                                             e.currentTarget.style.opacity = '1';
@@ -163,6 +166,7 @@ const Home = () => {
                                     src={tatvas[6].image}
                                     alt={tatvas[6].english}
                                     loading="lazy"
+                                    decoding="async"
                                     className="absolute inset-0 w-full h-full object-contain p-4 opacity-0 group-hover:scale-105 transition-[opacity,transform] duration-500"
                                     onLoad={(e) => {
                                         e.currentTarget.style.opacity = '1';

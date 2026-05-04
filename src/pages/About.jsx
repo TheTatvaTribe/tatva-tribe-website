@@ -84,6 +84,7 @@ const CertificationsCarousel = () => {
                                     src={cert.src}
                                     alt={cert.alt}
                                     loading="lazy"
+                                    decoding="async"
                                     className="w-full h-auto object-contain bg-white"
                                 />
                             </div>
@@ -126,25 +127,26 @@ const CertificationsCarousel = () => {
     );
 };
 
-const About = () => {
-    const audienceTypes = [
-        {
-            Icon: Flame,
-            title: 'The Motivated Beginner',
-            description: 'Highly motivated, but don\'t know where to start.',
-        },
-        {
-            Icon: TrendingDown,
-            title: 'The Inconsistent Learner',
-            description: 'Know a little, but struggle to stay consistent.',
-        },
-        {
-            Icon: RefreshCw,
-            title: 'The Plateau Warrior',
-            description: 'Stuck in the same routine for years.',
-        },
-    ];
+// Module-scope: pure presentational data, no reason to recreate on every render.
+const audienceTypes = [
+    {
+        Icon: Flame,
+        title: 'The Motivated Beginner',
+        description: 'Highly motivated, but don\'t know where to start.',
+    },
+    {
+        Icon: TrendingDown,
+        title: 'The Inconsistent Learner',
+        description: 'Know a little, but struggle to stay consistent.',
+    },
+    {
+        Icon: RefreshCw,
+        title: 'The Plateau Warrior',
+        description: 'Stuck in the same routine for years.',
+    },
+];
 
+const About = () => {
     return (
         <div className="pt-20">
             {/* Hero Section — soft "horizon" motif: a wide warm band suggesting sunrise */}
@@ -226,6 +228,7 @@ const About = () => {
                                     src={`${BASE}images/trainer.jpeg`}
                                     alt="Advay Shidhaye — Master Trainer"
                                     loading="lazy"
+                                    decoding="async"
                                     className="w-full h-full object-cover"
                                 />
                             </div>

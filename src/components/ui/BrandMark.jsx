@@ -2,23 +2,28 @@ import { Link } from 'react-router-dom';
 
 const BASE = import.meta.env.BASE_URL;
 
+const WORDMARK_W = 1270;
+const WORDMARK_H = 292;
+
 /**
- * Brand emblem (gold "T" disc with logo image overlay) + text wordmark.
+ * Brand emblem (gold "T" disc with logo image overlay) + wordmark image.
  * Shared by Navbar and Footer so the brand block stays consistent.
  *
- * The wordmark is a bold-italic "TheTatvaTribe" rendered in the heading
- * font (Antonio). Was previously an <img> referencing wordmark.png — that
- * was reverted because the image rendered poorly at small sizes on the
- * dark theme.
+ * The wordmark is two PNGs stacked in the same grid cell: the white
+ * version shows by default, the gold version fades in on hover. Both
+ * PNGs are pre-padded to identical 1270x292 canvases so the swap is
+ * a pure opacity crossfade with no positional shift.
  *
- * The wordmark <span> uses `pointer-events-none` so clicks anywhere in the
- * brand block bubble to the parent <Link>, keeping the whole area as one
- * home-page link target.
+ * The wordmark <span> uses `pointer-events-none` so clicks anywhere in
+ * the brand block bubble to the parent <Link>, keeping the whole area
+ * as one home-page link target.
  *
- * Pass `wordmarkClassName` (e.g. `"text-2xl"`) to override the size per
- * surface. Footer uses a larger size since it has more vertical room.
+ * Sizing is controlled via `wordmarkClassName` — pass a Tailwind height
+ * utility (e.g. `h-7`, `h-9`); width derives from the image's intrinsic
+ * aspect ratio. Default is `h-7` (28px) for the navbar; Footer overrides
+ * to `h-9` (36px) since it has more vertical room.
  */
-const BrandMark = ({ wordmarkClassName = '', linkClassName = '' }) => (
+const BrandMark = ({ wordmarkClassName = 'h-7', linkClassName = '' }) => (
     <Link
         to="/"
         aria-label="TheTatvaTribe — home"
@@ -41,10 +46,26 @@ const BrandMark = ({ wordmarkClassName = '', linkClassName = '' }) => (
             />
         </div>
 
-        <span
-            className={`font-heading font-bold italic text-xl text-cream group-hover:text-gold-400 transition-colors pointer-events-none ${wordmarkClassName}`}
-        >
-            TheTatvaTribe
+        <span className="relative inline-block pointer-events-none">
+            <img
+                src={`${BASE}images/wordmark-white.png`}
+                alt="TheTatvaTribe"
+                width={WORDMARK_W}
+                height={WORDMARK_H}
+                loading="eager"
+                decoding="async"
+                className={`block w-auto transition-opacity duration-200 group-hover:opacity-0 ${wordmarkClassName}`}
+            />
+            <img
+                src={`${BASE}images/wordmark-gold.png`}
+                alt=""
+                aria-hidden="true"
+                width={WORDMARK_W}
+                height={WORDMARK_H}
+                loading="eager"
+                decoding="async"
+                className={`absolute left-0 top-0 w-auto opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${wordmarkClassName}`}
+            />
         </span>
     </Link>
 );

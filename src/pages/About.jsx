@@ -298,12 +298,8 @@ const About = () => {
             <section className="section bg-gradient-to-br from-forest-600/50 to-forest-700/50">
                 <div className="container text-center">
                     <div className="max-w-2xl mx-auto">
-                        <h2 className="heading-lg text-cream mb-4">
-                            Ready to Discover{' '}
-                            <span className="text-gradient">Your Tatva</span>?
-                        </h2>
                         <p className="text-cream/70 mb-8 text-lg">
-                            Start your transformation journey today with a free consultation.
+                            Start your transformation journey today with a free consultation. 👇🏼
                         </p>
                         <Link to="/contact" className="btn btn-primary text-lg px-10 py-4">
                             Join the Tribe

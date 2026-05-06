@@ -11,7 +11,7 @@
       // real URL via history.replaceState before React Router boots.
       // Adapted from https://github.com/rafgraph/spa-github-pages (MIT).
       (function () {
-        var pathSegmentsToKeep = 1; // matches Vite `base: '/tatva-tribe-website/'`
+        var pathSegmentsToKeep = 0; // custom apex domain, no base path
         var l = window.location;
         l.replace(
           l.protocol +

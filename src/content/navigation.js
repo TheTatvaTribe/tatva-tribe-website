@@ -20,4 +20,8 @@ export const socialLinks = {
         handle: '@advayshidhaye',
         url: 'https://www.instagram.com/advayshidhaye/',
     },
+    email: {
+        address: 'thetatvatribe@gmail.com',
+        url: 'mailto:thetatvatribe@gmail.com',
+    },
 };

@@ -17,6 +17,12 @@ const InstagramIcon = ({ className = 'w-5 h-5' }) => (
     </svg>
 );
 
+const MailIcon = ({ className = 'w-5 h-5' }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+    </svg>
+);
+
 const Footer = () => {
     const currentYear = new Date().getFullYear();
 
@@ -82,6 +88,21 @@ const Footer = () => {
                                 >
                                     {socialLinks.instagram.handle}
                                 </ExternalLink>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <a
+                                    href={socialLinks.email.url}
+                                    aria-label={`Email ${socialLinks.email.address}`}
+                                    className="w-10 h-10 rounded-full bg-forest-700/50 flex items-center justify-center text-cream hover:bg-gold-400 hover:text-dark transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-forest-600 shrink-0"
+                                >
+                                    <MailIcon />
+                                </a>
+                                <a
+                                    href={socialLinks.email.url}
+                                    className="inline-flex items-center gap-1.5 text-gold-400 hover:underline rounded-sm break-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-forest-600"
+                                >
+                                    {socialLinks.email.address}
+                                </a>
                             </div>
                             <p>DM "TATVA" for FREE consultation!</p>
                         </div>

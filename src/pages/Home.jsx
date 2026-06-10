@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target } from 'lucide-react';
 import Card from '../components/ui/Card';
 import EyebrowPill from '../components/ui/EyebrowPill';
+import HeroVideo from '../components/HeroVideo';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -67,32 +69,56 @@ const tatvas = [
 ];
 
 const Home = () => {
+    // Layout switch for the hero video: below lg the video runs full-bleed
+    // behind the headline (portrait footage ≈ portrait screens); at lg+ it
+    // becomes a framed card beside the text so the wide hero never crops it.
+    const isDesktop = useMediaQuery('(min-width: 1024px)');
+
     return (
         <div className="pt-20">
             {/* Hero Section */}
             <section className="section min-h-[90vh] flex items-center relative overflow-hidden">
-                {/* Background Gradient */}
+                {/* Background Gradient — also the fallback if the video fails */}
                 <div className="absolute inset-0 bg-gradient-to-br from-forest-600 via-dark to-dark" />
                 <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gold-400/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-forest-500/20 rounded-full blur-3xl" />
 
+                {/* Mobile/tablet: full-bleed video behind the text with a dark
+                    scrim so the headline stays legible over the footage. */}
+                {!isDesktop && (
+                    <>
+                        <HeroVideo className="absolute inset-0 w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-dark/75 via-dark/50 to-dark/85" />
+                    </>
+                )}
+
                 <div className="container relative z-10">
-                    <div className="max-w-3xl mx-auto text-center">
-                        <EyebrowPill className="mb-6 animate-fade-in">
-                            🌟 Holistic Health Coaching
-                        </EyebrowPill>
-                        <h1 className="heading-xl text-cream mb-6 animate-slide-up">
-                            <span className="text-gradient">SMARTWORK</span> over Hardwork
-                        </h1>
-                        <p className="text-xl text-cream/70 mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                            Be the difference between looking fit and{' '}
-                            <span className="text-gradient font-semibold">actually being fit</span>.
-                        </p>
-                        <div className="flex flex-wrap gap-4 justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                            <Link to="/contact" className="btn btn-primary">
-                                Get Free Consultation
-                            </Link>
+                    <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
+                        <div className="max-w-3xl mx-auto text-center lg:mx-0 lg:text-left">
+                            <EyebrowPill className="mb-6 animate-fade-in">
+                                🌟 Holistic Health Coaching
+                            </EyebrowPill>
+                            <h1 className="heading-xl text-cream mb-6 animate-slide-up">
+                                <span className="text-gradient">SMARTWORK</span> over Hardwork
+                            </h1>
+                            <p className="text-xl text-cream/70 mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                                Be the difference between looking fit and{' '}
+                                <span className="text-gradient font-semibold">actually being fit</span>.
+                            </p>
+                            <div className="flex flex-wrap gap-4 justify-center lg:justify-start animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                                <Link to="/contact" className="btn btn-primary">
+                                    Get Free Consultation
+                                </Link>
+                            </div>
                         </div>
+
+                        {/* Desktop: the video at its natural portrait aspect in a
+                            gold-trimmed card — no cropping at any window size. */}
+                        {isDesktop && (
+                            <div className="justify-self-center animate-fade-in">
+                                <HeroVideo className="h-[65vh] min-h-[420px] max-h-[640px] w-auto rounded-3xl border border-gold-400/30 shadow-lg shadow-dark/50" />
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>

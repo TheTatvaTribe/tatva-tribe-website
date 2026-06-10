@@ -18,7 +18,11 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // `behavior: 'instant'` is required: <html> has `scroll-behavior: smooth`
+    // (index.css), which otherwise turns this reset into an animated scroll.
+    // That animation gets cancelled by the incoming route's re-render, leaving
+    // the new page stuck at the previous scroll offset instead of the top.
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
   return null;
 }

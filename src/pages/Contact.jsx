@@ -1,5 +1,6 @@
 import Card from '../components/ui/Card';
 import EyebrowPill from '../components/ui/EyebrowPill';
+import ConsultationForm from '../components/ConsultationForm';
 
 const Contact = () => {
     return (
@@ -23,26 +24,14 @@ const Contact = () => {
                 </div>
             </section>
 
-            {/* Google Form Embed */}
+            {/* Custom consultation form — posts to the Google Form's
+                formResponse endpoint, so responses land in the same sheet
+                as the old embedded iframe. */}
             <section className="section -mt-8">
                 <div className="container">
                     <div className="grid lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2">
-                            <Card hover={false} className="p-0 overflow-hidden">
-                                <iframe
-                                    src="https://docs.google.com/forms/d/e/1FAIpQLScScCLsxvv6BaL4wphS_QksI2fm4x0B_QQGeM4pd0LB7DMdMQ/viewform?embedded=true"
-                                    width="100%"
-                                    height="800"
-                                    frameBorder="0"
-                                    marginHeight="0"
-                                    marginWidth="0"
-                                    loading="lazy"
-                                    title="Free Consultation Form"
-                                    className="w-full min-h-[800px]"
-                                >
-                                    Loading...
-                                </iframe>
-                            </Card>
+                            <ConsultationForm />
                         </div>
 
                         <div className="space-y-6">

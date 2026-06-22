@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Tatva Tribe — Holistic Health Coaching</title>
+  <meta name="description" content="Holistic Health Coaching & Personal Training rooted in the 7 Tatvas of transformation. SMARTWORK over Hardwork." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Hind:wght@300;400;500;600&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" aria-label="The Tatva Tribe Home">
+        <span class="logo-devanagari">तत्व</span>
+        <span class="logo-text">TRIBE</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="#tatvas"       class="nav-link">The 7 Tatvas</a></li>
+        <li><a href="#services"     class="nav-link">Services</a></li>
+        <li><a href="#testimonials" class="nav-link">Stories</a></li>
+        <li><a href="#contact"      class="nav-link nav-cta">Free Consult</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- hero-scroll-zone gives 200vh of scroll runway for the zoom animation -->
+  <div class="hero-scroll-zone" id="heroScrollZone">
+  <section class="hero" id="hero">
+    <!-- bg-zoom layer: everything that zooms in -->
+    <div class="hero-bg-zoom" id="heroBgZoom">
+      <div class="hero-mandala" aria-hidden="true"></div>
+      <div class="hero-grain"   aria-hidden="true"></div>
+      <div class="hero-om"      aria-hidden="true">ॐ</div>
+      <div class="hero-kolam"   aria-hidden="true"></div>
+    </div>
+    <!-- content layer: fades out as zoom progresses -->
+    <div class="hero-content" id="heroContent">
+      <span class="hero-shloka" aria-hidden="true">✦&nbsp; तमसो मा ज्योतिर्गमय &nbsp;✦</span>
+      <p class="hero-eyebrow">Holistic Health Coaching</p>
+      <h1 class="hero-headline">
+        <span class="hero-hindi">स्मार्टवर्क</span><br />over Hardwork
+      </h1>
+      <p class="hero-sub">
+        Be the difference between <em>looking fit</em> and <em>actually being fit</em>.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary ripple-btn">Get Free Consultation</a>
+        <a href="#tatvas"  class="btn btn-ghost">Explore the Tatvas ↓</a>
+      </div>
+    </div>
+    <div class="hero-tatvas-reveal" id="heroTatvasReveal" aria-hidden="true">
+      <span class="section-eyebrow">The Ancient Blueprint</span>
+      <h2 class="section-title">The 7 Tatvas of<br />Transformation</h2>
+      <p class="section-desc"><em>'Tatva'</em> — the Sanskrit word for <em>core essence</em>. Scroll through the seven pillars that govern your health, energy, and purpose.</p>
+      <div class="tatvas-scroll-hint" aria-hidden="true">↓ Scroll to explore each Tatva</div>
+    </div>
+    <div class="hero-scroll-hint" id="heroScrollHint" aria-hidden="true">
+      <span class="scroll-line"></span>
+      <span class="scroll-label">scroll</span>
+    </div>
+  </section>
+  </div><!-- /hero-scroll-zone -->
+
+
+
+  <section class="tatvas-section" id="tatvas">
+    <div class="tatvas-stack" id="tatvasStack">
+      <div class="tatva-card-full" data-index="0" style="--card-col:#D4E84A; --card-bg:#111600">
+        <div class="tcf-visual">
+          <div class="tcf-big-num">01</div>
+          <img src="https://thetatvatribe.com/images/tatvas/sharira.png" alt="" class="tcf-icon" loading="lazy" />
+        </div>
+        <div class="tcf-content">
+          <span class="tcf-devan">शरीर</span>
+          <h3 class="tcf-name">Body Discipline</h3>
+          <p class="tcf-desc">Anything which promotes movement — strength training, endurance, yoga, aerobics. शरीर is your most sacred instrument; treat it accordingly.</p>
+          <div class="tcf-tags"><span>Sharira</span><span>Movement</span><span>Strength</span></div>
+        </div>
+      </div>
+      <div class="tatva-card-full" data-index="1" style="--card-col:#A8D458; --card-bg:#0D1608">
+        <div class="tcf-visual">
+          <div class="tcf-big-num">02</div>
+          <img src="https://thetatvatribe.com/images/tatvas/aahaar.png" alt="" class="tcf-icon" loading="lazy" />
+        </div>
+        <div class="tcf-content">
+          <span class="tcf-devan">आहार</span>
+          <h3 class="tcf-name">Nutrition</h3>
+
+  
+
+          <p class="tcf-desc">Mindful eating, balancing macros, staying hydrated. Real food = Real energy. आहार is medicine when chosen wisely — dal, sabzi, and ghee included.</p>
+          <div class="tcf-tags"><span>Aahaar</span><span>Mindful Eating</span><span>Balance</span></div>
+        </div>
+      </div>
+      <div class="tatva-card-full" data-index="2" style="--card-col:#5CBF60; --card-bg:#091209">
+        <div class="tcf-visual">
+          <div class="tcf-big-num">03</div>
+          <img src="https://thetatvatribe.com/images/tatvas/manas.png" alt="" class="tcf-icon" loading="lazy" />
+        </div>
+        <div class="tcf-content">
+          <span class="tcf-devan">मानस</span>
+          <h3 class="tcf-name">Mental Toughness</h3>
+          <p class="tcf-desc">Meditation, breathwork, journaling. Mental resilience &gt; Digital chaos. A strong मानस is the foundation of every achievement worth having.</p>
+          <div class="tcf-tags"><span>Manas</span><span>Meditation</span><span>Resilience</span></div>
+        </div>
+      </div>
+      <div class="tatva-card-full" data-index="3" style="--card-col:#36B8A8; --card-bg:#061412">
+        <div class="tcf-visual">
+          <div class="tcf-big-num">04</div>
+          <img src="https://thetatvatribe.com/images/tatvas/nidra.png" alt="" class="tcf-icon" loading="lazy" />
+        </div>
+        <div class="tcf-content">
+          <span class="tcf-devan">निद्रा</span>
+          <h3 class="tcf-name">Rest &amp; Recovery</h3>
+          <p class="tcf-desc">Restorative sleep, active recovery, mobility. Good rest = Better mood, strength and healthspan. निद्रा is not laziness — it is sacred medicine.</p>
+          <div class="tcf-tags"><span>Nidra</span><span>Sleep</span><span>Recovery</span></div>
+        </div>
+      </div>
+      <div class="tatva-card-full" data-index="4" style="--card-col:#6CC96E; --card-bg:#0A150A">
+        <div class="tcf-visual">
+          <div class="tcf-big-num">05</div>
+          <img src="https://thetatvatribe.com/images/tatvas/samaaj.png" alt="" class="tcf-icon" loading="lazy" />
+        </div>
+        <div class="tcf-content">
+          <span class="tcf-devan">समाज</span>
+          <h3 class="tcf-name">Community</h3>
+          <p class="tcf-desc">Building good relations, socialising. Growing together — Milke Badho. समाज reminds us we are far stronger inside a tribe than standing alone.</p>
+          <div class="tcf-tags"><span>Samaaj</span><span>Community</span><span>Connection</span></div>
+        </div>
+      </div>
+      <div class="tatva-card-full" data-index="5" style="--card-col:#3A9E40; --card-bg:#081108">
+        <div class="tcf-visual">
+          <div class="tcf-big-num">06</div>
+          <img src="https://thetatvatribe.com/images/tatvas/prakriti.png" alt="" class="tcf-icon" loading="lazy" />
+        </div>
+        <div class="tcf-content">
+          <span class="tcf-devan">प्रकृति</span>
+          <h3 class="tcf-name">Nature</h3>
+          <p class="tcf-desc">Aligning with nature, seasonal rhythms in diet &amp; activity. Sunlight, fresh air = Natural healers. प्रकृति is your original home — return to it often.</p>
+          <div class="tcf-tags"><span>Prakriti</span><span>Nature</span><span>Seasons</span></div>
+        </div>
+      </div>
+      <div class="tatva-card-full" data-index="6" style="--card-col:#C8E030; --card-bg:#121500">
+        <div class="tcf-visual">
+          <div class="tcf-big-num">07</div>
+          <img src="https://thetatvatribe.com/images/tatvas/uddeshya.png" alt="" class="tcf-icon" loading="lazy" />
+        </div>
+        <div class="tcf-content">
+          <span class="tcf-devan">उद्देश्य</span>
+          <h3 class="tcf-name">Purpose</h3>
+          <p class="tcf-desc">Keeping the right intention, setting a goal. No purpose = No growth. उद्देश्य is the north star that makes every other Tatva meaningful and worth pursuing.</p>
+          <div class="tcf-tags"><span>Uddeshya</span><span>Purpose</span><span>Goal</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack-progress" id="stackProgress" aria-hidden="true">
+      <span class="sp-dot active" data-card="0"></span>
+      <span class="sp-dot" data-card="1"></span>
+      <span class="sp-dot" data-card="2"></span>
+      <span class="sp-dot" data-card="3"></span>
+      <span class="sp-dot" data-card="4"></span>
+      <span class="sp-dot" data-card="5"></span>
+      <span class="sp-dot" data-card="6"></span>
+    </div>
+  </section>
+
+  <section class="programs-orbit-section" id="services">
+    <div class="programs-orbit-sticky">
+      <div id="servicesWash" aria-hidden="true"></div>
+      <div class="orbit-center-copy" id="orbitCenterCopy" aria-hidden="true">
+        <h2>Programs Built<br />Around You</h2>
+      </div>
+
+      <div class="orbit-cards" id="orbitCards" aria-hidden="true">
+        <article class="orbit-card" style="--orbit-col:#D4E84A; --orbit-bg:#111703;">
+          <div class="orbit-icon">
+            <svg class="orbit-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="7" cy="12" r="2.2" />
+              <circle cx="17" cy="12" r="2.2" />
+              <path d="M2.5 12h2.3M19.2 12h2.3M9.2 12h5.6" />
+              <path d="M6 9.2v5.6M18 9.2v5.6" />
+            </svg>
+          </div>
+          <h3>Personal Training</h3>
+        </article>
+
+        <article class="orbit-card" style="--orbit-col:#5CBF60; --orbit-bg:#091209;">
+          <div class="orbit-icon">
+            <svg class="orbit-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="12" rx="2" />
+              <path d="M9 20h6M12 16v4" />
+              <path d="M7.5 10.5l2-2 2.5 3 2.3-2.2 2.2 2.2" />
+            </svg>
+          </div>
+          <h3>Online Coaching</h3>
+        </article>
+
+        <article class="orbit-card" style="--orbit-col:#36B8A8; --orbit-bg:#061412;">
+          <div class="orbit-icon">
+            <svg class="orbit-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 13.5c0-3.6 3.4-6.5 8-6.5s8 2.9 8 6.5" />
+              <path d="M5.5 13.5h13" />
+              <path d="M12 7V4.5" />
+              <path d="M9.2 5.8l1.1 1.2M14.8 5.8l-1.1 1.2" />
+              <path d="M7.5 18.5h9" />
+            </svg>
+          </div>
+          <h3>Diet Plans</h3>
+        </article>
+
+        <article class="orbit-card" style="--orbit-col:#6CC96E; --orbit-bg:#0A150A;">
+          <div class="orbit-icon">
+            <svg class="orbit-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4.5 18.5h15" />
+              <path d="M7 18.5v-6.8h4.2v6.8" />
+              <path d="M12.8 18.5v-9h4.2v9" />
+              <path d="M5.5 9.2l2.8-2.2 2.7 2.2" />
+            </svg>
+          </div>
+          <h3>Workout Blueprints</h3>
+        </article>
+
+        <article class="orbit-card" style="--orbit-col:#3A9E40; --orbit-bg:#081108;">
+          <div class="orbit-icon">
+            <svg class="orbit-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 19.5h18" />
+              <path d="M4.5 19.5l5.2-8 3.2 4.8 2.7-3.5 3.7 6.7" />
+              <circle cx="17.5" cy="6.3" r="1.2" />
+            </svg>
+          </div>
+          <h3>Outdoor Experiences</h3>
+        </article>
+      </div>
+
+      <div class="services-rail-viewport" id="servicesRailViewport" aria-hidden="true">
+      <div class="services-rail" id="servicesRail" aria-hidden="true">
+        <article class="service-mini-card" style="--mini-col:#D4E84A; --mini-bg:#111703;" data-service-card="1">
+          <div class="service-face service-face-front">
+            <div class="service-front-main">
+              <span class="service-sanskrit">व्यक्तिगत</span>
+              <h4>Personal Training</h4>
+              <span class="service-divider" aria-hidden="true"></span>
+              <p>One-to-one sessions built around your posture, movement patterns, and progressive overload principles.</p>
+              <div class="service-tags"><span>STRENGTH</span><span>POSTURE</span><span>1-ON-1</span></div>
+              <div class="service-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <aside class="service-front-side">
+              <div class="smc-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5h2.5M18.5 11.5H21"/><path d="M5.5 9v5M18.5 9v5"/><path d="M8 11.5h8"/><rect x="6" y="9" width="2" height="5" rx="1"/><rect x="16" y="9" width="2" height="5" rx="1"/></svg>
+              </div>
+              <strong>01</strong>
+              <small>OF 05</small>
+              <em>TAP FOR MORE INFO</em>
+            </aside>
+          </div>
+          <div class="service-face service-face-back" aria-hidden="true">
+            <span class="service-back-eyebrow">Personal Training</span>
+            <h5>What to expect from every session</h5>
+            <span class="service-divider" aria-hidden="true"></span>
+            <p>Every session starts with a movement assessment so training adapts to your body, not a generic plan.</p>
+            <ul>
+              <li>Posture and movement screening</li>
+              <li>Progressive overload every week</li>
+              <li>Form correction and technique focus</li>
+            </ul>
+            <div class="service-stats"><span><strong>3×</strong>Weekly</span><span><strong>60m</strong>Duration</span><span><strong>1:1</strong>Format</span><span><strong>₹</strong>Premium rate</span></div>
+            <button type="button">Book a session</button>
+          </div>
+        </article>
+        <article class="service-mini-card" style="--mini-col:#A8D458; --mini-bg:#0D1608;" data-service-card="2">
+          <div class="service-face service-face-front">
+            <div class="service-front-main">
+              <span class="service-sanskrit">ऑनलाइन</span>
+              <h4>Online Coaching</h4>
+              <span class="service-divider" aria-hidden="true"></span>
+              <p>Remote check-ins, progress tracking, and adaptive programming that keeps the plan moving wherever you are.</p>
+              <div class="service-tags"><span>REMOTE</span><span>FLEXIBLE</span><span>PROGRESS</span></div>
+              <div class="service-dots" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span></span><span></span><span></span></div>
+            </div>
+            <aside class="service-front-side">
+              <div class="smc-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M9 20h6M12 16v4"/></svg>
+              </div>
+              <strong>02</strong>
+              <small>OF 05</small>
+              <em>TAP FOR MORE INFO</em>
+            </aside>
+          </div>
+          <div class="service-face service-face-back" aria-hidden="true">
+            <span class="service-back-eyebrow">Online Coaching</span>
+            <h5>What to expect from every session</h5>
+            <span class="service-divider" aria-hidden="true"></span>
+            <p>Weekly check-ins keep your plan evolving. No gym needed — just consistency and the right guidance.</p>
+            <ul>
+              <li>Weekly video check-in calls</li>
+              <li>Adaptive program updates</li>
+              <li>24/7 messaging support</li>
+            </ul>
+            <div class="service-stats"><span><strong>1×</strong>Weekly call</span><span><strong>Async</strong>Support</span><span><strong>App</strong>Tracking</span><span><strong>₹</strong>Flexible rate</span></div>
+            <button type="button">Start coaching</button>
+          </div>
+        </article>
+        <article class="service-mini-card" style="--mini-col:#5CBF60; --mini-bg:#091209;" data-service-card="3">
+          <div class="service-face service-face-front">
+            <div class="service-front-main">
+              <span class="service-sanskrit">आहार</span>
+              <h4>Diet Plans</h4>
+              <span class="service-divider" aria-hidden="true"></span>
+              <p>Nutrition plans built around Indian food, your schedule, and goals — no bland meals or impossible restrictions.</p>
+              <div class="service-tags"><span>NUTRITION</span><span>INDIAN FOOD</span><span>GOALS</span></div>
+              <div class="service-dots" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span></span><span></span></div>
+            </div>
+            <aside class="service-front-side">
+              <div class="smc-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13.5c0-3.6 3.4-6.5 8-6.5s8 2.9 8 6.5"/><path d="M5.5 13.5h13"/><path d="M12 7V4.5"/></svg>
+              </div>
+              <strong>03</strong>
+              <small>OF 05</small>
+              <em>TAP FOR MORE INFO</em>
+            </aside>
+          </div>
+          <div class="service-face service-face-back" aria-hidden="true">
+            <span class="service-back-eyebrow">Diet Plans</span>
+            <h5>What to expect from your plan</h5>
+            <span class="service-divider" aria-hidden="true"></span>
+            <p>A plan that works with your lifestyle, not against it. Real food, practical portions, sustainable habits.</p>
+            <ul>
+              <li>Personalised Indian meal plans</li>
+              <li>Macro and micronutrient guidance</li>
+              <li>Monthly plan revisions</li>
+            </ul>
+            <div class="service-stats"><span><strong>Custom</strong>Meals</span><span><strong>Monthly</strong>Review</span><span><strong>Indian</strong>Cuisine</span><span><strong>₹</strong>Per plan</span></div>
+            <button type="button">Get my plan</button>
+          </div>
+        </article>
+        <article class="service-mini-card" style="--mini-col:#36B8A8; --mini-bg:#061412;" data-service-card="4">
+          <div class="service-face service-face-front">
+            <div class="service-front-main">
+              <span class="service-sanskrit">योजना</span>
+              <h4>Workout Blueprints</h4>
+              <span class="service-divider" aria-hidden="true"></span>
+              <p>Structured training programs you can follow independently — designed for your goal, equipment, and schedule.</p>
+              <div class="service-tags"><span>PROGRAM</span><span>SELF-LED</span><span>STRUCTURED</span></div>
+              <div class="service-dots" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span></span></div>
+            </div>
+            <aside class="service-front-side">
+              <div class="smc-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v6M3 9h18M3 15h18"/></svg>
+              </div>
+              <strong>04</strong>
+              <small>OF 05</small>
+              <em>TAP FOR MORE INFO</em>
+            </aside>
+          </div>
+          <div class="service-face service-face-back" aria-hidden="true">
+            <span class="service-back-eyebrow">Workout Blueprints</span>
+            <h5>What's inside your blueprint</h5>
+            <span class="service-divider" aria-hidden="true"></span>
+            <p>A complete training roadmap — warm-up, working sets, progressions, and deload weeks all mapped out.</p>
+            <ul>
+              <li>8 to 12 week structured programs</li>
+              <li>Exercise substitutions included</li>
+              <li>Video demos for every movement</li>
+            </ul>
+            <div class="service-stats"><span><strong>12wk</strong>Duration</span><span><strong>Self</strong>Led</span><span><strong>PDF +</strong>App</span><span><strong>₹</strong>One-time</span></div>
+            <button type="button">Get my blueprint</button>
+          </div>
+        </article>
+        <article class="service-mini-card" style="--mini-col:#C8E030; --mini-bg:#121500;" data-service-card="5">
+          <div class="service-face service-face-front">
+            <div class="service-front-main">
+              <span class="service-sanskrit">बाह्य</span>
+              <h4>Outdoor Experiences</h4>
+              <span class="service-divider" aria-hidden="true"></span>
+              <p>Community sessions that build stamina, confidence, and a stronger training rhythm that sticks beyond the session.</p>
+              <div class="service-tags"><span>OUTDOOR</span><span>STAMINA</span><span>COMMUNITY</span></div>
+              <div class="service-dots" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span></div>
+            </div>
+            <aside class="service-front-side">
+              <div class="smc-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19.5h18"/><path d="M4.5 19.5l5.2-8 3.2 4.8 2.7-3.5 3.7 6.7"/></svg>
+              </div>
+              <strong>05</strong>
+              <small>OF 05</small>
+              <em>TAP FOR MORE INFO</em>
+            </aside>
+          </div>
+          <div class="service-face service-face-back" aria-hidden="true">
+            <span class="service-back-eyebrow">Outdoor Experiences</span>
+            <h5>What to expect from every session</h5>
+            <span class="service-divider" aria-hidden="true"></span>
+            <p>Every session is built around progressive movement, fresh air, and community energy. The structure adapts to where you are.</p>
+            <ul>
+              <li>Warm-up and mobility every session</li>
+              <li>Strength circuits adapted to your level</li>
+              <li>Cooldown and breathwork close</li>
+            </ul>
+            <div class="service-stats"><span><strong>3×</strong>Weekly</span><span><strong>90m</strong>Duration</span><span><strong>All</strong>Levels</span><span><strong>Open</strong>Air</span></div>
+            <button type="button">Book a session</button>
+          </div>
+        </article>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials-section" id="testimonials">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-eyebrow">Real Stories</span>
+        <h2 class="section-title">From the Tribe</h2>
+      </div>
+      <div class="carousel reveal-up" style="--delay:0.15s" id="carousel">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="testimonial-slide">
+            <div class="ts-inner">
+              <div class="ts-quote">"</div>
+              <p class="ts-text">I had tried every diet trend in the book. The Tatva approach was the first one that felt natural — because it <em>was</em> natural. Indian food, real habits, no guilt. Lost 8 kgs sustainably.</p>
+              <div class="ts-author">
+                <div class="ts-avatar" style="--av:#D4E84A">R</div>
+                <div><strong>Riya Marathe</strong><span>Mumbai, Maharashtra</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="ts-inner">
+              <div class="ts-quote">"</div>
+              <p class="ts-text">The concept of 7 Tatvas changed how I think about fitness. It's not just about the gym — it's about your whole life. समाज, उद्देश्य — everything clicked. This is the real deal.</p>
+              <div class="ts-author">
+                <div class="ts-avatar" style="--av:#5CBF60">A</div>
+                <div><strong>Aarav Kulkarni</strong><span>Pune, Maharashtra</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="ts-inner">
+              <div class="ts-quote">"</div>
+              <p class="ts-text">Lost 12 kgs in 4 months and more importantly, I kept it off. The mindset shift was the real transformation. शुक्रिया Tatva Tribe — you genuinely changed my life!</p>
+              <div class="ts-author">
+                <div class="ts-avatar" style="--av:#36B8A8">P</div>
+                <div><strong>Priya Shinde</strong><span>Nashik, Maharashtra</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="ts-inner">
+              <div class="ts-quote">"</div>
+              <p class="ts-text">As someone with a desk job, I thought real fitness wasn't for me. The outdoor experiences and community changed everything. Milke Badho is real — you grow with the tribe.</p>
+              <div class="ts-author">
+                <div class="ts-avatar" style="--av:#C8E030">V</div>
+                <div><strong>Varun Deshpande</strong><span>Nagpur, Maharashtra</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="carouselPrev" aria-label="Previous testimonial">←</button>
+          <div class="carousel-dots" id="carouselDots" role="tablist">
+            <button class="c-dot active" data-index="0" role="tab" aria-label="Slide 1"></button>
+            <button class="c-dot" data-index="1" role="tab" aria-label="Slide 2"></button>
+            <button class="c-dot" data-index="2" role="tab" aria-label="Slide 3"></button>
+            <button class="c-dot" data-index="3" role="tab" aria-label="Slide 4"></button>
+          </div>
+          <button class="carousel-btn" id="carouselNext" aria-label="Next testimonial">→</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" id="contact">
+    <div class="cta-orbit-wrap" aria-hidden="true">
+      <div class="cta-ring cta-ring-1"></div>
+      <div class="cta-ring cta-ring-2"></div>
+      <div class="cta-ring cta-ring-3"></div>
+    </div>
+    <div class="cta-inner reveal-up">
+      <span class="section-eyebrow" style="color:var(--yellow)">Start Today</span>
+      <h2 class="cta-title">Ready to Begin Your<br />Transformation?</h2>
+      <p class="cta-sub">DM <strong>"TATVA"</strong> on Instagram or email us for a <strong>FREE consultation</strong> — and take the first step towards a healthier, stronger you.</p>
+      <div class="cta-actions">
+        <a href="https://www.instagram.com/thetatvatribe._/" target="_blank" rel="noopener noreferrer" class="btn btn-primary ripple-btn">DM on Instagram</a>
+        <a href="mailto:thetatvatribe@gmail.com" class="btn btn-ghost">Email Us</a>
+      </div>
+      <p class="cta-note">No obligations. No spam. Just real conversations.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo footer-logo">
+          <span class="logo-devanagari">तत्व</span>
+          <span class="logo-text">TRIBE</span>
+        </a>
+        <p class="footer-tagline">Holistic Health Coaching & Personal Training.<br /><em>SMARTWORK over Hardwork</em> is 🔑</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/thetatvatribe._/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="mailto:thetatvatribe@gmail.com" class="social-link" aria-label="Email">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul role="list">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#tatvas">The 7 Tatvas</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Services</h4>
+        <ul role="list">
+          <li><a href="#services">Personal Training</a></li>
+          <li><a href="#services">Online Coaching</a></li>
+          <li><a href="#services">Diet Plans</a></li>
+          <li><a href="#services">Workout Blueprints</a></li>
+          <li><a href="#services">Outdoor Experiences</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Get In Touch</h4>
+        <p><a href="https://www.instagram.com/thetatvatribe._/" target="_blank" rel="noopener noreferrer">@thetatvatribe._</a></p>
+        <p><a href="mailto:thetatvatribe@gmail.com">thetatvatribe@gmail.com</a></p>
+        <p class="footer-dm">DM <strong>"TATVA"</strong> for FREE consultation!</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 The Tatva Tribe. All rights reserved.</p>
+      <p>Made with ❤️ by <a href="https://www.instagram.com/advayshidhaye/" target="_blank" rel="noopener noreferrer">@advayshidhaye</a></p>
+    </div>
+  </footer>
+
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top">↑</button>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>

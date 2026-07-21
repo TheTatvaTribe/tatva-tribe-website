@@ -69,3 +69,29 @@ Verified by installing deps and running the real Vite build (compiles all JSX + 
 ## 5. Recommendation
 
 Strong design progress, and the pricing-flip rebuild shows the direction is becoming real. But treat it as a **redesign proposal to review with the client**, not something to merge: it would replace the whole site and currently **drops the contact form, changes prices, and can't handle a refresh on `/about`**. If the client approves the direction, the sensible path is a **planned port into the current React 19 + router repo** — bringing over the visuals/interactions while keeping routing, the Google Form, brand tokens, and asset hosting — rather than switching to this app as-is.
+
+---
+
+## 6. Polish pass applied (cleanup commits on this branch)
+
+Only **provably safe** changes were made — nothing that can alter the rendered design.
+
+| Fix | Detail | Result |
+|---|---|---|
+| **Removed dead scroll code** | The services section is now `<PricingSection>`, so the orbit / rail / wash-blob / 3D-tilt logic targeted elements that no longer exist — dead code attaching no-op scroll+resize listeners on every scroll. | −~280 lines |
+| **Dropped GSAP entirely** | Its only consumer (`initServicesRailScrollTrigger`) was never called, so the dependency was 100% unused. | **JS 332.9 → 213.4 kB** (gzip 114.5 → 67.2) |
+| **Removed dead plan-flip handler** | `tatvaInteractions.js` queried `[data-plan-card]`, which exists nowhere — `PlanCard.jsx` owns the flip via React state on `.pricing-card-rotor`. | dead code gone |
+| **Pruned unmatchable CSS** | 271 rules whose selectors reference classes/ids present in *no* source file (old orbit/rail markup, a superseded `plan-*` pricing system, an abandoned `aboutx-*` About design, the old `about-*` block). Verified no live class lost its rules. | **CSS 78.9 → 43.0 kB source (−45.5%)**, 3011 → 1253 lines; bundle 70.0 → 41.2 kB (gzip 14.9 → 9.4) |
+| **Tokenised duplicate colours** | 32 hardcoded hex values that were *exact* duplicates of existing `:root` tokens now use `var(--cream)`, `var(--dark)`, `var(--border)`, `var(--text-muted)`, etc. Visually identical by definition. | design tokens honoured |
+| **Fixed nav-CTA contrast bug** | `updateActiveNav` forced cream text on the gold "Free Consult" pill whenever `#contact` was the active section → low-contrast cream-on-gold. Now skipped. | real bug fixed |
+| **Real teardown** | `initTatvaInteractions()` returned `() => {}`, leaking every listener plus the carousel `setInterval`. Now returns an `AbortController`-based cleanup that also clears the timer and disconnects the observer. | no leak |
+
+**Net:** total gzipped payload **129.4 → 76.6 kB (−41%)** with zero intended visual change. Build passes; dev server serves 200.
+
+### Deliberately NOT changed (needs a design decision or a visual check)
+
+- **Brand colour ambiguity.** Two accent systems coexist: the gold `--yellow: #D4AF37` (nav CTA, buttons, hero shimmer) and the lemon→teal card palette (`#D4E84A`, `#A8D458`, `#5CBF60`, `#36B8A8`). Which is canonical is a brand call, not a code fix.
+- **Remaining near-duplicate colours.** ~8 distinct off-whites (`#FFF`, `#F6F6F6`, `#F5F6EF`, `#F2F2F2`, `#DCDED8`, `#D5D2CB`, `#CFCDC5`, `#C9C5BB`) and `#000` used alongside `--dark: #0A0A0A`. Consolidating these *would* change pixels, so it needs sign-off.
+- **`#1B3022`** maps to two tokens (`--green-dark` *and* `--dark-4`); left as-is rather than guess the intended semantics.
+- **Ghor Tapasya band colour.** Its `bandColor` (`#A8CE55`, lemon) breaks the lemon→green→teal progression of the other three cards. Possibly intentional, possibly a copy-paste slip — worth a look.
+- **Vestigial `#plansMount`** div in `content.html` (the whole `<section id="services">` is replaced by React, so it never renders). Harmless.

@@ -2,8 +2,8 @@
  * The Tatva Tribe — scroll & micro-interactions (vanilla, no dependencies).
  *
  * Sections: hero zoom · navbar glass · mobile nav · scroll-to-top · reveal ·
- * ripple · plan-card flip · stacking Tatva cards · testimonial carousel ·
- * active-nav highlight.
+ * ripple · stacking Tatva cards · testimonial carousel · active-nav highlight.
+ * (The pricing-card flip is owned by PlanCard.jsx via React state.)
  *
  * Returns a cleanup that removes every listener/timer/observer it created,
  * so the caller's React effect can tear it down safely.
@@ -120,26 +120,7 @@ export function initTatvaInteractions() {
     }, { signal });
   });
 
-  /* ── 6. PLAN CARD FLIP ────────────────────────────────── */
-  document.querySelectorAll('[data-plan-card]').forEach(card => {
-    function setFlipped(nextFlipped) {
-      card.classList.toggle('is-flipped', nextFlipped);
-      card.setAttribute('aria-pressed', String(nextFlipped));
-    }
-    card.addEventListener('click', event => {
-      if (event.target.closest('a, button')) return;
-      setFlipped(!card.classList.contains('is-flipped'));
-    }, { signal });
-    card.addEventListener('keydown', event => {
-      if (event.target.closest('a, button')) return;
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        setFlipped(!card.classList.contains('is-flipped'));
-      }
-    }, { signal });
-  });
-
-  /* ── 7. STACKING TATVA CARDS ─────────────────────────────
+  /* ── 6. STACKING TATVA CARDS ─────────────────────────────
      As the user scrolls through .tatvas-stack, each card
      becomes the "active" (top) card. Cards underneath scale
      down and dim for a deck-of-cards depth effect. Progress
@@ -190,7 +171,7 @@ export function initTatvaInteractions() {
   window.addEventListener('scroll', updateStack, { passive: true, signal });
   updateStack();
 
-  /* ── 8. TESTIMONIAL CAROUSEL ─────────────────────────────
+  /* ── 7. TESTIMONIAL CAROUSEL ─────────────────────────────
      4 slides, auto-advances every 5s, pauses on hover.
      Prev / Next buttons + dot navigation + touch swipe.
   ─────────────────────────────────────────────────────── */
@@ -238,7 +219,7 @@ export function initTatvaInteractions() {
     startAuto();
   }
 
-  /* ── 9. ACTIVE NAV HIGHLIGHT on scroll ─────────────────── */
+  /* ── 8. ACTIVE NAV HIGHLIGHT on scroll ─────────────────── */
   const sections   = document.querySelectorAll('section[id]');
   const navAnchors = document.querySelectorAll('.nav-link[href^="#"]');
 

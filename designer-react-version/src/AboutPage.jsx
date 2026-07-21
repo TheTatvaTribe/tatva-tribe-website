@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
+// Deploy base ('/' locally, '/sub-path/' when published under one) so the
+// links back to the home page resolve correctly wherever this is hosted.
+const BASE = import.meta.env.BASE_URL;
+
 function AboutPage() {
   const timelineRef = useRef(null);
   const progressRef = useRef(null);
@@ -44,7 +48,7 @@ function AboutPage() {
     <main className="about-mobile-page">
       <nav className="navbar" id="navbar">
         <div className="nav-inner">
-          <a href="/" className="nav-logo" aria-label="The Tatva Tribe Home">
+          <a href={BASE} className="nav-logo" aria-label="The Tatva Tribe Home">
             <span className="logo-devanagari">तत्व</span>
             <span className="logo-text">TRIBE</span>
           </a>
@@ -57,11 +61,11 @@ function AboutPage() {
             <span></span><span></span><span></span>
           </button>
           <ul className={['nav-links', navOpen ? 'open' : ''].join(' ')} role="list">
-            <li><a href="/#tatvas" className="nav-link" onClick={() => setNavOpen(false)}>The 7 Tatvas</a></li>
-            <li><a href="/#services" className="nav-link" onClick={() => setNavOpen(false)}>Plans</a></li>
-            <li><a href="/about" className="nav-link" onClick={() => setNavOpen(false)}>About</a></li>
-            <li><a href="/#testimonials" className="nav-link" onClick={() => setNavOpen(false)}>Stories</a></li>
-            <li><a href="/#contact" className="nav-link nav-cta" onClick={() => setNavOpen(false)}>Free Consult</a></li>
+            <li><a href={`${BASE}#tatvas`} className="nav-link" onClick={() => setNavOpen(false)}>The 7 Tatvas</a></li>
+            <li><a href={`${BASE}#services`} className="nav-link" onClick={() => setNavOpen(false)}>Plans</a></li>
+            <li><a href={`${BASE}about`} className="nav-link" onClick={() => setNavOpen(false)}>About</a></li>
+            <li><a href={`${BASE}#testimonials`} className="nav-link" onClick={() => setNavOpen(false)}>Stories</a></li>
+            <li><a href={`${BASE}#contact`} className="nav-link nav-cta" onClick={() => setNavOpen(false)}>Free Consult</a></li>
           </ul>
         </div>
       </nav>

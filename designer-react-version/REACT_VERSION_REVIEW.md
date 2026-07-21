@@ -95,3 +95,37 @@ Only **provably safe** changes were made — nothing that can alter the rendered
 - **`#1B3022`** maps to two tokens (`--green-dark` *and* `--dark-4`); left as-is rather than guess the intended semantics.
 - **Ghor Tapasya band colour.** Its `bandColor` (`#A8CE55`, lemon) breaks the lemon→green→teal progression of the other three cards. Possibly intentional, possibly a copy-paste slip — worth a look.
 - **Vestigial `#plansMount`** div in `content.html` (the whole `<section id="services">` is replaced by React, so it never renders). Harmless.
+
+---
+
+## 7. Live preview deployment (for client review)
+
+**URL: https://thetatvatribe.github.io/tatva-tribe-preview/**
+
+Hosted from a **separate repository** — `TheTatvaTribe/tatva-tribe-preview` — deliberately isolated from production.
+
+> ⚠️ **Why a separate repo:** this repo's GitHub Pages is `build_type: workflow`, source `main`, CNAME **thetatvatribe.com** — i.e. the one Pages site *is* the live website. Publishing a preview from here would have replaced thetatvatribe.com. Production was verified untouched afterwards (Pages config unchanged; `main` still at `35cc1a4`).
+
+**Guards on the preview:** `noindex, nofollow` + `robots.txt` disallow, so this WIP (placeholder photos, draft pricing) can't be indexed or mistaken for the real site.
+
+### Making it deployable under a sub-path
+
+The app previously hardcoded `/` for routing and links, which breaks under `…/tatva-tribe-preview/`. Fixed:
+
+- `vite.config.js` — `base` now comes from `VITE_BASE` (bare path segment, so it's shell-safe on Windows/MSYS).
+- `App.jsx` — route detection strips `import.meta.env.BASE_URL`; root-relative `href="/…"` links in `content.html` are rewritten to sit under the base.
+- `AboutPage.jsx` — its nav links use the base too.
+- Build step writes `404.html` (SPA fallback so `/about` deep-links work on Pages), `.nojekyll`, and `robots.txt`.
+
+Local dev is unchanged (base stays `/`).
+
+### Redeploy after further changes
+
+```bash
+cd designer-react-version
+VITE_BASE=tatva-tribe-preview npm run build
+node -e "const f=require('fs');let h=f.readFileSync('dist/index.html','utf8');h=h.replace('<head>','<head>\n  <meta name=\"robots\" content=\"noindex, nofollow\" />');f.writeFileSync('dist/index.html',h);f.writeFileSync('dist/404.html',h);f.writeFileSync('dist/.nojekyll','');f.writeFileSync('dist/robots.txt','User-agent: *\nDisallow: /\n')"
+cd dist && git add -A && git commit -m "Update preview" && git push origin main
+```
+
+To take the preview down: delete the `TheTatvaTribe/tatva-tribe-preview` repo (production is unaffected either way).

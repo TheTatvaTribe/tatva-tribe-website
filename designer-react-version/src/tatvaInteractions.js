@@ -1,26 +1,28 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
+/**
+ * The Tatva Tribe — scroll & micro-interactions (vanilla, no dependencies).
+ *
+ * Sections: hero zoom · navbar glass · mobile nav · scroll-to-top · reveal ·
+ * ripple · plan-card flip · stacking Tatva cards · testimonial carousel ·
+ * active-nav highlight.
+ *
+ * Returns a cleanup that removes every listener/timer/observer it created,
+ * so the caller's React effect can tear it down safely.
+ */
 export function initTatvaInteractions() {
-
-  gsap.registerPlugin(ScrollTrigger);
-  window.gsap = gsap;
-  window.ScrollTrigger = ScrollTrigger;
+  const controller = new AbortController();
+  const { signal } = controller;
 
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
   window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
-  
-
   const NAV_H = 68; // matches --nav-h in CSS
 
   /* ── 0. HERO ZOOM-IN SCROLL ──────────────────────────────
-     As the user scrolls through the 300vh hero-scroll-zone,
-     the background layers zoom in (1x → 3x) while the hero
-     text content fades out. When the zone is fully scrolled,
-     the first Tatva stacking card naturally takes over.
+     As the user scrolls through the hero-scroll-zone, the
+     background layers zoom in (1x → 3x) while the hero text
+     fades out and the "7 Tatvas" reveal fades in.
   ─────────────────────────────────────────────────────── */
   const heroZone         = document.getElementById('heroScrollZone');
   const heroBgZoom       = document.getElementById('heroBgZoom');
@@ -51,7 +53,6 @@ export function initTatvaInteractions() {
     if (heroHint) heroHint.style.opacity = Math.max(0, 1 - p / 0.15).toFixed(3);
 
     // Tatvas reveal: in after a gap — fully visible at p=0.65
-    // Card enters viewport bottom at p≈0.67, so text is complete before card appears
     if (heroTatvasReveal) {
       const inStart = 0.45, inEnd = 0.65;
       const revealIn = p < inStart ? 0 : p > inEnd ? 1 : (p - inStart) / (inEnd - inStart);
@@ -62,20 +63,16 @@ export function initTatvaInteractions() {
   }
 
   /* ── 1. NAVBAR scroll glass + scroll-top button ──────── */
-  const navbar      = document.getElementById('navbar');
+  const navbar       = document.getElementById('navbar');
   const scrollTopBtn = document.getElementById('scrollTopBtn');
 
   function onScroll() {
     const y = window.scrollY;
-    if (navbar) {
-      navbar.classList.toggle('scrolled', y > 60);
-    }
-    if (scrollTopBtn) {
-      scrollTopBtn.classList.toggle('visible', y > 400);
-    }
+    if (navbar)       navbar.classList.toggle('scrolled', y > 60);
+    if (scrollTopBtn) scrollTopBtn.classList.toggle('visible', y > 400);
     updateHeroZoom();
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive: true, signal });
   onScroll();
 
   /* ── 2. MOBILE nav toggle ─────────────────────────────── */
@@ -85,34 +82,30 @@ export function initTatvaInteractions() {
     navToggle.addEventListener('click', () => {
       const open = navLinks.classList.toggle('open');
       navToggle.setAttribute('aria-expanded', String(open));
-    });
+    }, { signal });
     navLinks.querySelectorAll('a').forEach(a =>
       a.addEventListener('click', () => {
         navLinks.classList.remove('open');
         navToggle.setAttribute('aria-expanded', 'false');
-      })
+      }, { signal })
     );
   }
 
   /* ── 3. SCROLL TO TOP ─────────────────────────────────── */
   if (scrollTopBtn) {
     scrollTopBtn.addEventListener('click', () =>
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    );
+      window.scrollTo({ top: 0, behavior: 'smooth' }),
+    { signal });
   }
 
-  /* ── 4. REVEAL ON SCROLL (IntersectionObserver) ─────────
-     Elements with .reveal-up / .reveal-left / .reveal-right
-     fade + slide in when they enter the viewport.
-  ─────────────────────────────────────────────────────── */
-  const revealEls = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
+  /* ── 4. REVEAL ON SCROLL (IntersectionObserver) ───────── */
   const revealObs = new IntersectionObserver(
     entries => entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
     }),
     { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
   );
-  revealEls.forEach(el => revealObs.observe(el));
+  document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right').forEach(el => revealObs.observe(el));
 
   /* ── 5. RIPPLE on .ripple-btn ──────────────────────────── */
   document.querySelectorAll('.ripple-btn').forEach(btn => {
@@ -124,7 +117,7 @@ export function initTatvaInteractions() {
       rpl.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - r.left - size/2}px;top:${e.clientY - r.top - size/2}px`;
       btn.appendChild(rpl);
       rpl.addEventListener('animationend', () => rpl.remove());
-    });
+    }, { signal });
   });
 
   /* ── 6. PLAN CARD FLIP ────────────────────────────────── */
@@ -133,146 +126,56 @@ export function initTatvaInteractions() {
       card.classList.toggle('is-flipped', nextFlipped);
       card.setAttribute('aria-pressed', String(nextFlipped));
     }
-
     card.addEventListener('click', event => {
       if (event.target.closest('a, button')) return;
       setFlipped(!card.classList.contains('is-flipped'));
-    });
-
+    }, { signal });
     card.addEventListener('keydown', event => {
       if (event.target.closest('a, button')) return;
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         setFlipped(!card.classList.contains('is-flipped'));
       }
-    });
+    }, { signal });
   });
 
-  /* ── 7. TATVA CARD 3D TILT (desktop hover) ──────────────
-     Removed from full-stack cards (they're now full-page).
-     Applied to any remaining small .tatva-card if present.
-  ─────────────────────────────────────────────────────── */
-  document.querySelectorAll('.tatva-card').forEach(card => {
-    const S = 6;
-    card.addEventListener('mousemove', e => {
-      const { left, top, width, height } = card.getBoundingClientRect();
-      const dx = (e.clientX - left - width / 2) / (width / 2);
-      const dy = (e.clientY - top - height / 2) / (height / 2);
-      card.style.transform = `perspective(700px) rotateX(${-dy*S}deg) rotateY(${dx*S}deg) translateY(-8px) scale(1.01)`;
-    });
-    card.addEventListener('mouseenter', () => { card.style.transition = 'transform .1s ease'; });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-      card.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1)';
-    });
-  });
-
-  /* ── 8. STACKING TATVA CARDS ─────────────────────────────
+  /* ── 7. STACKING TATVA CARDS ─────────────────────────────
      As the user scrolls through .tatvas-stack, each card
      becomes the "active" (top) card. Cards underneath scale
-     down and dim to give a depth / deck-of-cards feel.
-     Progress dots in the corner update accordingly.
+     down and dim for a deck-of-cards depth effect. Progress
+     dots in the corner track the active card.
   ─────────────────────────────────────────────────────── */
   const stack         = document.getElementById('tatvasStack');
   const stackProgress = document.getElementById('stackProgress');
-  const servicesWash  = document.getElementById('servicesWash');
   const spDots        = stackProgress ? [...stackProgress.querySelectorAll('.sp-dot')] : [];
   let   lastActiveIdx = -1;
-  let   handoffWashProgress = 0;
-  let   washTarget = 0;
-  let   washCurrent = 0;
-  let   washRafId = 0;
-
-  function clamp01(v) {
-    return Math.max(0, Math.min(v, 1));
-  }
-
-  function liquidEase(t) {
-    const x = clamp01(t);
-    const eased = 1 - Math.pow(1 - x, 3);
-    const momentum = Math.sin(Math.PI * x) * 0.08;
-    return clamp01(eased + momentum * (1 - x * 0.45));
-  }
-
-  function renderWashBlob(ts) {
-    washCurrent += (washTarget - washCurrent) * 0.18;
-    const p = clamp01(washCurrent);
-
-    if (!servicesWash) return;
-
-    if (p < 0.003 && washTarget < 0.003) {
-      servicesWash.classList.remove('is-active');
-      servicesWash.style.opacity = '0';
-      washRafId = 0;
-      return;
-    }
-
-    servicesWash.classList.add('is-active');
-    servicesWash.style.opacity = String(Math.min(0.72, p * 0.9));
-
-    const w = window.innerWidth;
-    const h = Math.max(1, window.innerHeight);
-    const cx = w * 0.48;
-    const cy = h * 0.56;
-    const maxR = Math.hypot(w, h) * 1.14;
-    const wobbleAmp = maxR * (0.018 + (1 - p) * 0.05);
-
-    for (let i = 0; i < 12; i++) {
-      const a = -Math.PI / 2 + (i * Math.PI * 2) / 12;
-      const directionalBias = 1 + 0.32 * ((-Math.cos(a) - Math.sin(a)) * 0.5);
-      const localP = clamp01(p * 1.08 * directionalBias);
-      const growth = liquidEase(localP);
-      const ripple = Math.sin(ts * 0.0038 + i * 0.95 + p * 8.5) * wobbleAmp;
-      const r = maxR * growth + ripple;
-
-      const px = ((cx + r * Math.cos(a)) / w) * 100;
-      const py = ((cy + r * Math.sin(a)) / h) * 100;
-      servicesWash.style.setProperty(`--w${i + 1}x`, `${px.toFixed(2)}%`);
-      servicesWash.style.setProperty(`--w${i + 1}y`, `${py.toFixed(2)}%`);
-    }
-
-    washRafId = requestAnimationFrame(renderWashBlob);
-  }
-
-  function setWashProgress(nextProgress) {
-    washTarget = clamp01(nextProgress);
-    if (!washRafId) washRafId = requestAnimationFrame(renderWashBlob);
-  }
 
   function updateStack() {
-    if (!stack) return;
+    if (!stack || !stackProgress) return;
 
     const stackRect = stack.getBoundingClientRect();
-    // px scrolled past the top of the stack into the sticky zone
-    const scrolled  = Math.max(0, NAV_H - stackRect.top);
-    const vh        = window.innerHeight - NAV_H;  // scroll unit per card
+    const scrolled  = Math.max(0, NAV_H - stackRect.top); // px into the sticky zone
+    const vh        = window.innerHeight - NAV_H;         // scroll unit per card
     const cards     = [...stack.querySelectorAll('.tatva-card-full')];
     const n         = cards.length;
 
-    // Active card index (clamped to last card)
     const activeIdx = Math.min(Math.floor(scrolled / vh), n - 1);
 
-    // Show/hide the progress dots when stack is in view
     const inStack = stackRect.top < window.innerHeight && stackRect.bottom > NAV_H;
     stackProgress.classList.toggle('active', inStack && scrolled > 0);
 
-    // Update dots
     if (activeIdx !== lastActiveIdx) {
       spDots.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
       lastActiveIdx = activeIdx;
     }
 
-    // Apply scale + brightness to each card based on depth
     cards.forEach((card, i) => {
       if (scrolled < i * vh) {
-        // Not yet reached — reset
         card.style.transform = '';
         card.style.filter    = '';
         return;
       }
-      // How many cards are piled on top of card i?
       const buried = Math.floor((scrolled - i * vh) / vh);
-
       if (buried === 0) {
         card.style.transform = '';
         card.style.filter    = '';
@@ -283,195 +186,25 @@ export function initTatvaInteractions() {
         card.style.filter    = `brightness(${brightness.toFixed(2)})`;
       }
     });
-
-    const stackUnits = scrolled / vh;
-    handoffWashProgress = inStack && activeIdx === n - 1
-      ? clamp01((stackUnits - (n - 1) - 0.58) / 0.5)
-      : 0;
   }
-
-  window.addEventListener('scroll', updateStack, { passive: true });
+  window.addEventListener('scroll', updateStack, { passive: true, signal });
   updateStack();
 
-    /* ── 9. PROGRAMS ORBIT ZOOM TRANSITION ───────────────────
-     After Tatvas, cards zoom out and settle into a circle,
-     with center copy appearing as the orbit locks in place.
+  /* ── 8. TESTIMONIAL CAROUSEL ─────────────────────────────
+     4 slides, auto-advances every 5s, pauses on hover.
+     Prev / Next buttons + dot navigation + touch swipe.
   ─────────────────────────────────────────────────────── */
-  const programsOrbit = document.querySelector('.programs-orbit-section');
-  const orbitCards    = programsOrbit ? [...programsOrbit.querySelectorAll('.orbit-card')] : [];
-  const orbitCenter   = document.getElementById('orbitCenterCopy');
-  const servicesRail  = document.getElementById('servicesRail');
-  const servicesRailViewport = document.getElementById('servicesRailViewport');
-  let servicesRailST = null;
-  let railCurrentProgress = 0;
-  let railStepIndex = 0;
-
-  function easeOutCubic(t) {
-    return 1 - Math.pow(1 - t, 3);
-  }
-
-  function initServicesRailScrollTrigger() {
-    if (!programsOrbit || !servicesRail || !servicesRailViewport) return;
-    if (!window.gsap || !window.ScrollTrigger) return;
-
-    const stickyWrap = programsOrbit.querySelector('.programs-orbit-sticky');
-    if (!stickyWrap) return;
-
-    const gsap = window.gsap;
-    const ScrollTrigger = window.ScrollTrigger;
-    gsap.registerPlugin(ScrollTrigger);
-    const cards = [...servicesRail.querySelectorAll('.service-mini-card')];
-    if (cards.length < 2) return;
-
-    function buildRailTrigger() {
-      if (servicesRailST) {
-        servicesRailST.kill();
-      }
-
-      const first = servicesRail.querySelector('.service-mini-card[data-service-card="1"]') || cards[0];
-      const last = servicesRail.querySelector('.service-mini-card[data-service-card="5"]') || cards[cards.length - 1];
-      gsap.set(servicesRail, { x: 0 });
-      const vpRect = servicesRailViewport.getBoundingClientRect();
-      const firstRect = first.getBoundingClientRect();
-      const lastRect = last.getBoundingClientRect();
-      const vpCenter = vpRect.left + vpRect.width / 2;
-      const firstCenter = firstRect.left + firstRect.width / 2;
-      const lastCenter = lastRect.left + lastRect.width / 2;
-      const startX = vpCenter - firstCenter;
-      const endX = vpCenter - lastCenter;
-      const travel = Math.abs(endX - startX);
-      gsap.set(servicesRail, { x: startX });
-
-      servicesRailST = ScrollTrigger.create({
-        trigger: programsOrbit,
-        start: 'top top',
-        end: `+=${Math.max(2200, travel * 2.6)}`,
-        pin: programsOrbit,
-        pinSpacing: true,
-        scrub: 1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: self => {
-          const moveProgress = clamp01((self.progress - 0.84) / 0.16);
-          const nextX = startX + (endX - startX) * moveProgress;
-          gsap.set(servicesRail, { x: nextX });
-        },
-        onRefresh: () => {
-          gsap.set(servicesRail, { x: startX });
-        }
-      });
-      ScrollTrigger.refresh();
-    }
-
-    buildRailTrigger();
-
-    window.addEventListener('load', () => {
-      buildRailTrigger();
-    }, { once: true });
-
-    let railResizeTimer = 0;
-    window.addEventListener('resize', () => {
-      clearTimeout(railResizeTimer);
-      railResizeTimer = window.setTimeout(buildRailTrigger, 130);
-    });
-  }
-
-  function updateProgramsOrbit() {
-    if (!programsOrbit || orbitCards.length === 0) return;
-
-    const rect      = programsOrbit.getBoundingClientRect();
-    const stageH    = window.innerHeight - NAV_H;
-    const maxScroll = Math.max(1, programsOrbit.offsetHeight - stageH);
-    const scrolled  = Math.max(0, NAV_H - rect.top);
-    const p         = Math.min(scrolled / maxScroll, 1);
-    const eased     = easeOutCubic(p);
-
-    const circleR   = Math.min(window.innerWidth, stageH) * 0.22;
-    const xStep     = Math.min(window.innerWidth * 0.16, 170);
-    const yStep     = Math.min(stageH * 0.13, 88);
-    const startY    = [0.07, -0.06, 0.10, -0.03, 0.08];
-    const startRot  = [-14, 10, -7, 12, -10];
-
-    orbitCards.forEach((card, i) => {
-      const startX       = (i - 2) * xStep;
-      const startYOffset = startY[i] * stageH + yStep * 0.2;
-
-      const angle   = -Math.PI / 2 + (i * (2 * Math.PI / orbitCards.length));
-      const targetX = Math.cos(angle) * circleR;
-      const targetY = Math.sin(angle) * circleR;
-
-      const x = startX + (targetX - startX) * eased;
-      const y = startYOffset + (targetY - startYOffset) * eased;
-      const s = 1.05 + (0.62 - 1.05) * eased;
-      const r = startRot[i] * (1 - eased);
-      const cardVisible = 1 - clamp01((p - 0.2) / 0.16);
-      const topLiftPhase = 1 - clamp01((p - 0.32) / 0.2);
-      const topLift = (i === 1 || i === 3) ? -Math.min(stageH * 0.18, 130) * topLiftPhase : 0;
-
-      card.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${(y + topLift).toFixed(1)}px) scale(${s.toFixed(3)}) rotate(${r.toFixed(2)}deg)`;
-      card.style.opacity = cardVisible.toFixed(3);
-      card.style.visibility = cardVisible < 0.03 ? 'hidden' : 'visible';
-    });
-
-    if (orbitCenter) {
-      const centerIn  = Math.max(0, Math.min((p - 0.28) / 0.12, 1));
-      const centerOut = 1 - Math.max(0, Math.min((p - 0.56) / 0.12, 1));
-      const centerOp  = centerIn * centerOut;
-      orbitCenter.style.opacity = centerOp.toFixed(3);
-      orbitCenter.style.transform = `translate(-50%, -50%) scale(${(0.92 + centerIn * 0.08).toFixed(3)})`;
-    }
-
-    if (servicesRail) {
-      const railIn = clamp01((p - 0.60) / 0.06);
-      servicesRail.style.opacity = railIn.toFixed(3);
-      const cards = [...servicesRail.querySelectorAll('.service-mini-card')];
-      const moveRaw = clamp01((p - 0.66) / 0.22);
-      const moveHold = clamp01((moveRaw - 0.55) / 0.45);
-      const steps = Math.max(1, cards.length - 1);
-      const desiredStepIndex = Math.min(steps, Math.floor(moveHold * (steps + 1)));
-      railStepIndex = desiredStepIndex;
-
-      const targetProgress = railStepIndex / steps;
-      railCurrentProgress += (targetProgress - railCurrentProgress) * 0.22;
-      const moveProgress = railCurrentProgress;
-      const first = servicesRail.querySelector('.service-mini-card[data-service-card="1"]') || cards[0];
-      const last = servicesRail.querySelector('.service-mini-card[data-service-card="5"]') || cards[cards.length - 1];
-      const viewportW = servicesRailViewport ? servicesRailViewport.clientWidth : window.innerWidth;
-      const startX = first
-        ? (viewportW / 2) - (first.offsetLeft + first.offsetWidth / 2)
-        : -window.innerWidth * 0.42;
-      const endX = last
-        ? (viewportW / 2) - (last.offsetLeft + last.offsetWidth / 2)
-        : -window.innerWidth * 0.03;
-      const railX = startX + (endX - startX) * moveProgress;
-      servicesRail.style.transform = `translate3d(${railX.toFixed(1)}px, -50%, 0)`;
-    }
-
-    const servicesInView = rect.top < window.innerHeight && rect.bottom > NAV_H;
-    const servicesWashProgress = servicesInView ? clamp01((p - 0.34) / 0.52) : 0;
-    setWashProgress(servicesWashProgress);
-  }
-
-  // Keep services progression tied to section scroll math for stable sequencing.
-  window.addEventListener('scroll', updateProgramsOrbit, { passive: true });
-  window.addEventListener('resize', updateProgramsOrbit);
-  updateProgramsOrbit();
-
-    /* ── 10. TESTIMONIAL CAROUSEL ────────────────────────────
-     4 slides, auto-advances every 5 s, pauses on hover.
-     Prev / Next buttons + dot navigation.
-  ─────────────────────────────────────────────────────── */
-  const track     = document.getElementById('carouselTrack');
-  const prevBtn   = document.getElementById('carouselPrev');
-  const nextBtn   = document.getElementById('carouselNext');
-  const dotsWrap  = document.getElementById('carouselDots');
+  const track    = document.getElementById('carouselTrack');
+  const prevBtn  = document.getElementById('carouselPrev');
+  const nextBtn  = document.getElementById('carouselNext');
+  const dotsWrap = document.getElementById('carouselDots');
+  let   autoTimer = null;
 
   if (track && prevBtn && nextBtn && dotsWrap) {
-    const slides    = [...track.querySelectorAll('.testimonial-slide')];
-    const dots      = [...dotsWrap.querySelectorAll('.c-dot')];
-    const total     = slides.length;
-    let   current   = 0;
-    let   autoTimer = null;
+    const slides = [...track.querySelectorAll('.testimonial-slide')];
+    const dots   = [...dotsWrap.querySelectorAll('.c-dot')];
+    const total  = slides.length;
+    let   current = 0;
 
     function goTo(idx) {
       current = (idx + total) % total;
@@ -481,36 +214,31 @@ export function initTatvaInteractions() {
         d.setAttribute('aria-selected', String(i === current));
       });
     }
+    function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 5000); }
+    function stopAuto()  { clearInterval(autoTimer); autoTimer = null; }
 
-    function startAuto() {
-      autoTimer = setInterval(() => goTo(current + 1), 5000);
-    }
-    function stopAuto() {
-      clearInterval(autoTimer);
-    }
+    prevBtn.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); }, { signal });
+    nextBtn.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); }, { signal });
+    dots.forEach(d => d.addEventListener('click', () => { stopAuto(); goTo(+d.dataset.index); startAuto(); }, { signal }));
 
-    prevBtn.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
-    nextBtn.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
-    dots.forEach(d => d.addEventListener('click', () => { stopAuto(); goTo(+d.dataset.index); startAuto(); }));
-
-    // Pause auto-play on hover
     const carouselEl = document.getElementById('carousel');
-    carouselEl.addEventListener('mouseenter', stopAuto);
-    carouselEl.addEventListener('mouseleave', startAuto);
+    if (carouselEl) {
+      carouselEl.addEventListener('mouseenter', stopAuto, { signal });
+      carouselEl.addEventListener('mouseleave', startAuto, { signal });
+    }
 
-    // Touch/swipe support
     let touchStartX = 0;
-    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend',   e => {
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true, signal });
+    track.addEventListener('touchend', e => {
       const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 50) { stopAuto(); goTo(current + (diff > 0 ? 1 : -1)); startAuto(); }
-    });
+    }, { signal });
 
     goTo(0);
     startAuto();
   }
 
-  /* ── 11. ACTIVE NAV HIGHLIGHT on scroll ─────────────────── */
+  /* ── 9. ACTIVE NAV HIGHLIGHT on scroll ─────────────────── */
   const sections   = document.querySelectorAll('section[id]');
   const navAnchors = document.querySelectorAll('.nav-link[href^="#"]');
 
@@ -518,12 +246,18 @@ export function initTatvaInteractions() {
     let current = '';
     sections.forEach(s => { if (s.getBoundingClientRect().top <= 100) current = s.id; });
     navAnchors.forEach(a => {
+      // Skip the CTA pill — it has its own solid background, and forcing the
+      // cream text colour on it produces low-contrast cream-on-gold.
+      if (a.classList.contains('nav-cta')) return;
       a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--cream)' : '';
     });
   }
-  window.addEventListener('scroll', updateActiveNav, { passive: true });
+  window.addEventListener('scroll', updateActiveNav, { passive: true, signal });
+  updateActiveNav();
 
-
-
-  return () => {};
+  return () => {
+    controller.abort();
+    if (autoTimer) clearInterval(autoTimer);
+    revealObs.disconnect();
+  };
 }

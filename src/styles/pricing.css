@@ -1,0 +1,381 @@
+/* =========================================================
+   PRICING — flippable plan cards
+   ========================================================= */
+.pricing-section {
+  padding: 6rem 0 5.5rem;
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pricing-shell { width: min(1200px, 92vw); margin-inline: auto; }
+
+.pricing-header { text-align: center; max-width: 720px; margin: 0 auto 2.5rem; }
+.pricing-eyebrow {
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: .65rem;
+}
+.pricing-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3.2vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--cream);
+  margin-bottom: .85rem;
+}
+.pricing-desc { color: var(--text-muted); font-size: .95rem; line-height: 1.62; }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  align-items: stretch;
+}
+
+/* A flip card has to reserve one height for both faces, since the back
+   is absolutely positioned. Rather than the old hard 400px — which the
+   "What you get" face overflowed — the frame grows with its tallest
+   face via a 1x1 grid that stacks front and back in the same cell. */
+.pricing-card-frame {
+  perspective: 1600px;
+  display: block;
+}
+
+.pricing-card-rotor {
+  position: relative;
+  display: grid;
+  grid-template-areas: 'face';
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .72s var(--ease-spring);
+}
+.pricing-card-rotor.is-flipped { transform: rotateY(180deg); }
+
+.pricing-face { grid-area: face; }
+.pricing-face-back { transform: rotateY(180deg); }
+
+.pricing-card {
+  --plan-accent: var(--green);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 400px;
+  padding: 1.45rem 1.3rem 1.3rem;
+  border-radius: 22px;
+  border: 1px solid var(--plan-band, var(--plan-accent));
+  background: var(--plan-bg, var(--dark-3));
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .3);
+  color: var(--cream);
+  text-align: center;
+  align-items: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.pricing-band {
+  width: calc(100% + 2.6rem);
+  margin: -1.45rem -1.3rem .64rem;
+  padding: .82rem .96rem;
+  min-height: 66px;
+  border-radius: 20px 20px 10px 10px;
+  background: var(--plan-band, var(--plan-accent));
+  border-bottom: 2px solid var(--plan-accent);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: .5rem;
+}
+.pricing-plan-dev {
+  font-family: var(--font-devan);
+  font-size: clamp(1.42rem, 2.2vw, 1.95rem);
+  font-weight: 600;
+  line-height: 1.35;
+  /* Darkened against its own band: the raw ink measured ~1.7:1, which
+     read as washed out. Applied at every width so the card does not
+     change appearance across the 640px breakpoint. */
+  color: color-mix(in srgb, var(--plan-band-ink, var(--plan-accent)) 30%, #05070a);
+  justify-self: end;
+  text-align: right;
+}
+.pricing-plan-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em; height: 2em;
+  color: var(--plan-band-ink, var(--plan-accent));
+}
+.pricing-plan-icon-svg { width: 1.56em; height: 1.56em; }
+
+.pricing-top-tags {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .42rem;
+  min-height: 1.55rem;   /* keeps cards aligned when a plan has no badge */
+  margin-bottom: .55rem;
+}
+.pricing-popular-badge,
+.pricing-save-top {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--plan-band, var(--plan-accent));
+  border: 1px solid color-mix(in srgb, var(--plan-band, var(--plan-accent)) 72%, #fff);
+  color: color-mix(in srgb, var(--plan-bg, #0f1610) 82%, #000);
+  padding: .25rem .86rem;
+  font-size: .73rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.pricing-price-panel { margin-bottom: 1rem; width: 100%; }
+.pricing-plan-name-en {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  color: #dcded8;
+  margin-bottom: .24rem;
+}
+.pricing-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+.pricing-price {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  line-height: 1.1;
+  font-weight: 400;
+  color: #f6f6f6;
+}
+.pricing-duration {
+  font-size: clamp(.92rem, 1.4vw, 1.1rem);
+  font-weight: 500;
+  color: #8f8f8f;
+  padding-bottom: .18rem;
+}
+
+.pricing-plan-desc {
+  font-size: .9rem;
+  color: #cfcdc5;
+  line-height: 1.55;
+  margin-bottom: .84rem;
+  max-width: 34ch;
+  width: 100%;
+  text-align: center;
+}
+.pricing-plan-desc-back { margin-bottom: .55rem; }
+
+.pricing-stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .85rem;
+  margin-top: .3rem;
+  width: 100%;
+}
+.pricing-stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  border-radius: 14px;
+  padding: .88rem .84rem;
+  background: #101112;
+  border: 1px solid color-mix(in srgb, var(--plan-band, var(--plan-accent)) 46%, #161819);
+}
+.pricing-stat-value {
+  font-family: var(--font-serif);
+  font-size: clamp(1.36rem, 1.6vw, 1.62rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: #f2f2f2;
+}
+.pricing-stat-label {
+  font-size: clamp(.8rem, .84vw, .88rem);
+  line-height: 1.25;
+  color: #c9c5bb;
+  margin-top: .2rem;
+}
+
+.pricing-back-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: var(--yellow-light);
+  margin: .2rem 0 .62rem;
+  width: 100%;
+  text-align: center;
+}
+.pricing-details-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .72rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pricing-details-list li {
+  font-size: .86rem;
+  line-height: 1.55;
+  color: #d5d2cb;
+  text-align: center;
+}
+
+.pricing-actions {
+  margin-top: auto;
+  padding-top: 1.1rem;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .62rem;
+  align-items: center;
+}
+.pricing-ghost-btn {
+  flex: 1 1 7rem;
+  max-width: 9rem;
+  min-height: 44px;
+  border-radius: 99px;
+  border: 1px solid var(--plan-band, var(--plan-accent));
+  background: transparent;
+  color: color-mix(in srgb, var(--plan-band, var(--plan-accent)) 82%, #fff);
+  font-family: var(--font-sans);
+  font-size: .88rem;
+  font-weight: 600;
+  padding: .55rem .85rem;
+  cursor: pointer;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.pricing-ghost-btn:hover {
+  background: color-mix(in srgb, var(--plan-band, var(--plan-accent)) 20%, transparent);
+}
+.pricing-cta {
+  flex: 1 1 10rem;
+  max-width: 12rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 99px;
+  background: var(--plan-band, var(--plan-accent));
+  color: color-mix(in srgb, var(--plan-bg, #0f1610) 82%, #000);
+  border: 1px solid color-mix(in srgb, var(--plan-band, var(--plan-accent)) 72%, #fff);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--plan-band, var(--plan-accent)) 42%, transparent);
+  min-height: 50px;
+  padding: .72rem 1.1rem;
+  font-size: .92rem;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: transform .2s var(--ease-spring), box-shadow .2s ease, background .25s ease;
+}
+.pricing-cta:hover {
+  transform: scale(1.04) translateY(-1px);
+  background: color-mix(in srgb, var(--plan-band, var(--plan-accent)) 86%, #fff);
+  box-shadow: 0 8px 30px color-mix(in srgb, var(--plan-band, var(--plan-accent)) 48%, transparent);
+}
+
+.pricing-footnote {
+  margin-top: 2.25rem;
+  text-align: center;
+  font-size: .88rem;
+  color: var(--text-muted);
+}
+.pricing-footnote a { color: var(--yellow); }
+.pricing-footnote a:hover { color: var(--yellow-light); text-decoration: underline; }
+
+/* =========================================================
+   THE TRIBE'S CODE — terms, kept from the existing site
+   ========================================================= */
+.code-section {
+  padding: 6rem 0;
+  background: var(--dark-2);
+  border-bottom: 1px solid var(--border);
+}
+.code-list {
+  max-width: 780px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.code-item {
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  transition: border-color .2s ease, transform .2s var(--ease-spring);
+}
+.code-item:hover { border-color: var(--yellow-dim); transform: translateX(6px); }
+/* On desktop the disclosure is always open and the summary reads as a
+   plain heading; mobile.css turns it back into a real control. */
+.code-item > .code-summary { display: block; }
+.code-item h3 {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: .6rem;
+}
+.code-item h3 span { color: var(--yellow); margin-right: .5rem; }
+.code-item p { color: var(--text-muted); font-size: .95rem; line-height: 1.75; }
+
+@media (max-width: 1100px) {
+  .pricing-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .pricing-section { padding: 4.5rem 0; }
+  .pricing-shell { width: min(1200px, 94vw); }
+  .pricing-header { margin-bottom: 1.8rem; }
+  .pricing-desc { font-size: .88rem; }
+
+  .pricing-card { padding: 1.1rem .9rem 1rem; border-radius: 18px; min-height: 0; }
+  .pricing-band {
+    width: calc(100% + 1.8rem);
+    margin: -1.1rem -.9rem .52rem;
+    padding: .68rem .74rem;
+    min-height: 56px;
+    border-radius: 16px 16px 9px 9px;
+  }
+  .pricing-plan-dev { font-size: clamp(1.2rem, 6.5vw, 1.45rem); }
+  .pricing-plan-icon { width: 1.72em; height: 1.72em; }
+  .pricing-plan-icon-svg { width: 1.38em; height: 1.38em; }
+  .pricing-plan-name-en { font-size: .92rem; }
+  .pricing-plan-desc { font-size: .84rem; margin-bottom: .8rem; }
+  .pricing-price { font-size: clamp(1.35rem, 6.7vw, 1.65rem); }
+  .pricing-duration { font-size: clamp(.8rem, 3.85vw, .92rem); }
+  .pricing-stats-row { gap: .62rem; }
+  .pricing-stat { min-height: 68px; padding: .64rem .58rem; }
+  .pricing-stat-value { font-size: clamp(1.05rem, 5.4vw, 1.28rem); }
+  .pricing-stat-label { font-size: clamp(.68rem, 2.8vw, .78rem); line-height: 1.2; }
+  .pricing-back-title { font-size: .9rem; }
+  .pricing-details-list { gap: .56rem; }
+  .pricing-details-list li { font-size: .8rem; line-height: 1.5; }
+
+  .pricing-actions { padding-top: .9rem; gap: .5rem; }
+  .pricing-ghost-btn { min-height: 44px; font-size: .84rem; max-width: none; }
+  .pricing-cta { min-height: 46px; font-size: .88rem; max-width: none; padding: .6rem .9rem; }
+}
+
+/* Below ~430px the two buttons cannot share a row without wrapping to
+   ragged widths, so stack them full-width on purpose. */
+@media (max-width: 430px) {
+  .pricing-ghost-btn,
+  .pricing-cta { flex: 1 1 100%; }
+
+  .code-section { padding: 4.5rem 0; }
+  .code-item { padding: 1.25rem 1.25rem; }
+  .code-item:hover { transform: none; }
+}

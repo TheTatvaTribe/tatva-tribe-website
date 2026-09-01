@@ -1,0 +1,288 @@
+/* ── NAVBAR ──────────────────────────────────────────────── */
+/* Height is pinned to --nav-h in both states: the sticky Tatva cards
+   offset themselves by --nav-h, so a nav that resized on scroll would
+   make them jump. Only the background changes. */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  transition: background .4s ease, box-shadow .4s ease;
+}
+/* The backdrop filter re-samples what is behind the bar on every frame of
+   every scroll. Dropped the saturate() — invisible over a 90%-opaque
+   near-black bar — and trimmed the radius, which halves that per-frame
+   cost without changing how the bar reads. */
+.navbar.scrolled {
+  background: rgba(7, 14, 7, .92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.nav-inner {
+  width: var(--shell);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: baseline;
+  gap: .3rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+.logo-devanagari {
+  font-family: var(--font-devan);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--yellow);
+  display: inline-block;
+  transition: transform .3s var(--ease-spring);
+}
+.nav-logo:hover .logo-devanagari { transform: rotate(-4deg) scale(1.15); }
+.logo-text { font-size: 1.1rem; color: var(--cream); letter-spacing: .2em; }
+
+.nav-links { display: flex; align-items: center; gap: .1rem; }
+
+/* Section links are <button>s, not anchors — the app runs on a
+   so the scroll offset for the fixed navbar applies from every route. */
+button.nav-link,
+.footer-links button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.nav-link {
+  padding: .5rem .8rem;
+  border-radius: 6px;
+  font-size: .9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text-muted);
+  position: relative;
+  transition: color .2s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%;
+  width: 0; height: 2px;
+  background: var(--yellow);
+  border-radius: 99px;
+  transform: translateX(-50%);
+  transition: width .25s var(--ease-out);
+}
+.nav-link:hover { color: var(--cream); }
+.nav-link:hover::after { width: 60%; }
+
+.nav-link.is-active { color: var(--cream); }
+.nav-link.is-active::after { width: 60%; }
+
+.nav-link.nav-cta {
+  color: var(--yellow);
+  font-weight: 600;
+}
+.nav-link.nav-cta:hover,
+.nav-link.nav-cta.is-active { color: var(--yellow-light); }
+.nav-link.nav-cta::after { background: var(--yellow-light); }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  /* 44px minimum touch target */
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+}
+.nav-toggle span {
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--cream);
+  border-radius: 99px;
+  transition: transform .3s ease, opacity .3s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Five links plus the wordmark stop fitting well below ~900px,
+   so the drawer takes over there rather than at 640px. */
+@media (max-width: 900px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: rgba(7, 14, 7, .97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 1rem clamp(1rem, 5vw, 2rem) 1.5rem;
+    border-bottom: 1px solid var(--border);
+    max-height: calc(100svh - var(--nav-h));
+    overflow-y: auto;
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: .85rem 1rem; width: 100%; border-radius: 6px; }
+  .nav-link::after { left: 1rem; transform: none; }
+  .nav-link:hover::after,
+  .nav-link.is-active::after { width: 28px; }
+  .nav-link.nav-cta {
+    margin-top: .6rem;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid var(--yellow);
+    border-radius: 99px;
+  }
+  .nav-link.nav-cta::after { display: none; }
+}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.footer {
+  background: var(--dark-2);
+  border-top: 1px solid var(--border);
+  padding: 4rem 0 0;
+}
+/* Equal columns. They were 2fr / 1fr / 1.5fr, left over from the
+   four-column layout before the Plans column came out, which left the
+   three remaining headings at uneven intervals. */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.footer-logo { margin-bottom: 1rem; }
+.footer-tagline {
+  color: var(--text-muted);
+  font-size: .9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+.footer-tagline em { color: var(--cream); font-style: italic; }
+.footer-social { display: flex; gap: .75rem; }
+.social-link {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: grid; place-items: center;
+  color: var(--text-muted);
+  transition: transform .2s var(--ease-spring), border-color .2s ease, color .2s ease;
+}
+.social-link:hover { transform: scale(1.15) translateY(-2px); border-color: var(--yellow); color: var(--yellow); }
+
+.footer-links h4, .footer-contact h4 {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 1.25rem;
+}
+.footer-links ul { display: flex; flex-direction: column; gap: .6rem; align-items: flex-start; }
+.footer-links a, .footer-links button, .footer-contact a {
+  font-size: .9rem;
+  color: var(--text-muted);
+  position: relative;
+  display: inline-block;
+  transition: color .2s ease;
+}
+.footer-links a::after, .footer-links button::after, .footer-contact a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 0; height: 1px;
+  background: var(--yellow);
+  transition: width .25s var(--ease-out);
+}
+.footer-links a:hover, .footer-links button:hover, .footer-contact a:hover { color: var(--cream); }
+.footer-links a:hover::after, .footer-links button:hover::after, .footer-contact a:hover::after { width: 100%; }
+.footer-contact p { margin-bottom: .6rem; }
+.footer-dm { font-size: .85rem; color: var(--text-muted); }
+.footer-dm strong { color: var(--yellow); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.5rem 0;
+  width: var(--shell);
+  margin-inline: auto;
+}
+.footer-bottom p { font-size: .8rem; color: var(--text-muted); }
+.footer-bottom a { color: var(--yellow); transition: color .2s ease; }
+.footer-bottom a:hover { color: var(--yellow-light); }
+
+/* Build credit — deliberately quieter than the line above it. */
+.footer-built-by {
+  width: var(--shell);
+  margin: 0 auto;
+  padding: 0 0 1.5rem;
+  text-align: center;
+  font-size: .74rem;
+  color: color-mix(in srgb, var(--text-muted) 78%, var(--dark-2));
+}
+.footer-built-by a {
+  color: color-mix(in srgb, var(--yellow) 78%, var(--dark-2));
+  transition: color .2s ease;
+  /* keeps the small links tappable without changing how they look */
+  display: inline-block;
+  min-height: 24px;
+  padding-block: 2px;
+}
+.footer-built-by a:hover { color: var(--yellow-light); }
+
+@media (max-width: 960px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: .5rem; text-align: center; }
+}
+
+/* ── SCROLL TO TOP ───────────────────────────────────────── */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 1.5rem; right: 1.5rem;
+  z-index: 800;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: var(--dark);
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: grid; place-items: center;
+  box-shadow: 0 4px 16px var(--yellow-dim);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity .3s ease, transform .3s var(--ease-spring), background .2s ease;
+}
+.scroll-top-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.scroll-top-btn:hover { background: var(--yellow-light); transform: translateY(-3px); }
+.scroll-top-btn:active { transform: scale(.93); }

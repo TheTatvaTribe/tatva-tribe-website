@@ -1,0 +1,297 @@
+/* =========================================================
+   MOBILE USABILITY LAYER
+   Applied against the Toptal mobile heuristic principles.
+   Every rule here is gated to phone widths or touch-primary
+   pointers, so the desktop experience is unchanged.
+   ========================================================= */
+
+/* ─────────────────────────────────────────────────────────
+   #2 IMMEDIACY OF ACTION FEEDBACK
+   On a touch device :hover never fires, so every control whose
+   only styled state was :hover gave no response to a tap. These
+   pressed states are the touch equivalent.
+   ───────────────────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* Kill the platform's grey flash so our own states read cleanly */
+  a, button, [role='tab'], summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Hover rules must not stick after a tap on touch devices */
+  .btn:hover,
+  .carousel-btn:hover,
+  .social-link:hover,
+  .certs-arrow:hover,
+  .pricing-cta:hover,
+  .code-item:hover {
+    transform: none;
+  }
+
+  .nav-link:active {
+    color: var(--cream);
+    background: rgba(212, 175, 55, .12);
+  }
+  .nav-link:active::after { width: 28px; }
+
+  .btn:active { transform: scale(.96); }
+  .btn-primary:active { background: var(--yellow-dark); }
+  .btn-ghost:active { border-color: var(--yellow); color: var(--yellow); background: rgba(212, 175, 55, .1); }
+
+  .pricing-cta:active {
+    transform: scale(.97);
+    filter: brightness(.88);
+  }
+  .pricing-ghost-btn:active {
+    background: color-mix(in srgb, var(--plan-band, var(--plan-accent)) 26%, transparent);
+    transform: scale(.97);
+  }
+
+  .carousel-btn:active,
+  .certs-arrow:active {
+    background: var(--yellow);
+    border-color: var(--yellow);
+    color: var(--dark);
+    transform: scale(.92);
+  }
+
+  .c-dot:active,
+  .certs-dot:active { background: var(--yellow-light); }
+
+  .social-link:active {
+    border-color: var(--yellow);
+    color: var(--yellow);
+    transform: scale(.92);
+  }
+
+  .nav-toggle:active span { background: var(--yellow); }
+
+  .scroll-top-btn:active { transform: scale(.9); background: var(--yellow-dark); }
+
+  .footer-links a:active,
+  .footer-links button:active,
+  .footer-contact a:active { color: var(--yellow); }
+
+  .code-summary:active { background: var(--dark-4); }
+
+  .tcf-tags span:active { background: rgba(255, 255, 255, .1); }
+}
+
+/* ─────────────────────────────────────────────────────────
+   #6 LIMITATION / WCAG 2.2 — SC 2.5.8 Target Size (Minimum)
+   Every control gets at least a 24x24 CSS px hit area. The dot
+   indicators keep their small visual form and grow the hit area
+   behind them, so nothing about the design changes.
+   ───────────────────────────────────────────────────────── */
+/* wider gap so the enlarged dot targets do not overlap each other */
+.carousel-dots, .certs-dots { gap: 1.15rem; }
+
+.footer-bottom a { display: inline-block; min-height: 24px; padding-block: 2px; }
+
+/* ─────────────────────────────────────────────────────────
+   #1 TRANSPARENCY OF SYSTEM STRUCTURE
+   #8 AVAILABILITY OF INFORMATION
+   The dot rail is hidden on phones (it sat over the card copy),
+   which left seven full-screen cards with no sense of position.
+   This is the mobile stand-in: a hairline progress bar and a
+   plain "3 / 7" count, pinned under the navbar.
+   #10 kept deliberately minimal so it does not become clutter.
+   ───────────────────────────────────────────────────────── */
+.stack-hud { display: none; }
+
+@media (max-width: 640px) {
+  .stack-hud {
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    z-index: 850;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .4rem .9rem .45rem;
+    background: rgba(7, 14, 7, .92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s var(--ease-out);
+  }
+  .stack-hud.is-visible { opacity: 1; transform: translateY(0); }
+
+  .stack-hud-label {
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .stack-hud-name {
+    flex: 1;
+    min-width: 0;
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--cream);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stack-hud-count {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--yellow);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .stack-hud-bar {
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: transparent;
+  }
+  .stack-hud-bar span {
+    display: block;
+    height: 100%;
+    background: var(--yellow);
+    transform-origin: left center;
+    transition: transform .2s linear;
+  }
+
+  /* the cards start below the navbar; give them room for the hud too */
+  .tatva-card-full { top: calc(var(--nav-h) + 30px); height: calc(100svh - var(--nav-h) - 30px); }
+  .tatvas-stack { height: calc(7 * (100svh - var(--nav-h) - 30px)); }
+}
+
+/* ─────────────────────────────────────────────────────────
+   #5 FAMILIARITY / #7 FUNCTION OVER FORM (Fitts's Law)
+   Carousel controls: bigger targets, and the certificate arrows
+   moved off the artwork so they stop covering the thing they are
+   meant to help you read.
+   ───────────────────────────────────────────────────────── */
+/* declared before the media query so the mobile rule wins the cascade */
+.swipe-hint { display: none; }
+
+@media (max-width: 640px) {
+  .certs-frame { padding: .7rem .7rem .7rem; }
+  .certs-arrow {
+    width: 44px; height: 44px;
+    font-size: 1.35rem;
+    background: rgba(10, 10, 10, .88);
+  }
+  .certs-arrow.prev { left: .35rem; }
+  .certs-arrow.next { right: .35rem; }
+
+  .carousel-btn { width: 44px; height: 44px; }
+
+  /* #4 swipe is the shortcut; say so once rather than leaving it hidden */
+  .swipe-hint {
+    display: block;
+    text-align: center;
+    margin-top: .55rem;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    color: var(--text-muted);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   #6 LIMITATION OF INFORMATION
+   The Tribe's Code is five blocks of terms — a wall of text on a
+   phone. On mobile each becomes a native disclosure so the list
+   can be scanned first and read on demand. Desktop keeps the
+   full text open and non-interactive.
+   ───────────────────────────────────────────────────────── */
+.code-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  list-style: none;
+  cursor: default;
+}
+.code-summary::-webkit-details-marker { display: none; }
+.code-chevron { display: none; }
+
+@media (max-width: 640px) {
+  .code-item { padding: 0; }
+  .code-summary {
+    cursor: pointer;
+    padding: 1rem 1.1rem;
+    min-height: 44px;
+    align-items: center;
+    transition: background .2s ease;
+  }
+  .code-chevron {
+    display: block;
+    flex-shrink: 0;
+    margin-left: auto;
+    width: 20px; height: 20px;
+    color: var(--yellow);
+    transition: transform .25s var(--ease-out);
+  }
+  details[open] .code-chevron { transform: rotate(180deg); }
+  .code-summary h3 { margin-bottom: 0; }
+  .code-body { padding: 0 1.1rem 1.1rem; }
+  .code-body p { margin: 0; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   #2 FEEDBACK — the embedded consultation form is a slow remote
+   iframe; without this the panel is blank with no explanation.
+   ───────────────────────────────────────────────────────── */
+.form-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .85rem;
+  min-height: 320px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: .92rem;
+}
+.form-spinner {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  border-top-color: var(--yellow);
+  animation: form-spin .8s linear infinite;
+}
+@keyframes form-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .form-spinner { animation-duration: 2s; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   #3 AWARENESS OF ERRORS
+   An image that fails to load should degrade to something
+   readable, not a broken-image glyph.
+   ───────────────────────────────────────────────────────── */
+.img-fallback {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1rem;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  background: var(--dark-3);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+.tcf-icon-fallback {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .18);
+  color: rgba(0, 0, 0, .55);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-devan);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+@media (max-width: 640px) {
+  .tcf-icon-fallback { width: 60px; height: 60px; font-size: 1.3rem; }
+}

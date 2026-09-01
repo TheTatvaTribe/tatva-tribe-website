@@ -6,25 +6,28 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0A0A0A" />
 
-    <!-- Font loading: preconnect to Google Fonts origins + load only the
-         four Antonio weights actually used by the site (400/500/600/700).
-         display=swap shows fallback text until the webfont is ready. -->
+    <!-- Yatra One for display, Hind for body, Noto Serif Devanagari for the
+         Sanskrit. display=swap shows fallback text until the webfont lands. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;600;700&display=swap" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Hind:wght@300;400;500;600;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap"
+    />
 
-    <meta name="description" content="The Tatva Tribe - Holistic fitness coaching based on 7 Tatvas. SMARTWORK > HARDWORK. Transform your body, elevate your mind." />
+    <meta name="description" content="The Tatva Tribe: holistic health coaching and personal training rooted in the 7 Tatvas of transformation. SMARTWORK over Hardwork." />
     <meta name="keywords" content="fitness, holistic health, personal training, nutrition, wellness, Tatva Tribe" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://thetatvatribe.com/" />
-    <meta property="og:title" content="The Tatva Tribe - Holistic Fitness Coaching" />
-    <meta property="og:description" content="Beyond Just Workouts — Towards Wholeness. Join the tribe for sustainable fitness transformation." />
+    <meta property="og:title" content="The Tatva Tribe | Holistic Fitness Coaching" />
+    <meta property="og:description" content="Be the difference between looking fit and actually being fit. Join the tribe for sustainable transformation." />
     <title>The Tatva Tribe | Holistic Fitness Coaching</title>
     <script>
       // SPA fallback decoder: pairs with public/404.html so GitHub Pages can
-      // serve deep links like /tatva-tribe-website/about. Restores the real
-      // path before React Router boots.
+      // serve deep links like /about and /stories. Restores the real path
+      // before React Router boots.
       (function (l) {
         if (l.search[1] === '/') {
           var decoded = l.search

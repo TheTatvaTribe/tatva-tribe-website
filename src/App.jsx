@@ -2,37 +2,53 @@ import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-d
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollTopButton from './components/ScrollTopButton';
 import Home from './pages/Home';
 import About from './pages/About';
-import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
+import Stories from './pages/Stories';
 import NotFound from './pages/NotFound';
+import { scrollToSection } from './hooks/useSectionNav';
+import { jumpTo } from './utils/scroll';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Explicitly instant. The two-argument form inherits the CSS
+    // scroll-behavior, so while the root was `smooth` every route change
+    // animated the whole twelve-screen page back to the top.
+    jumpTo(0);
   }, [pathname]);
   return null;
+}
+
+/** Keeps the old /pricing URL working now that plans live on the home page. */
+function PricingRedirect() {
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => scrollToSection('services'));
+    });
+  }, []);
+  return <Home />;
 }
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen bg-dark flex flex-col">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <Navbar />
+      <main className="site-main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/pricing" element={<PricingRedirect />} />
+          <Route path="/stories" element={<Stories />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      <Footer />
+      <ScrollTopButton />
     </Router>
   );
 }

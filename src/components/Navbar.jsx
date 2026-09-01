@@ -1,140 +1,128 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useSectionNav } from '../hooks/useSectionNav';
+
+const SECTIONS = ['tatvas', 'services'];
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
-    const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const { pathname } = useLocation();
+  const goToSection = useSectionNav();
 
-    const navLinks = [
-        { name: 'Home', path: '/' },
-        { name: 'About', path: '/about' },
-        { name: 'Pricing', path: '/pricing' },
-        { name: 'Contact', path: '/contact' },
-    ];
+  const isHome = pathname === '/';
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  useEffect(() => {
+    // Batched into an animation frame: this used to run three
+    // getBoundingClientRect calls on every scroll event, which on a page
+    // that is one long scroll interaction is a lot of forced layout.
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      setIsScrolled(window.scrollY > 60);
 
-    useEffect(() => {
-        if (isOpen) {
-            setIsOpen(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location]);
+      if (!isHome) {
+        setActiveSection('');
+        return;
+      }
+      // Highlight whichever section's top has passed just under the navbar.
+      let current = '';
+      SECTIONS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) current = id;
+      });
+      setActiveSection(current);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(measure); };
 
-    return (
-        <nav
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass py-3' : 'bg-transparent py-5'
-                }`}
+    measure();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [isHome]);
+
+  // Close the drawer on any route change (including back/forward), adjusted
+  // during render rather than in an effect to avoid a cascading re-render.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setIsOpen(false);
+  }
+
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [isOpen]);
+
+  const sectionLink = (id, label) => (
+    <li key={id}>
+      <button
+        type="button"
+        className={`nav-link${isHome && activeSection === id ? ' is-active' : ''}`}
+        onClick={() => { setIsOpen(false); goToSection(id); }}
+      >
+        {label}
+      </button>
+    </li>
+  );
+
+  return (
+    <nav className={`navbar${isScrolled ? ' scrolled' : ''}`}>
+      <div className="nav-inner">
+        <Link to="/" className="nav-logo" aria-label="The Tatva Tribe home">
+          <span className="logo-devanagari">तत्व</span>
+          <span className="logo-text">TRIBE</span>
+        </Link>
+
+        <button
+          className="nav-toggle"
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((v) => !v)}
         >
-            <div className="container">
-                <div className="flex items-center justify-between">
-                    {/* Logo
-                        To use a custom logo image:
-                        1. Drop your logo file into public/images/logo.png (PNG with transparent bg works best)
-                        2. The <img> below will load it automatically; on error it falls back to the gold "T"
-                    */}
-                    <Link to="/" className="flex items-center gap-3 group">
-                        <img
-                            src="/tatva-tribe-website/images/logo.png"
-                            alt="The Tatva Tribe"
-                            className="w-10 h-10 rounded-full object-cover"
-                            onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
-                        />
-                        <div className="w-10 h-10 bg-gold-400 rounded-full items-center justify-center hidden">
-                            <span className="text-dark font-heading font-bold text-lg">T</span>
-                        </div>
-                        <span className="font-heading font-bold text-xl text-cream group-hover:text-gold-400 transition-colors">
-                            The Tatva Tribe
-                        </span>
-                    </Link>
+          <span /><span /><span />
+        </button>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-8">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                className={`font-medium transition-colors ${location.pathname === link.path
-                                    ? 'text-gold-400'
-                                    : 'text-cream hover:text-gold-400'
-                                    }`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                        <Link to="/contact" className="btn btn-primary">
-                            Free Consultation
-                        </Link>
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2 text-cream hover:text-gold-400 transition-colors"
-                        aria-label="Toggle menu"
-                        aria-expanded={isOpen}
-                    >
-                        <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            {isOpen ? (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            ) : (
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            )}
-                        </svg>
-                    </button>
-                </div>
-
-                {/* Mobile Menu */}
-                <div
-                    className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-80 mt-4' : 'max-h-0'
-                        }`}
-                >
-                    <div className="glass rounded-xl p-4 space-y-3">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                className={`block py-2 px-4 rounded-lg font-medium transition-colors ${location.pathname === link.path
-                                    ? 'bg-gold-400/20 text-gold-400'
-                                    : 'text-cream hover:bg-forest-600/50'
-                                    }`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                        <Link
-                            to="/contact"
-                            className="btn btn-primary w-full mt-4"
-                        >
-                            Free Consultation
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    );
+        <ul className={`nav-links${isOpen ? ' open' : ''}`}>
+          {sectionLink('tatvas', 'The 7 Tatvas')}
+          {sectionLink('services', 'Plans')}
+          <li>
+            <Link
+              to="/about"
+              className={`nav-link${pathname === '/about' ? ' is-active' : ''}`}
+              onClick={() => setIsOpen(false)}
+            >
+              About
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/stories"
+              className={`nav-link${pathname === '/stories' ? ' is-active' : ''}`}
+              onClick={() => setIsOpen(false)}
+            >
+              Stories
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/contact"
+              className={`nav-link nav-cta${pathname === '/contact' ? ' is-active' : ''}`}
+              onClick={() => setIsOpen(false)}
+            >
+              Free Consult
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;

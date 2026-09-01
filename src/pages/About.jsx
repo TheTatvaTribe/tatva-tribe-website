@@ -1,367 +1,337 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Dumbbell, Apple, Brain, Moon, Users, Leaf, Target, Flame, TrendingDown, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
-import Card from '../components/ui/Card';
+import PhotoCarousel from '../components/PhotoCarousel';
+import {
+  aboutPhotos,
+  audienceTypes,
+  certifications,
+  DESIGNER_URL,
+  trainerPhoto,
+} from '../data/site';
 
-const certifications = [
-    { src: '/tatva-tribe-website/images/certifications/certified_personal_trainer.jpeg', alt: 'Certified Personal Trainer' },
-    { src: '/tatva-tribe-website/images/certifications/kettlebell_training_specialist.PNG', alt: 'Kettlebell Training Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/olympic_weightlifting_training_specialist.PNG', alt: 'Olympic Weightlifting Training Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/postureandfunctional_corrective_exercise_specialist.PNG', alt: 'Posture & Functional Corrective Exercise Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/resistance_band_training_specialist.PNG', alt: 'Resistance Band Training Specialist' },
-    { src: '/tatva-tribe-website/images/certifications/weight_loss_training_specialist.PNG', alt: 'Weight Loss Training Specialist' },
-];
+const SWIPE_PX = 50;
 
+/* ── Certifications carousel ─────────────────────────────── */
 const CertificationsCarousel = () => {
-    const [current, setCurrent] = useState(0);
-    const timeoutRef = useRef(null);
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [failed, setFailed] = useState({});
+  const touchStartX = useRef(0);
+  const total = certifications.length;
 
-    const resetTimer = useCallback(() => {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-            setCurrent((prev) => (prev + 1) % certifications.length);
-        }, 3000);
-    }, []);
+  const go = useCallback(
+    (dir) => setCurrent((prev) => (prev + dir + total) % total),
+    [total]
+  );
 
-    useEffect(() => {
-        resetTimer();
-        return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
-    }, [current, resetTimer]);
+  useEffect(() => {
+    if (paused) return undefined;
+    const timer = setTimeout(() => setCurrent((prev) => (prev + 1) % total), 3500);
+    return () => clearTimeout(timer);
+  }, [current, paused, total]);
 
-    const go = (dir) => {
-        setCurrent((prev) => (prev + dir + certifications.length) % certifications.length);
-    };
-
-    return (
-        <div className="mt-12 max-w-2xl mx-auto">
-            <p className="text-cream/60 text-xs uppercase tracking-wider text-center mb-3">Certifications</p>
-            <div className="relative group border-2 border-gold-400/30 rounded-2xl p-4 bg-forest-600/20">
-                <div className="overflow-hidden rounded-xl">
-                    <div
-                        className="flex transition-transform duration-500 ease-in-out"
-                        style={{ transform: `translateX(-${current * 100}%)` }}
-                    >
-                        {certifications.map((cert, i) => (
-                            <div key={i} className="w-full flex-shrink-0">
-                                <img
-                                    src={cert.src}
-                                    alt={cert.alt}
-                                    className="w-full h-auto object-contain bg-white"
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                <button
-                    onClick={() => go(-1)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-dark/70 hover:bg-dark/90 rounded-full flex items-center justify-center text-cream opacity-0 group-hover:opacity-100 transition-opacity"
-                    aria-label="Previous certificate"
-                >
-                    <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                    onClick={() => go(1)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-dark/70 hover:bg-dark/90 rounded-full flex items-center justify-center text-cream opacity-0 group-hover:opacity-100 transition-opacity"
-                    aria-label="Next certificate"
-                >
-                    <ChevronRight className="w-4 h-4" />
-                </button>
-            </div>
-            <div className="flex justify-center gap-1.5 mt-3">
-                {certifications.map((_, i) => (
-                    <button
-                        key={i}
-                        onClick={() => setCurrent(i)}
-                        className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-gold-400 w-4' : 'bg-cream/30 hover:bg-cream/50'}`}
-                        aria-label={`Go to certificate ${i + 1}`}
-                    />
-                ))}
-            </div>
-            <p className="text-cream/50 text-xs text-center mt-2">{certifications[current].alt}</p>
+  return (
+    <div className="about-certs">
+      <p className="about-certs-label">Certifications</p>
+      <div
+        className="certs-frame"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocusCapture={() => setPaused(true)}
+        onBlurCapture={() => setPaused(false)}
+      >
+        {/* Swipe matches the testimonials carousel, so both behave the same
+            way on touch instead of one supporting it and the other not. */}
+        <div
+          className="certs-viewport"
+          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => {
+            const diff = touchStartX.current - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > SWIPE_PX) go(diff > 0 ? 1 : -1);
+          }}
+        >
+          <div className="certs-track" style={{ transform: `translateX(-${current * 100}%)` }}>
+            {certifications.map((cert, i) => (
+              <div className="certs-slide" key={cert.src}>
+                {failed[cert.src] ? (
+                  <div className="img-fallback" style={{ minHeight: 200 }}>{cert.alt}</div>
+                ) : (
+                  <img
+                    src={cert.src}
+                    alt={cert.alt}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    onError={() => setFailed((prev) => ({ ...prev, [cert.src]: true }))}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-    );
+        <button
+          type="button"
+          className="certs-arrow prev"
+          aria-label="Previous certificate"
+          onClick={() => go(-1)}
+        >
+          ‹
+        </button>
+        <button
+          type="button"
+          className="certs-arrow next"
+          aria-label="Next certificate"
+          onClick={() => go(1)}
+        >
+          ›
+        </button>
+      </div>
+      <div className="certs-dots">
+        {certifications.map((cert, i) => (
+          <button
+            key={cert.src}
+            type="button"
+            className={`certs-dot${i === current ? ' active' : ''}`}
+            aria-label={`Certificate ${i + 1} of ${total}`}
+            onClick={() => setCurrent(i)}
+          />
+        ))}
+      </div>
+      <p className="certs-caption">{certifications[current].alt}</p>
+      <p className="swipe-hint">Swipe to browse</p>
+    </div>
+  );
 };
 
+/* ── Timeline beats ──────────────────────────────────────── */
+const BEATS = [
+  {
+    key: 'c1',
+    tone: 'beat-prarambha',
+    tag: 'AGE 14',
+    title: 'Where it started',
+    body: 'I had absolutely no idea what I was doing, but I was fascinated by the weights, the machines, and let’s be honest, flexing in the mirror.',
+  },
+  {
+    key: 'c2',
+    tone: 'beat-shakti',
+    tag: 'TURNING POINT',
+    title: 'Then everything changed',
+    body: 'Everything changed with professional cricket. Fitness wasn’t about how I looked anymore. It was how I performed, recovered, and felt on days I wasn’t training.',
+    photo: aboutPhotos.cricket,
+  },
+  {
+    key: 'c3',
+    tone: 'beat-tapasya',
+    tag: 'THE LAYERS',
+    title: 'Fitness has layers',
+    body: 'Real fitness is more than a mirror check. It’s science, mental discipline, and a holistic approach to taking care of your body.',
+  },
+];
+
 const About = () => {
-    const tatvas = [
-        {
-            hindi: 'शरीर',
-            english: 'Body Discipline',
-            description: 'Anything which promotes Movement.',
-            examples: 'Strength training, Endurance, Yoga, Aerobics',
-            Icon: Dumbbell,
-            /*
-             * TATVA IMAGE — Sharira (Body Discipline)
-             * Drop your image into public/images/tatvas/sharira.jpg
-             * Then uncomment the line below:
-             */
-            // image: '/tatva-tribe-website/images/tatvas/sharira.jpg',
-        },
-        {
-            hindi: 'आहार',
-            english: 'Nutrition',
-            description: 'Mindful eating, balancing macros, staying hydrated.',
-            examples: 'Real food = Real energy',
-            Icon: Apple,
-            /*
-             * TATVA IMAGE — Aahaar (Nutrition)
-             * Drop your image into public/images/tatvas/aahaar.jpg
-             * Then uncomment the line below:
-             */
-            // image: '/tatva-tribe-website/images/tatvas/aahaar.jpg',
-        },
-        {
-            hindi: 'मानस',
-            english: 'Mental Toughness',
-            description: 'Meditation, Breathwork, Journaling.',
-            examples: 'Mental resilience > Digital Chaos',
-            Icon: Brain,
-            /*
-             * TATVA IMAGE — Manas (Mental Toughness)
-             * Drop your image into public/images/tatvas/manas.jpg
-             * Then uncomment the line below:
-             */
-            // image: '/tatva-tribe-website/images/tatvas/manas.jpg',
-        },
-        {
-            hindi: 'निद्रा',
-            english: 'Rest & Recovery',
-            description: 'Restorative sleep, active recovery, mobility.',
-            examples: 'Good rest = Better mood, strength and health span',
-            Icon: Moon,
-            /*
-             * TATVA IMAGE — Nidra (Rest & Recovery)
-             * Drop your image into public/images/tatvas/nidra.jpg
-             * Then uncomment the line below:
-             */
-            // image: '/tatva-tribe-website/images/tatvas/nidra.jpg',
-        },
-        {
-            hindi: 'समाज',
-            english: 'Community & Connections',
-            description: 'Building good relations, socialising.',
-            examples: 'Growing together',
-            Icon: Users,
-            /*
-             * TATVA IMAGE — Samaaj (Community)
-             * Drop your image into public/images/tatvas/samaaj.jpg
-             * Then uncomment the line below:
-             */
-            // image: '/tatva-tribe-website/images/tatvas/samaaj.jpg',
-        },
-        {
-            hindi: 'प्रकृति',
-            english: 'Nature',
-            description: 'Aligning with nature, seasonal rhythms in diet & activity.',
-            examples: 'Sunlight, fresh air = Natural healers',
-            Icon: Leaf,
-            /*
-             * TATVA IMAGE — Prakriti (Nature)
-             * Drop your image into public/images/tatvas/prakriti.jpg
-             * Then uncomment the line below:
-             */
-            // image: '/tatva-tribe-website/images/tatvas/prakriti.jpg',
-        },
-        {
-            hindi: 'उद्देश्य',
-            english: 'Purpose',
-            description: 'Keeping the Right intention, setting a goal.',
-            examples: 'No purpose = No Growth',
-            Icon: Target,
-            /*
-             * TATVA IMAGE — Uddeshya (Purpose)
-             * Drop your image into public/images/tatvas/uddeshya.jpg
-             * Then uncomment the line below:
-             */
-            // image: '/tatva-tribe-website/images/tatvas/uddeshya.jpg',
-        },
-    ];
+  const timelineRef = useRef(null);
+  const progressRef = useRef(null);
+  const [revealed, setRevealed] = useState({});
 
-    const audienceTypes = [
-        {
-            Icon: Flame,
-            title: 'The Motivated Beginner',
-            description: 'Highly motivated, but don\'t know where to start.',
-        },
-        {
-            Icon: TrendingDown,
-            title: 'The Inconsistent Learner',
-            description: 'Know a little, but struggle to stay consistent.',
-        },
-        {
-            Icon: RefreshCw,
-            title: 'The Plateau Warrior',
-            description: 'Stuck in the same routine for years.',
-        },
-    ];
-
-    return (
-        <div className="pt-20">
-            {/* Hero Section */}
-            <section className="section relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-forest-600 via-dark to-dark" />
-                <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-gold-400/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-forest-500/20 rounded-full blur-3xl" />
-
-                <div className="container relative z-10">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <span className="inline-block px-4 py-2 bg-gold-400/10 border border-gold-400/30 rounded-full text-gold-400 text-sm font-medium mb-6 animate-fade-in">
-                            Our Philosophy
-                        </span>
-                        <h1 className="heading-xl text-cream mb-6 animate-slide-up">
-                            Beyond Just Workouts —{' '}
-                            <span className="text-gradient">Towards Wholeness</span>
-                        </h1>
-                        <p className="text-xl text-cream/70 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                            At The Tatva Tribe, Fitness isn't one-dimensional. It's a blend of all the TATVAS together to create real, lasting change.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Master Trainer Section */}
-            <section className="section">
-                <div className="container">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div className="order-2 lg:order-1">
-                            <span className="text-gold-400 text-sm font-medium uppercase tracking-wider">
-                                About the Master Trainer
-                            </span>
-                            <h2 className="heading-lg text-cream mt-2 mb-6">
-                                From a Curious Teen to a{' '}
-                                <span className="text-gradient">Conscious Coach</span>
-                            </h2>
-                            <div className="space-y-4 text-cream/70">
-                                <p>
-                                    I began my fitness journey at the age of 14 — as a young kid who hardly knew about form and technique, but was absolutely fascinated by machines, weights, and flexing in the mirror.
-                                </p>
-                                <p>
-                                    Later when I took up Cricket professionally, I realised that fitness is not just physical, it has a lot more layers to it!
-                                </p>
-                                <p>
-                                    Over the last 12–13 years, I've seen fitness through two lenses —
-                                </p>
-                                <ul className="space-y-2 pl-4">
-                                    <li className="flex items-start gap-3">
-                                        <span className="text-gold-400 mt-1">👉</span>
-                                        <span>as an everyday individual, who just wanted to feel strong and confident, and</span>
-                                    </li>
-                                    <li className="flex items-start gap-3">
-                                        <span className="text-gold-400 mt-1">👉</span>
-                                        <span>as an athlete, who understood the science, the discipline, and the holistic approach needed!</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            {/* Quote Box */}
-                            <div className="mt-8 p-6 bg-forest-600/30 border-l-4 border-gold-400 rounded-r-lg">
-                                <p className="text-cream italic text-lg">
-                                    "Real progress doesn't come from doing more; it comes from doing what truly matters, with the right guidance and intent."
-                                </p>
-                            </div>
-
-                            <p className="mt-6 text-cream/70">
-                                Today, as a fitness professional, my aim is to build a tribe (a community) of people who have discovered what fitness truly is — <strong className="text-cream">a sustainable lifestyle, not just a temporary goal.</strong>
-                            </p>
-
-                            <a
-                                href="https://www.instagram.com/advayshidhaye/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-secondary mt-8"
-                            >
-                                Connect on Instagram
-                            </a>
-                        </div>
-                        <div className="order-1 lg:order-2 relative">
-                            <div className="aspect-square max-w-md mx-auto rounded-full overflow-hidden shadow-xl shadow-black/40">
-                                <img
-                                    src="/tatva-tribe-website/images/trainer.jpeg"
-                                    alt="Advay Shidhaye — Master Trainer"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold-400/20 rounded-full blur-xl" />
-                            <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-forest-400/30 rounded-full blur-xl" />
-                        </div>
-                    </div>
-
-                    {/* Certifications Carousel */}
-                    <CertificationsCarousel />
-                </div>
-            </section>
-
-            {/* Why Join TTT Section */}
-            <section className="section">
-                <div className="container">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="heading-lg text-cream mb-4">
-                            Why join <span className="text-gradient">TTT</span>?
-                        </h2>
-                        <p className="text-cream/70 text-lg">
-                            Through years of coaching, we've noticed three common types of people in fitness:
-                        </p>
-                    </div>
-
-                    {/* Audience Types */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                        {audienceTypes.map((type, index) => (
-                            <Card key={index} className="text-center">
-                                <div className="w-14 h-14 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <type.Icon className="w-7 h-7 text-gold-400" />
-                                </div>
-                                <h3 className="heading-sm text-cream mb-3">{type.title}</h3>
-                                <p className="text-cream/70 text-sm">{type.description}</p>
-                            </Card>
-                        ))}
-                    </div>
-
-                    {/* The Solution */}
-                    <div className="max-w-3xl mx-auto text-center">
-                        <div className="p-8 bg-forest-600/30 rounded-2xl border border-forest-500/30">
-                            <p className="text-cream/80 text-lg mb-6">
-                                Different journeys, same challenge — <strong className="text-cream">no real progress.</strong>
-                            </p>
-                            <p className="text-cream/80 text-lg mb-6">
-                                And the missing link? <span className="text-gold-400 font-semibold">Professional guidance!</span>
-                            </p>
-                            <p className="text-cream/70 mb-8">
-                                At The Tatva Tribe, our goal is to bridge that gap — by providing a holistic, science-backed approach that helps you train smarter and live stronger. We don't just build fitter bodies — we build healthier lifestyles and stronger mindsets.
-                            </p>
-
-                            {/* Philosophy Highlight */}
-                            <div className="inline-block px-8 py-4 bg-gradient-to-r from-gold-400/20 to-gold-500/20 rounded-xl border border-gold-400/30">
-                                <p className="text-cream text-sm mb-2">Because we believe in one simple philosophy:</p>
-                                <p className="text-2xl md:text-3xl font-heading font-bold">
-                                    <span className="text-gold-400">SMARTWORK</span>
-                                    <span className="text-cream/60 mx-3">{'>'}</span>
-                                    <span className="text-cream/80">HARDWORK</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="section bg-gradient-to-br from-forest-600/50 to-forest-700/50">
-                <div className="container text-center">
-                    <div className="max-w-2xl mx-auto">
-                        <h2 className="heading-lg text-cream mb-4">
-                            Ready to Discover{' '}
-                            <span className="text-gradient">Your Tatva</span>?
-                        </h2>
-                        <p className="text-cream/70 mb-8 text-lg">
-                            Start your transformation journey today with a free consultation.
-                        </p>
-                        <Link to="/contact" className="btn btn-primary text-lg px-10 py-4">
-                            Join the Tribe
-                        </Link>
-                    </div>
-                </div>
-            </section>
-        </div>
+  useEffect(() => {
+    const nodes = document.querySelectorAll('[data-about-card]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const key = entry.target.getAttribute('data-about-card');
+          setRevealed((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15 }
     );
+    nodes.forEach((el) => observer.observe(el));
+
+    let frame = 0;
+    const updateProgress = () => {
+      frame = 0;
+      const timeline = timelineRef.current;
+      const line = progressRef.current;
+      if (!timeline || !line) return;
+      const rect = timeline.getBoundingClientRect();
+      const total = Math.max(1, rect.height);
+      const progress = Math.min(Math.max((window.innerHeight * 0.8 - rect.top) / total, 0), 1);
+      line.style.transform = `scaleY(${progress})`;
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(updateProgress); };
+
+    updateProgress();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+
+    return () => {
+      observer.disconnect();
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, []);
+
+  return (
+    <div className="about-page">
+      <section className="about-hero about-shell">
+        <p className="about-dev">अनुशासन</p>
+        <h1>My fitness journey</h1>
+        <p className="about-sub">Told the way it actually happened.</p>
+      </section>
+
+      <section className="about-shell about-timeline" ref={timelineRef} aria-label="Journey timeline">
+        <div className="about-line-bg" aria-hidden="true" />
+        <div className="about-line-progress" ref={progressRef} aria-hidden="true" />
+
+        {BEATS.map((beat) => (
+          <div className={`about-beat ${beat.tone}`} data-about-card={beat.key} key={beat.key}>
+            <div className="about-node" aria-hidden="true" />
+            <article className={`about-card${revealed[beat.key] ? ' is-visible' : ''}`}>
+              {beat.photo ? <PhotoCarousel slot={beat.photo} /> : null}
+              <div className="about-card-body">
+                <div className="about-card-head">
+                  <span className="about-tag">{beat.tag}</span>
+                </div>
+                <h3>{beat.title}</h3>
+                <p>{beat.body}</p>
+              </div>
+            </article>
+          </div>
+        ))}
+
+        <div className="about-beat beat-ghor" data-about-card="c4">
+          <div className="about-node" aria-hidden="true" />
+          <div className={`about-lenses${revealed.c4 ? ' is-visible' : ''}`}>
+            <p className="about-lenses-title">12-13 YEARS, TWO LENSES</p>
+            <div className="about-lens-grid">
+              <article className="about-card lens">
+                <div className="about-card-body">
+                  <p className="lens-head">THE REGULAR GUY</p>
+                  <p>
+                    Someone who just wanted to feel strong, energised, and confident walking into
+                    any room.
+                  </p>
+                </div>
+              </article>
+              <article className="about-card lens alt">
+                <div className="about-card-body">
+                  <p className="lens-head alt">THE ATHLETE</p>
+                  <p>
+                    Someone who had to learn the exact science, grit, and structure it takes to
+                    perform at the highest level.
+                  </p>
+                </div>
+              </article>
+            </div>
+            <p className="about-bridge">
+              I brought these two worlds together to become the coach I am today.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="about-quote">
+        <p className="about-quote-dev">एकता</p>
+        <p className="about-quote-text">
+          &ldquo;Real progress doesn&rsquo;t come from doing more; it comes from doing what truly
+          matters, with the right guidance and intent.&rdquo;
+        </p>
+      </section>
+
+      <section className="about-trainer about-shell">
+        <div className="about-trainer-grid">
+          <div className="about-trainer-photo-wrap">
+            <div className="about-trainer-ring" aria-hidden="true" />
+            <img
+              className="about-trainer-photo"
+              src={trainerPhoto}
+              alt="Advay Shidhaye, Master Trainer"
+            />
+          </div>
+          <div className="about-trainer-copy">
+            <span className="section-eyebrow">About the Master Trainer</span>
+            <h2 className="section-title">From a curious teen to a conscious coach</h2>
+            <p>
+              Today, as a fitness professional, my aim is to build a tribe, a community of people
+              who have discovered what fitness truly is:{' '}
+              <strong>a sustainable lifestyle, not just a temporary goal.</strong>
+            </p>
+            <a href={DESIGNER_URL} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              Connect on Instagram
+            </a>
+          </div>
+        </div>
+
+        <CertificationsCarousel />
+      </section>
+
+      <section className="about-why">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">Why join TTT?</h2>
+            <p className="section-desc">
+              Through years of coaching, we&rsquo;ve noticed three common types of people in fitness:
+            </p>
+          </div>
+
+          <div className="about-why-grid">
+            {audienceTypes.map((type) => (
+              <div className="about-why-card" key={type.title}>
+                <span className="num">{type.num}</span>
+                <h3>{type.title}</h3>
+                <p>{type.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="about-solution">
+            <p>
+              Different journeys, same challenge: <strong>no real progress.</strong>
+            </p>
+            <p>
+              And the missing link? <span className="accent">Professional guidance.</span>
+            </p>
+            <p>
+              At The Tatva Tribe, our goal is to bridge that gap by providing a holistic, science-backed
+              approach that helps you train smarter and live stronger. We don&rsquo;t just build
+              fitter bodies; we build healthier lifestyles and stronger mindsets.
+            </p>
+            <div className="about-philosophy">
+              <p className="about-philosophy-label">
+                Because we believe in one simple philosophy:
+              </p>
+              <p className="about-philosophy-line">
+                <span className="smart">SMARTWORK</span>
+                <span className="gt">&gt;</span>
+                <span>HARDWORK</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="about-tribe about-shell">
+        <h2>Not a 30-day challenge. A permanent lifestyle.</h2>
+        <p>
+          I&rsquo;m not here to sell you a quick fix. My goal is to build a tribe of people ready to
+          redefine what fitness means to them.
+        </p>
+        <p>
+          A strong, capable body through a lifestyle you actually enjoy and can sustain for life.
+        </p>
+        <PhotoCarousel slot={aboutPhotos.coaching} className="about-photo-tribe" />
+      </section>
+
+      <section className="about-join">
+        <h2>Ready to stop chasing temporary goals?</h2>
+        <p>Let&rsquo;s build a strong, permanent you.</p>
+        <Link to="/contact" className="btn btn-primary">
+          Let&rsquo;s build it together
+        </Link>
+      </section>
+    </div>
+  );
 };
 
 export default About;

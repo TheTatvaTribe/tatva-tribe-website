@@ -1,109 +1,128 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import BrandMark from './ui/BrandMark';
-import { navLinks } from '../content/navigation';
+import { useSectionNav } from '../hooks/useSectionNav';
+
+const SECTIONS = ['tatvas', 'services'];
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
-    const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const { pathname } = useLocation();
+  const goToSection = useSectionNav();
 
-    // Scroll listener — throttle via rAF and pass passive: true so the
-    // browser doesn't have to wait for our handler before scrolling.
-    useEffect(() => {
-        let raf = null;
-        const handleScroll = () => {
-            if (raf) return;
-            raf = requestAnimationFrame(() => {
-                setIsScrolled(window.scrollY > 20);
-                raf = null;
-            });
-        };
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-            if (raf) cancelAnimationFrame(raf);
-        };
-    }, []);
+  const isHome = pathname === '/';
 
-    // Close the mobile menu on route change. setIsOpen-in-effect is flagged
-    // by the new react-hooks rule, but this is the canonical pattern for
-    // syncing internal UI state with external navigation state.
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIsOpen(false);
-    }, [location.pathname]);
+  useEffect(() => {
+    // Batched into an animation frame: this used to run three
+    // getBoundingClientRect calls on every scroll event, which on a page
+    // that is one long scroll interaction is a lot of forced layout.
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      setIsScrolled(window.scrollY > 60);
 
-    const navLinkClass = (path) =>
-        `font-medium transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark ${
-            location.pathname === path ? 'text-gold-400' : 'text-cream hover:text-gold-400'
-        }`;
+      if (!isHome) {
+        setActiveSection('');
+        return;
+      }
+      // Highlight whichever section's top has passed just under the navbar.
+      let current = '';
+      SECTIONS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) current = id;
+      });
+      setActiveSection(current);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(measure); };
 
-    const mobileLinkClass = (path) =>
-        `block py-2 px-4 rounded-lg font-medium transition-colors ${
-            location.pathname === path ? 'bg-gold-400/20 text-gold-400' : 'text-cream hover:bg-forest-600/50'
-        }`;
+    measure();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [isHome]);
 
-    return (
-        <nav
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                isScrolled ? 'glass py-3' : 'bg-transparent py-5'
-            }`}
+  // Close the drawer on any route change (including back/forward), adjusted
+  // during render rather than in an effect to avoid a cascading re-render.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setIsOpen(false);
+  }
+
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [isOpen]);
+
+  const sectionLink = (id, label) => (
+    <li key={id}>
+      <button
+        type="button"
+        className={`nav-link${isHome && activeSection === id ? ' is-active' : ''}`}
+        onClick={() => { setIsOpen(false); goToSection(id); }}
+      >
+        {label}
+      </button>
+    </li>
+  );
+
+  return (
+    <nav className={`navbar${isScrolled ? ' scrolled' : ''}`}>
+      <div className="nav-inner">
+        <Link to="/" className="nav-logo" aria-label="The Tatva Tribe home">
+          <span className="logo-devanagari">तत्व</span>
+          <span className="logo-text">TRIBE</span>
+        </Link>
+
+        <button
+          className="nav-toggle"
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((v) => !v)}
         >
-            <div className="container">
-                <div className="flex items-center justify-between">
-                    <BrandMark />
+          <span /><span /><span />
+        </button>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-8">
-                        {navLinks.map((link) => (
-                            <Link key={link.name} to={link.path} className={navLinkClass(link.path)}>
-                                {link.name}
-                            </Link>
-                        ))}
-                        <Link to="/contact" className="btn btn-primary">
-                            Free Consultation
-                        </Link>
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2 text-cream hover:text-gold-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
-                        aria-label="Toggle menu"
-                        aria-expanded={isOpen}
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d={isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
-                            />
-                        </svg>
-                    </button>
-                </div>
-
-                {/* Mobile Menu */}
-                <div
-                    className={`md:hidden overflow-hidden transition-all duration-300 ${
-                        isOpen ? 'max-h-80 mt-4' : 'max-h-0'
-                    }`}
-                >
-                    <div className="glass rounded-xl p-4 space-y-3">
-                        {navLinks.map((link) => (
-                            <Link key={link.name} to={link.path} className={mobileLinkClass(link.path)}>
-                                {link.name}
-                            </Link>
-                        ))}
-                        <Link to="/contact" className="btn btn-primary w-full mt-4">
-                            Free Consultation
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    );
+        <ul className={`nav-links${isOpen ? ' open' : ''}`}>
+          {sectionLink('tatvas', 'The 7 Tatvas')}
+          {sectionLink('services', 'Plans')}
+          <li>
+            <Link
+              to="/about"
+              className={`nav-link${pathname === '/about' ? ' is-active' : ''}`}
+              onClick={() => setIsOpen(false)}
+            >
+              About
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/stories"
+              className={`nav-link${pathname === '/stories' ? ' is-active' : ''}`}
+              onClick={() => setIsOpen(false)}
+            >
+              Stories
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/contact"
+              className={`nav-link nav-cta${pathname === '/contact' ? ' is-active' : ''}`}
+              onClick={() => setIsOpen(false)}
+            >
+              Free Consult
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;

@@ -1,73 +1,90 @@
-import Card from '../components/ui/Card';
-import EyebrowPill from '../components/ui/EyebrowPill';
+import { useState } from 'react';
+import { EMAIL, INSTAGRAM_URL } from '../data/site';
+
+const FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLScScCLsxvv6BaL4wphS_QksI2fm4x0B_QQGeM4pd0LB7DMdMQ/viewform?embedded=true';
+
+const EXPECTATIONS = [
+  'Free 30-min discovery call',
+  'Goal assessment',
+  'Personalised recommendations',
+  'No obligation to sign up',
+];
 
 const Contact = () => {
-    return (
-        <div className="pt-20">
-            {/* Hero — welcoming "open door" motif: a centered top glow with a soft floor reflection */}
-            <section className="section relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-forest-600/80 via-dark to-dark" />
-                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] bg-gold-300/15 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-forest-500/15 to-transparent blur-2xl" />
+  // The form is a remote iframe and can take a few seconds on mobile data.
+  // Without this the panel is simply blank, with nothing to say it is working.
+  const [formReady, setFormReady] = useState(false);
 
-                <div className="container relative z-10">
-                    <div className="max-w-3xl mx-auto text-center">
-                        <EyebrowPill className="mb-6">Start Your Journey</EyebrowPill>
-                        <h1 className="heading-xl text-cream mb-6">
-                            Get Your <span className="text-gradient">Free Consultation</span>
-                        </h1>
-                        <p className="text-xl text-cream/70">
-                            Tell us about your fitness goals and we'll create a personalized plan just for you.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Google Form Embed */}
-            <section className="section -mt-8">
-                <div className="container">
-                    <div className="grid lg:grid-cols-3 gap-8">
-                        <div className="lg:col-span-2">
-                            <Card hover={false} className="p-0 overflow-hidden">
-                                <iframe
-                                    src="https://docs.google.com/forms/d/e/1FAIpQLScScCLsxvv6BaL4wphS_QksI2fm4x0B_QQGeM4pd0LB7DMdMQ/viewform?embedded=true"
-                                    width="100%"
-                                    height="800"
-                                    frameBorder="0"
-                                    marginHeight="0"
-                                    marginWidth="0"
-                                    loading="lazy"
-                                    title="Free Consultation Form"
-                                    className="w-full min-h-[800px]"
-                                >
-                                    Loading...
-                                </iframe>
-                            </Card>
-                        </div>
-
-                        <div className="space-y-6">
-                            <Card hover={false}>
-                                <h3 className="heading-sm text-cream mb-3">What to Expect</h3>
-                                <ul className="space-y-3">
-                                    {[
-                                        'Free 10 minutes assessment call with Master Trainer',
-                                        'Goal assessment',
-                                        'Personalized recommendations',
-                                        'No obligation to sign up',
-                                    ].map((item, index) => (
-                                        <li key={index} className="flex items-center gap-2 text-sm text-cream/70">
-                                            <span className="text-gold-400">&#10003;</span>
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </Card>
-                        </div>
-                    </div>
-                </div>
-            </section>
+  return (
+  <div>
+    <section className="page-head">
+      <div className="container">
+        <div className="page-head-inner">
+          <span className="section-eyebrow">Start Your Journey</span>
+          <h1>Get your free consultation</h1>
+          <p>
+            Tell us about your goals and we&rsquo;ll shape a plan around your routine, your
+            timeline, and your Tatvas.
+          </p>
         </div>
-    );
+      </div>
+    </section>
+
+    <section className="contact-section">
+      <div className="container contact-grid">
+        <div className="contact-form-card">
+          {!formReady && (
+            <div className="form-loading" role="status">
+              <span className="form-spinner" aria-hidden="true" />
+              <span>Loading the consultation form…</span>
+            </div>
+          )}
+          <iframe
+            src={FORM_URL}
+            title="Free consultation form"
+            onLoad={() => setFormReady(true)}
+            style={formReady ? undefined : { height: 0, visibility: 'hidden' }}
+          />
+        </div>
+
+        <aside className="contact-aside">
+          <div className="contact-card">
+            <h3>What to expect</h3>
+            <ul>
+              {EXPECTATIONS.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="contact-card">
+            <h3>Prefer to talk first?</h3>
+            <p>
+              DM <strong>&quot;TATVA&quot;</strong> on Instagram, or drop us an email. A real
+              person replies.
+            </p>
+            <p>
+              <a
+                className="contact-link"
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @thetatvatribe._
+              </a>
+            </p>
+            <p>
+              <a className="contact-link" href={`mailto:${EMAIL}`}>
+                {EMAIL}
+              </a>
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </div>
+  );
 };
 
 export default Contact;

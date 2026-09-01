@@ -1,0 +1,556 @@
+/* =========================================================
+   HERO — 100svh sticky stage with a scroll-driven zoom
+   ========================================================= */
+
+/* Scroll runway for the zoom.
+   The hero is 100svh and the Tatvas section is pulled up by 100svh, so
+   the first card spends exactly 100svh rising over the pinned hero. That
+   means the stretch where NOTHING enters or leaves the viewport — where
+   only the background scales — is precisely (runway - 200svh).
+   At the original 400svh that dead stretch was two entire screens: you
+   could scroll for two full viewport heights and the page looked frozen.
+   240svh keeps the zoom and the title hand-off but cuts that to 0.4. */
+.hero-scroll-zone {
+  position: relative;
+  height: 240svh;
+}
+
+.hero {
+  position: sticky;
+  top: 0;
+  z-index: 1;              /* .tatvas-section is z-index 2 */
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + 2rem) 5vw 5rem;
+  overflow: hidden;
+  background: var(--dark);
+}
+
+/* Everything that zooms lives inside this layer */
+.hero-bg-zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* Ambient gradient blobs. Both sit on .hero-bg-zoom so they scale
+   with the zoom — the primary one used to sit on .hero and stayed
+   frozen while everything around it grew. */
+.hero-bg-zoom::before,
+.hero-bg-zoom::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  will-change: transform, opacity;
+}
+.hero-bg-zoom::before {
+  width: 70vw; height: 55vh;
+  top: -10%; left: 50%;
+  background: radial-gradient(ellipse at center, #2D5A3A 0%, #1B3022 50%, transparent 100%);
+  opacity: .75;
+  animation: hero-blob-1 14s ease-in-out infinite alternate;
+}
+.hero-bg-zoom::after {
+  width: 45vw; height: 45vh;
+  bottom: -5%; left: -5%;
+  background: radial-gradient(ellipse at center, #1B3022 0%, transparent 70%);
+  opacity: .5;
+  animation: hero-blob-2 18s ease-in-out infinite alternate;
+}
+@keyframes hero-blob-1 {
+  0%   { transform: translateX(-50%) translateY(0)   scale(1);    opacity: .85; }
+  33%  { transform: translateX(-44%) translateY(4%)  scale(1.07); opacity: .90; }
+  66%  { transform: translateX(-56%) translateY(-3%) scale(.95);  opacity: .75; }
+  100% { transform: translateX(-50%) translateY(5%)  scale(1.04); opacity: .85; }
+}
+@keyframes hero-blob-2 {
+  0%   { transform: translate(0, 0)    scale(1);    opacity: .55; }
+  50%  { transform: translate(6%, -8%) scale(1.15); opacity: .70; }
+  100% { transform: translate(-4%, 4%) scale(.9);   opacity: .50; }
+}
+
+.hero-mandala {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: min(680px, 100vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, .22);
+  pointer-events: none;
+  animation: mandala-spin 60s linear infinite;
+}
+.hero-mandala::before {
+  content: ''; position: absolute; inset: 10%;
+  border-radius: 50%; border: 1px dashed rgba(212, 175, 55, .13);
+  animation: mandala-spin 40s linear infinite reverse;
+}
+.hero-mandala::after {
+  content: ''; position: absolute; inset: 25%;
+  border-radius: 50%; border: 1px solid rgba(45, 90, 58, .25);
+  animation: mandala-spin 25s linear infinite;
+}
+@keyframes mandala-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.hero-om {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-devan);
+  font-size: min(52vw, 680px);
+  color: rgba(212, 175, 55, .035);
+  pointer-events: none; user-select: none;
+  line-height: 1; z-index: 0;
+  animation: om-breathe 9s ease-in-out infinite;
+}
+@keyframes om-breathe {
+  0%, 100% { opacity: .035; transform: scale(1); }
+  50%      { opacity: .055; transform: scale(1.03); }
+}
+
+.hero-kolam {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, rgba(212, 175, 55, .09) 1.2px, transparent 1.2px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 35%, black 100%);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 35%, black 100%);
+}
+
+.hero-grain {
+  position: absolute; inset: 0;
+  background-image: var(--grain-url);
+  background-size: 200px;
+  pointer-events: none;
+  opacity: .4;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 780px;
+  will-change: opacity, transform;
+}
+.hero-eyebrow {
+  display: block;
+  font-size: .85rem;
+  letter-spacing: .12em;
+  color: var(--yellow);
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+}
+.hero-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 7vw, 5.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--cream);
+  margin-bottom: 1.5rem;
+}
+.hero-hindi {
+  background: linear-gradient(90deg, var(--yellow), var(--yellow-light), var(--yellow));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer-text 4s linear infinite;
+}
+@keyframes shimmer-text { to { background-position: 200% center; } }
+
+.hero-sub {
+  color: var(--text-muted);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  max-width: 560px;
+  margin-inline: auto;
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+}
+.hero-sub em { color: var(--cream); font-style: italic; }
+
+.hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; }
+
+/* Overlay that fades in over the hero as the hero copy fades out */
+.hero-tatvas-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(var(--nav-h) + 1rem) 5vw 4rem;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.hero-tatvas-reveal .section-eyebrow { letter-spacing: .18em; margin-bottom: 1rem; }
+.hero-tatvas-reveal .section-title {
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+.hero-tatvas-reveal .section-desc { max-width: 600px; margin-bottom: 1.5rem; }
+.hero-tatvas-reveal .section-desc em { color: var(--cream); font-style: italic; }
+.tatvas-scroll-hint {
+  color: var(--yellow);
+  font-size: .8rem;
+  letter-spacing: .1em;
+  opacity: .7;
+  animation: scroll-bob-y 2s ease-in-out infinite;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  opacity: .45;
+  animation: scroll-bob 2s ease-in-out infinite;
+}
+.scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--yellow), transparent); }
+.scroll-label { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted); }
+@keyframes scroll-bob   { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+@keyframes scroll-bob-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+/* =========================================================
+   7 TATVAS — stacking full-screen cards
+   ========================================================= */
+.tatvas-section {
+  background: var(--dark);
+  position: relative;
+  z-index: 2;
+  margin-top: -100svh;   /* pulled up so card 1 rises over the pinned hero */
+}
+
+.tatvas-stack {
+  position: relative;
+  height: calc(7 * (100svh - var(--nav-h)));
+}
+
+.tatva-card-full {
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100svh - var(--nav-h));
+  background: var(--card-bg, var(--dark-3));
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  overflow: hidden;
+  transform-origin: top center;
+  will-change: transform, filter;
+  /* no CSS transition on transform/filter — JS drives these per frame */
+}
+
+.tcf-visual {
+  background: var(--card-col);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2rem;
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.tcf-big-num {
+  position: absolute; bottom: -.5rem; right: 1rem;
+  font-family: var(--font-serif);
+  font-size: 9rem; font-weight: 400;
+  color: rgba(0, 0, 0, .15);
+  line-height: 1; pointer-events: none; user-select: none;
+}
+.tcf-icon {
+  width: 130px; height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, .35));
+  position: relative; z-index: 1;
+}
+
+/* Deliberately NOT a scroll container. It was `overflow-y: auto` with
+   `overscroll-behavior: contain`, which made all seven of these — each
+   covering ~90% of the viewport for ~40% of the page's scroll length —
+   into scroll traps the moment the copy overflowed by even a pixel: the
+   wheel scrolled the panel's few stray pixels and `contain` then refused
+   to pass the rest to the page, so scrolling died mid-gesture.
+   The short-viewport rules below keep the copy fitting instead. */
+.tcf-content {
+  padding: 4rem 3.5rem;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center;
+  position: relative;
+  min-height: 0;
+}
+/* Devanagari watermark. Driven by the data-devan attribute on
+   .tcf-content — the rule existed before but nothing ever set the
+   attribute, so it never painted. */
+.tcf-content::before {
+  content: attr(data-devan);
+  position: absolute; right: 2rem; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-devan);
+  font-size: 12rem; line-height: 1;
+  color: rgba(255, 255, 255, .03);
+  pointer-events: none; user-select: none;
+}
+.tcf-devan {
+  display: block;
+  font-family: var(--font-devan);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  color: var(--card-col);
+  line-height: 1.3;
+  margin-bottom: .5rem;
+}
+.tcf-name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3vw, 2.8rem);
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 1.5rem;
+}
+.tcf-desc {
+  font-size: clamp(.95rem, 1.2vw, 1.1rem);
+  color: var(--text-muted);
+  line-height: 1.8;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+}
+.tcf-tags { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
+.tcf-tags span {
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: .35rem 1rem;
+  border-radius: 99px;
+  border: 1px solid var(--card-col);
+  color: var(--card-col);
+  transition: background .2s ease;
+}
+.tcf-tags span:hover { background: rgba(255, 255, 255, .06); }
+
+/* Progress dots — fixed rail while the stack is on screen */
+.stack-progress {
+  position: fixed;
+  right: 1.5rem; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: .55rem;
+  z-index: 800;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+}
+.stack-progress.active { opacity: 1; }
+.sp-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  border: 1px solid var(--text-muted);
+  transition: background .3s ease, transform .25s var(--ease-spring);
+}
+.sp-dot.active { background: var(--yellow); transform: scale(1.5); border-color: var(--yellow); }
+
+/* =========================================================
+   TESTIMONIALS
+   ========================================================= */
+.testimonials-section {
+  padding: 7rem 0;
+  background: var(--dark-2);
+  border-top: 1px solid var(--border);
+}
+.carousel { position: relative; border-radius: 20px; }
+.carousel-viewport { overflow: hidden; border-radius: 20px; }
+.carousel-track { display: flex; align-items: stretch; transition: transform .5s var(--ease-out); will-change: transform; }
+.testimonial-slide { min-width: 100%; }
+.ts-inner {
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3.5rem 4rem;
+  min-height: 320px;
+  height: 100%;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.ts-quote {
+  font-family: var(--font-serif);
+  font-size: 5rem; line-height: .8;
+  color: var(--yellow); opacity: .25;
+  margin-bottom: .5rem; user-select: none;
+}
+.ts-text {
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  flex: 1;
+}
+.ts-text em { color: var(--cream); font-style: italic; }
+.ts-author { display: flex; align-items: center; gap: 1rem; }
+.ts-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--av, var(--yellow));
+  color: var(--dark);
+  font-weight: 800; font-size: 1.1rem;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+/* When a display picture is available it replaces the initials disc. */
+img.ts-avatar {
+  object-fit: cover;
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+}
+.ts-author strong { display: block; color: var(--cream); font-size: 1rem; }
+.ts-author span   { font-size: .82rem; color: var(--text-muted); }
+
+.carousel-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.5rem; margin-top: 2rem;
+}
+.carousel-btn {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 1.1rem; cursor: pointer;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s var(--ease-spring);
+}
+.carousel-btn:hover { background: var(--yellow); border-color: var(--yellow); color: var(--dark); transform: scale(1.1); }
+.carousel-dots { display: flex; gap: .6rem; align-items: center; }
+/* The visible dot is 8px, but the button keeps a 24px-tall hit area
+   so it stays tappable on touch. */
+.c-dot {
+  position: relative;
+  width: 8px; height: 8px;
+  border-radius: 99px;
+  background: var(--border);
+  border: none; cursor: pointer; padding: 0;
+  transition: background .25s ease, width .25s var(--ease-spring);
+}
+.c-dot::after {
+  content: '';
+  position: absolute;
+  /* 8px dot, 28x28 hit area — WCAG 2.2 SC 2.5.8 applies at every width */
+  inset: -10px;
+}
+.c-dot.active { background: var(--yellow); width: 24px; }
+
+/* =========================================================
+   CTA
+   ========================================================= */
+.cta-section {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 6rem 5vw;
+  background: var(--dark);
+}
+.cta-orbit-wrap {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: min(760px, 96vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+.cta-ring { position: absolute; border-radius: 50%; }
+.cta-ring-1 { inset: 2%;  border: 1.5px solid rgba(45, 90, 58, .45);   animation: orbit-spin 35s linear infinite reverse; }
+.cta-ring-2 { inset: 12%; border: 1px dashed rgba(212, 175, 55, .25);  animation: orbit-spin 20s linear infinite; }
+.cta-ring-3 { inset: 24%; border: 1.5px solid rgba(45, 90, 58, .3);    animation: orbit-spin 12s linear infinite reverse; }
+
+.cta-inner { position: relative; z-index: 2; max-width: 580px; margin-inline: auto; }
+.cta-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 4.5vw, 3.5rem);
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 1.25rem;
+}
+.cta-sub { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2.5rem; line-height: 1.75; }
+.cta-sub strong { color: var(--yellow); }
+.cta-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+.cta-note { font-size: .8rem; color: var(--text-muted); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 960px) {
+  .tatva-card-full { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+  .tcf-visual {
+    padding: 1.75rem 1.75rem 1.5rem;
+    flex-direction: row; justify-content: flex-start;
+    gap: 1.5rem; min-height: 0;
+  }
+  .tcf-big-num { font-size: 5rem; bottom: -.75rem; right: .5rem; }
+  .tcf-icon { width: 76px; height: 76px; }
+  .tcf-content { padding: 2rem 1.75rem 2.5rem; justify-content: flex-start; }
+  .tcf-content::before { font-size: 8rem; right: -1rem; opacity: .7; }
+  .tcf-desc { margin-bottom: 1.5rem; }
+}
+
+/* Short viewports: keep the Tatva copy inside the card rather than
+   letting it overflow (the panel is no longer scrollable by design). */
+@media (max-height: 620px) {
+  .tcf-content { padding: 1.5rem 2rem; }
+  .tcf-devan { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: .2rem; }
+  .tcf-name { font-size: clamp(1.3rem, 2.4vw, 1.8rem); margin-bottom: .6rem; }
+  .tcf-desc { font-size: .95rem; line-height: 1.6; margin-bottom: 1rem; }
+  .tcf-tags span { font-size: .64rem; padding: .28rem .7rem; }
+  .tcf-visual { padding: 1.25rem 1.5rem; }
+  .tcf-icon { width: 84px; height: 84px; }
+}
+
+@media (max-width: 640px) {
+  /* Even less runway on a phone: the dead stretch is (runway - 200svh),
+     so 220svh leaves only a fifth of a screen of pure zoom. */
+  .hero-scroll-zone { height: 220svh; }
+  .hero-actions, .cta-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn, .cta-actions .btn { width: 100%; }
+  .hero-scroll-hint { bottom: 1.25rem; }
+  .scroll-line { height: 34px; }
+
+  .tcf-visual { padding: 1.25rem 1.25rem 1rem; gap: 1rem; }
+  .tcf-icon { width: 60px; height: 60px; }
+  .tcf-big-num { font-size: 4rem; }
+  .tcf-content { padding: 1.5rem 1.25rem 2rem; }
+  .tcf-content::before { display: none; }
+  .tcf-name { margin-bottom: 1rem; }
+  .tcf-desc { line-height: 1.7; margin-bottom: 1.25rem; }
+  .tcf-tags { gap: .45rem; }
+  .tcf-tags span { font-size: .64rem; padding: .3rem .75rem; }
+
+  /* The dot rail sits on top of card copy on a narrow screen */
+  .stack-progress { display: none; }
+
+  .testimonials-section { padding: 4.5rem 0; }
+  .ts-inner { padding: 2rem 1.5rem; min-height: 0; }
+  .ts-quote { font-size: 3.5rem; }
+  .ts-text { margin-bottom: 1.5rem; }
+  .carousel-controls { gap: 1rem; margin-top: 1.5rem; }
+  .carousel-btn { width: 42px; height: 42px; }
+
+  .cta-section { padding: 5rem 5vw; }
+  .cta-sub { margin-bottom: 2rem; }
+  .scroll-top-btn { bottom: 1rem; right: 1rem; }
+}
+
+/* With reduced motion the zoom is skipped, so the 3–4 screens of scroll
+   runway would just be dead space. Collapse the hero to a single screen
+   and let the Tatvas follow it normally. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-zone { height: 100svh; }
+  .tatvas-section { margin-top: 0; }
+  .hero-tatvas-reveal { display: none; }
+}
+
+/* link out from the home carousel to the full stories page */
+.testimonials-more { margin-top: 2rem; text-align: center; }

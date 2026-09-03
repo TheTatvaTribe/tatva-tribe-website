@@ -159,9 +159,11 @@
     transition: transform .2s linear;
   }
 
-  /* the cards start below the navbar; give them room for the hud too */
-  .tatva-card-full { top: calc(var(--nav-h) + 30px); height: calc(100svh - var(--nav-h) - 30px); }
-  .tatvas-stack { height: calc(7 * (100svh - var(--nav-h) - 30px)); }
+  /* the cards start below the navbar; give them room for the hud too.
+     Only the card height changes here: the stack height and the dwell
+     margin in home.css are both derived from --tatva-card-h. */
+  .tatvas-section { --tatva-card-h: calc(100svh - var(--nav-h) - 30px); }
+  .tatva-card-full { top: calc(var(--nav-h) + 30px); }
 }
 
 /* ─────────────────────────────────────────────────────────

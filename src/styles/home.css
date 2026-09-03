@@ -228,17 +228,31 @@
   position: relative;
   z-index: 2;
   margin-top: -100svh;   /* pulled up so card 1 rises over the pinned hero */
+
+  /* Card height and the pause after it lands, in one place. The mobile
+     layer overrides only --tatva-card-h; everything below is derived. */
+  --tatva-card-h: calc(100svh - var(--nav-h));
+  --tatva-dwell: 35svh;
 }
 
+/* One slot per card: the card's own height plus the dwell. Without the
+   dwell the slot equalled the card height, and since a sticky card's
+   replacement always takes exactly one card-height of scroll to travel
+   from the viewport bottom up to the sticky top, the next card started
+   covering the current one the instant it landed. No card was ever fully
+   readable: the description was cut mid-sentence while the HUD still
+   named that Tatva. The dwell is pure scroll runway before the hand-over
+   begins. */
 .tatvas-stack {
   position: relative;
-  height: calc(7 * (100svh - var(--nav-h)));
+  height: calc(7 * (var(--tatva-card-h) + var(--tatva-dwell)));
 }
 
 .tatva-card-full {
   position: sticky;
   top: var(--nav-h);
-  height: calc(100svh - var(--nav-h));
+  height: var(--tatva-card-h);
+  margin-bottom: var(--tatva-dwell);
   background: var(--card-bg, var(--dark-3));
   display: grid;
   grid-template-columns: 360px 1fr;

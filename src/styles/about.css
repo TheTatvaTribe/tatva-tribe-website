@@ -91,6 +91,13 @@
 .about-card.is-visible,
 .about-lenses.is-visible { opacity: 1; transform: translateY(0); }
 
+/* The two lens cards sit inside .about-lenses, which is the element the
+   observer reveals. They carry .about-card for its styling, but nothing ever
+   adds .is-visible to them, so the rule above left them at opacity 0 while
+   the badge and the bridge line around them faded in: a 333px hole in the
+   timeline. The wrapper does the reveal for this group, so opt them out. */
+.about-lenses .about-card { opacity: 1; transform: none; }
+
 .about-card {
   background: linear-gradient(150deg,
               color-mix(in srgb, var(--about-bg) 92%, var(--dark)),
@@ -293,14 +300,18 @@
               color-mix(in srgb, #061412 84%, #021106));
   border-color: rgba(168, 206, 85, .42);
 }
-.lens-head {
+/* Scoped, as it was in the original hand-off, so it outranks `.about-card p`
+   (0,1,1) which was overriding the bare `.lens-head` (0,1,0) and painting this
+   heading in --text-muted at body size. Only the first card showed it:
+   `.lens-head.alt` is (0,2,0) and already won, so the teal one looked right. */
+.about-lenses .lens-head {
   font-size: .72rem;
   letter-spacing: .1em;
   font-weight: 600;
   color: #a8ce55;
   margin-bottom: .4rem;
 }
-.lens-head.alt { color: #43b8ac; }
+.about-lenses .lens-head.alt { color: #43b8ac; }
 .about-bridge {
   margin: 1.25rem auto 0;
   font-size: 1rem;

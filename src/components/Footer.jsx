@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSectionNav } from '../hooks/useSectionNav';
-import { BUILT_BY, DESIGNER_URL, EMAIL, INSTAGRAM_URL } from '../data/site';
+import { BUILT_BY, EMAIL, INSTAGRAM_URL } from '../data/site';
 
 const InstagramIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -69,20 +69,11 @@ const Footer = () => {
           <p>
             <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           </p>
-          <p className="footer-dm">
-            DM <strong>&quot;TATVA&quot;</strong> for a FREE consultation!
-          </p>
         </div>
       </div>
 
       <div className="footer-bottom">
         <p>© {year} The Tatva Tribe. All rights reserved.</p>
-        <p>
-          Made with ❤️ by{' '}
-          <a href={DESIGNER_URL} target="_blank" rel="noopener noreferrer">
-            @advayshidhaye
-          </a>
-        </p>
       </div>
 
       {/* Build credit. Links render only when a URL is present, so an

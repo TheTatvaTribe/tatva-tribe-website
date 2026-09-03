@@ -232,12 +232,13 @@ button.nav-link,
 .footer-links a:hover, .footer-links button:hover, .footer-contact a:hover { color: var(--cream); }
 .footer-links a:hover::after, .footer-links button:hover::after, .footer-contact a:hover::after { width: 100%; }
 .footer-contact p { margin-bottom: .6rem; }
-.footer-dm { font-size: .85rem; color: var(--text-muted); }
-.footer-dm strong { color: var(--yellow); }
 
+/* Centred, not space-between: this row holds a single line now that the
+   designer credit has been removed, and space-between would park it on
+   the left edge on desktop. */
 .footer-bottom {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;

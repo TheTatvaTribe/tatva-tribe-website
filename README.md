@@ -1,129 +1,156 @@
-# The Tatva Tribe — Website
+# The Tatva Tribe
 
-Marketing site for **The Tatva Tribe**, a holistic fitness coaching brand founded by Advay Shidhaye. The site introduces the brand's "7 Tatvas" philosophy, presents coaching plans, and routes prospects to a free consultation.
+Marketing site for **The Tatva Tribe**, a holistic fitness coaching practice run by Advay Shidhaye. The site explains the 7 Tatvas philosophy, presents the four coaching plans, carries member stories, and routes prospects to a free consultation form.
 
-> **Brand voice in one line:** *SMARTWORK over Hardwork.*
+> **Brand line:** *SMARTWORK over Hardwork.*
 
-**Live**: https://thetatvatribe.github.io/tatva-tribe-website/  *(custom domain `thetatvatribe.in` planned)*
+**Live:** https://thetatvatribe.com
+**Repo:** https://github.com/TheTatvaTribe/tatva-tribe-website
 
 ---
 
-## Table of contents
+## Contents
 
 1. [Stack](#stack)
 2. [Quick start](#quick-start)
-3. [npm scripts](#npm-scripts)
-4. [Folder structure](#folder-structure)
+3. [Scripts](#scripts)
+4. [Project structure](#project-structure)
 5. [Architecture](#architecture)
-6. [How to do common things](#how-to-do-common-things)
-7. [UI primitives](#ui-primitives)
-8. [Styling system](#styling-system)
-9. [Routing & GitHub Pages SPA fallback](#routing--github-pages-spa-fallback)
-10. [Deploy pipeline](#deploy-pipeline)
-11. [Conventions](#conventions)
-12. [Common gotchas](#common-gotchas)
-13. [Known limitations / roadmap](#known-limitations--roadmap)
+6. [Editing content](#editing-content)
+7. [Styling system](#styling-system)
+8. [Routing and the GitHub Pages SPA fallback](#routing-and-the-github-pages-spa-fallback)
+9. [Deploy](#deploy)
+10. [Conventions](#conventions)
+11. [Gotchas](#gotchas)
+12. [Open items](#open-items)
 
 ---
 
 ## Stack
 
-| Concern | Choice | Why |
+| Concern | Choice | Notes |
 |---|---|---|
-| Framework | **React 19** | Industry-standard, big ecosystem |
-| Bundler / dev server | **Vite 7** | Sub-second HMR, simple config |
-| Routing | **react-router-dom 7** | `BrowserRouter` with GH Pages SPA fallback |
-| Styling | **Tailwind 3** + small `@layer components` | Utility-first; project tokens stay in `tailwind.config.js` |
-| Icons | **lucide-react** | Tree-shakeable SVG icons |
-| Lint | **ESLint 9** (flat config) | Wired into a flat `eslint.config.js` |
-| Hosting | **GitHub Pages** | Free, fast, no server to maintain |
-| Deploy | **GitHub Actions** (`.github/workflows/deploy.yml`) | Auto-deploys on push to `main` |
+| Framework | **React 19** | Function components only |
+| Build tool | **Vite 7** | `base: '/'`, because the site runs on an apex domain |
+| Routing | **react-router-dom 7** | `BrowserRouter` plus a GitHub Pages SPA fallback |
+| Styling | **Hand-written CSS** | Custom properties in `src/styles/tokens.css`, nine files imported by `src/index.css`. No Tailwind, no CSS-in-JS |
+| Icons | **Inline SVG** | No icon package. Icons live in the component that draws them |
+| Lint | **ESLint 9** flat config | `eslint.config.js` |
+| Hosting | **GitHub Pages** | Custom apex domain via `public/CNAME` |
+| CI/CD | **GitHub Actions** | `.github/workflows/deploy.yml`, deploys on push to `main` |
 
-No TypeScript, no test runner, no CMS — yet. See [Roadmap](#known-limitations--roadmap).
+Runtime dependencies are only `react`, `react-dom` and `react-router-dom`. Everything else is a dev dependency.
+
+No TypeScript, no test runner, no CMS, no analytics.
 
 ---
 
 ## Quick start
 
-You'll need **Node 20+** and **npm**.
+Requires **Node 20+** (the deploy workflow pins Node 20) and npm.
 
 ```bash
-# 1. Clone
 git clone https://github.com/TheTatvaTribe/tatva-tribe-website.git
-cd tatva-tribe-website
-
-# 2. Install
-npm install
-
-# 3. Start the dev server (HMR, opens at http://localhost:5173/tatva-tribe-website/)
-npm run dev
-
-# 4. Lint (run before opening a PR)
-npm run lint
-
-# 5. Production build (output in dist/)
-npm run build
-
-# 6. Preview the production build locally
-npm run preview
 ```
 
-> ⚠️ The dev URL is `http://localhost:5173/tatva-tribe-website/` (with the trailing path), **not** `localhost:5173`. The trailing path comes from `vite.config.js` → `base: '/tatva-tribe-website/'`, which matches the GitHub Pages subpath. When you switch to a custom apex domain, set `base: '/'` and update `pathSegmentsToKeep` in `public/404.html` to `0`.
+```bash
+npm install && npm run dev
+```
+
+The dev server runs at **http://localhost:5173/** with no path suffix. `vite.config.js` sets `base: '/'` to match the apex domain, so local and production paths are identical.
+
+Before opening a PR:
+
+```bash
+npm run lint && npm run build
+```
 
 ---
 
-## npm scripts
+## Scripts
 
 | Script | What it does |
 |---|---|
 | `npm run dev` | Vite dev server with HMR |
-| `npm run build` | Production build → `dist/` |
-| `npm run preview` | Serve `dist/` locally to verify the build |
-| `npm run lint` | ESLint over the whole repo |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serves the built `dist/` locally |
+| `npm run lint` | ESLint over the repo (see the caveat in Gotchas) |
+
+A clean production build currently emits:
+
+```
+dist/index.html                    2.55 kB | gzip:  1.12 kB
+dist/assets/index-*.css           52.24 kB | gzip: 11.05 kB
+dist/assets/index-*.js           267.94 kB | gzip: 86.35 kB   <- shell + Home
+dist/assets/About-*.js            11.38 kB | gzip:  3.89 kB
+dist/assets/Contact-*.js           1.94 kB | gzip:  0.89 kB
+dist/assets/Stories-*.js           1.75 kB | gzip:  0.74 kB
+dist/assets/NotFound-*.js          0.46 kB | gzip:  0.31 kB
+```
 
 ---
 
-## Folder structure
+## Project structure
 
 ```
 tatva-tribe-website/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml          ← GitHub Actions: builds + deploys on push to main
-├── public/                     ← Static files copied verbatim into dist/
-│   ├── 404.html                ← GitHub Pages SPA fallback (see Routing section)
-│   ├── favicon.svg
+├── .github/workflows/deploy.yml   Builds and deploys on push to main
+├── public/                        Copied verbatim into dist/
+│   ├── CNAME                      thetatvatribe.com
+│   ├── 404.html                   SPA fallback (pathSegmentsToKeep = 0)
+│   ├── favicon-32.png
+│   ├── favicon-192.png
+│   ├── apple-touch-icon.png
 │   └── images/
-│       ├── logo.png            ← Round "T" emblem (navbar/footer)
-│       ├── trainer.jpeg        ← Master Trainer photo (About page)
-│       ├── certifications/     ← Trainer credentials (carousel)
-│       └── tatvas/             ← Illustrations for each of the 7 Tatvas (Home page)
+│       ├── trainer.jpeg           Trainer portrait (About)
+│       ├── tatvas/                7 illustrations, one per Tatva (Home)
+│       ├── certifications/        6 credential images (About carousel)
+│       ├── stories/               3 member portraits (Stories, Home carousel)
+│       └── about/
+│           ├── cricket/           5 playing-career photos (About carousel)
+│           └── coaching/          6 coaching photos (About carousel)
 ├── src/
-│   ├── App.jsx                 ← Router shell + ScrollToTop, mounts Navbar/Footer
-│   ├── main.jsx                ← React entry point (creates root, renders <App />)
-│   ├── index.css               ← Tailwind directives + @layer components + base styles
+│   ├── main.jsx                   React entry point
+│   ├── App.jsx                    Router, layout shell, lazy routes
+│   ├── index.css                  Imports the nine stylesheets, in order
+│   ├── data/
+│   │   ├── site.js                Tatvas, plans, terms, certifications, photos, contact
+│   │   └── stories.js             The six questions and three member stories
+│   ├── pages/
+│   │   ├── Home.jsx               Composes six home sections, nothing else
+│   │   ├── About.jsx              Journey timeline, photo carousels, certifications
+│   │   ├── Stories.jsx            Portrait, name, six questions and answers
+│   │   ├── Contact.jsx            Embedded Google Form plus direct contact details
+│   │   └── NotFound.jsx
 │   ├── components/
-│   │   ├── Navbar.jsx          ← Fixed top nav with mobile drawer
-│   │   ├── Footer.jsx          ← 4-column footer
-│   │   └── ui/                 ← Reusable, presentational primitives
-│   │       ├── BrandMark.jsx   ← Logo emblem + wordmark with text fallback
-│   │       ├── Button.jsx      ← (Currently unused — pages use the .btn className)
-│   │       ├── Card.jsx        ← Glass-style card with hover lift
-│   │       ├── EyebrowPill.jsx ← Gold-on-translucent pill above hero headings
-│   │       └── ExternalLink.jsx← Outbound <a> with icon + a11y hint
-│   ├── content/                ← Single source of truth for non-page-specific data
-│   │   └── navigation.js       ← navLinks + socialLinks (used by Navbar AND Footer)
-│   └── pages/                  ← One file per route
-│       ├── Home.jsx            ← Hero + 7 Tatvas grid + CTA
-│       ├── About.jsx           ← Philosophy + Master Trainer + Certifications carousel
-│       ├── Pricing.jsx         ← 4 plans + "Tatva-Achaar" T&Cs
-│       ├── Contact.jsx         ← Google Form embed + "What to Expect" sidebar
-│       └── NotFound.jsx        ← 404 page
-├── index.html                  ← HTML entry; includes the SPA-fallback decoder script
-├── vite.config.js              ← Vite config (sets `base` for GH Pages subpath)
-├── tailwind.config.js          ← Brand color tokens + font family
-├── postcss.config.js           ← PostCSS pipeline (Tailwind + autoprefixer)
-├── eslint.config.js            ← ESLint 9 flat config
+│   │   ├── Navbar.jsx             Fixed bar, scroll spy, mobile drawer
+│   │   ├── Footer.jsx             Three equal columns plus build credit
+│   │   ├── ScrollTopButton.jsx
+│   │   ├── PhotoCarousel.jsx      Adapts to 0, 1, or many images
+│   │   ├── home/
+│   │   │   ├── Hero.jsx           Sticky 100svh stage, scroll-driven zoom
+│   │   │   ├── TatvaStack.jsx     Sticky deck-of-cards for the 7 Tatvas
+│   │   │   ├── Testimonials.jsx   Member carousel, links to /stories
+│   │   │   └── CtaSection.jsx
+│   │   └── pricing/
+│   │       ├── PricingSection.jsx Grid of the four plans
+│   │       ├── PlanCard.jsx       Flippable card
+│   │       ├── PlanIcon.jsx       Inline SVG per plan
+│   │       └── TribeCode.jsx      "The Tatva-Achaar" terms disclosure
+│   ├── hooks/
+│   │   ├── useMediaQuery.js       useMediaQuery, useIsMobile, useIsTouch
+│   │   ├── useReveal.js           useReveal, useFrameScroll
+│   │   └── useSectionNav.js       scrollToSection, useSectionNav
+│   ├── utils/
+│   │   ├── scroll.js              smoothScrollTo, jumpTo
+│   │   └── ripple.js              addRipple (touch feedback on primary CTAs)
+│   └── styles/                    tokens, base, layout, home, pricing,
+│                                  about, pages, stories, mobile
+├── scripts/
+│   └── gen-favicon.cjs            Regenerates the favicon set (untracked, see below)
+├── index.html                     Fonts, meta tags, SPA decoder script
+├── vite.config.js
+├── eslint.config.js
 └── package.json
 ```
 
@@ -131,228 +158,258 @@ tatva-tribe-website/
 
 ## Architecture
 
-### Big picture
+### Routes
+
+All routing lives in `src/App.jsx`.
+
+| Path | Renders | Loading |
+|---|---|---|
+| `/` | `Home` | Eager. It is the landing page and should not flash a fallback |
+| `/about` | `About` | Lazy |
+| `/stories` | `Stories` | Lazy |
+| `/contact` | `Contact` | Lazy |
+| `/pricing` | `Home`, then scrolls to `#services` | Kept alive so old links and bookmarks still land on the plans |
+| `*` | `NotFound` | Lazy |
+
+`Home` is a composition of six sections rather than a page with its own markup:
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  index.html                                          │
-│  ├─ SPA-fallback decoder (restores deep-link URL)   │
-│  └─ <div id="root"></div>                            │
-│       │                                              │
-│       ▼                                              │
-│  main.jsx → createRoot().render(<App />)             │
-│       │                                              │
-│       ▼                                              │
-│  App.jsx                                             │
-│  └─ <BrowserRouter basename="/tatva-tribe-website">  │
-│      ├─ <ScrollToTop />  (resets scroll on nav)      │
-│      ├─ <Navbar />        (fixed top, brand + links) │
-│      ├─ <main>                                       │
-│      │   └─ <Routes>                                 │
-│      │       ├─ /         → <Home />                 │
-│      │       ├─ /about    → <About />                │
-│      │       ├─ /pricing  → <Pricing />              │
-│      │       ├─ /contact  → <Contact />              │
-│      │       └─ *         → <NotFound />             │
-│      │   </Routes>                                   │
-│      └─ <Footer />        (brand + nav + services)   │
-└─────────────────────────────────────────────────────┘
+Hero  ->  TatvaStack  ->  PricingSection  ->  TribeCode  ->  Testimonials  ->  CtaSection
+#hero     #tatvas         #services          #tatva-achaar   #testimonials    #start
 ```
+
+Those section IDs are the anchors the navbar and footer scroll to.
 
 ### Data flow
 
-The site is **fully static** — no backend, no database, no user accounts.
-- **Content** lives in two places:
-  - **`src/content/`** for shared data (currently just `navigation.js`)
-  - **Inline in each page file** for page-specific copy (tatvas list in `Home.jsx`, plans in `Pricing.jsx`, etc.)
-- **State** is local to components (`useState` / `useEffect`) — no Redux, no Context API. The largest pieces of state are the `Navbar`'s scroll/mobile-menu state and the Certifications carousel inside `About.jsx`.
-- **External integrations**: a single Google Forms `<iframe>` on the Contact page; outbound Instagram links from the Footer.
+The site is fully static. No backend, no database, no accounts.
 
-### What lives where (mental model)
+- **Content** lives in `src/data/`. Components import from it and render. Copy changes are edits to a plain JS object, not to JSX.
+- **State** is local to each component. There is no Redux and no Context. The largest pieces of state are the navbar's scroll spy and drawer, the plan card flips, and the three carousels.
+- **The only external call** is the Google Forms iframe on `/contact`.
 
-| Concern | Lives in |
-|---|---|
-| Routing | `App.jsx` (one file, all routes) |
-| Layout (header/main/footer) | `App.jsx` |
-| Navigation links | `src/content/navigation.js` (used by both `Navbar` and `Footer`) |
-| Reusable visual primitives | `src/components/ui/` |
-| Page-specific content | Inline in `src/pages/<Page>.jsx` |
-| Brand tokens (colors, fonts) | `tailwind.config.js` |
-| Custom Tailwind utilities (`.btn`, `.section`, `.heading-xl`, `.card`, `.glass`, `.text-gradient`) | `src/index.css` under `@layer components` |
-| Static assets (images, favicon) | `public/` |
+### Section navigation
+
+Links to home sections are `<button>` elements calling `useSectionNav()`, not `#anchor` hrefs. The hook navigates home first if you are on another route, then scrolls with an offset for the fixed navbar read from the `--nav-h` custom property. Doing it programmatically keeps that offset consistent from every route, which a raw anchor href cannot.
 
 ---
 
-## How to do common things
+## Editing content
 
-### Edit copy on a page
-Open `src/pages/<Page>.jsx`. Each page is a single component; copy is right there in JSX. No build step needed during dev — Vite's HMR reflects changes instantly.
+Almost every content change is a one-line edit in `src/data/`.
 
-### Add a new route
-1. Create `src/pages/MyPage.jsx` (use any existing page as a template).
-2. Register the route in `src/App.jsx` inside `<Routes>`.
-3. Add the link to `src/content/navigation.js` — both Navbar and Footer pick it up automatically.
+### The 7 Tatvas
 
-### Update the navigation
-Edit `src/content/navigation.js`. Both `Navbar.jsx` and `Footer.jsx` read from this file, so adding/renaming a link is a one-line change.
+`src/data/site.js`, the `tatvas` array. Each entry has a Devanagari name, an English name, a description, tags, an image path, and the accent and background colours that card uses.
 
-### Edit the 7 Tatvas
-Open `src/pages/Home.jsx`. The `tatvas` array (top of the component) holds Hindi label, English title, description, examples, fallback icon, and image path for each.
+Current order: शरीर Body Discipline, आहार Nutrition, मानस Mental Toughness, निद्रा Rest & Recovery, समाज Community, प्रकृति Nature, उद्देश्य Purpose.
 
-### Edit pricing plans
-Open `src/pages/Pricing.jsx`. Two arrays at the top:
-- `plans` — the 4 tier cards
-- `tribeCode` — the "Tatva-Achaar" terms & conditions
+### Plans and prices
 
-### Edit Master Trainer / About page
-Open `src/pages/About.jsx`. The carousel images are listed in the `certifications` array; the audience-types cards are in `audienceTypes`.
+`src/data/site.js`, the `plans` array.
 
-### Add an image
-Drop the file into `public/images/` (or a subfolder). Reference it as:
-```jsx
-<img src={`${import.meta.env.BASE_URL}images/your-file.png`} alt="..." />
+| Plan | Duration | Price | Badge |
+|---|---|---|---|
+| Prarambh (प्रारंभ) | 1 month | ₹12,499 | |
+| Shakti (शक्ति) | 3 months | ₹29,999 | Most Popular |
+| Tapasya (तपस्या) | 6 months | ₹51,999 | High Value |
+| Ghor Tapasya (घोर तपस्या) | 12 months | ₹91,999 | |
+
+`savings` on the longer plans is derived from the ₹12,499 monthly rate. If a price changes, recompute the savings figure too, since nothing recalculates it at runtime.
+
+### Terms
+
+`src/data/site.js`, the `tribeCode` array. Rendered by `TribeCode.jsx` as "The Tatva-Achaar", a `<details>` disclosure that is open by default on desktop and collapsed on mobile.
+
+### Member stories
+
+`src/data/stories.js`. `STORY_QUESTIONS` holds the six questions, in order. Each entry in `stories` holds a name, portrait, the six answers in matching order, plus a `quote` and `accent` used only by the home page carousel.
+
+Answers are members' own words. The file header records that the only edits made were orthographic. Keep it that way, and get consent before adding anyone.
+
+### Contact details, socials, build credit
+
+Top of `src/data/site.js`: `INSTAGRAM_URL`, `EMAIL`, `DESIGNER_URL`, `BUILT_BY`. The footer renders each `BUILT_BY` link only when it is a non-empty string, so leaving one blank hides it rather than producing a dead link.
+
+### About page photos
+
+`src/data/site.js`, `aboutPhotos`. Two slots, `cricket` and `coaching`, each with a `label` and an `images` array of `{ src, alt }`.
+
+`PhotoCarousel` scales to whatever it is handed:
+
+- **0 images** renders a labelled placeholder that holds the same space
+- **1 image** renders just the photo, no controls
+- **2 or more** renders a carousel with arrows, dots, and swipe
+
+Advancing is manual by design. These sit inside a page the reader is already scrolling, so they should not move on their own. Photos use `object-fit: contain`, because the set mixes portrait and landscape and cropping would cut off faces and trophies.
+
+### Regenerating the favicons
+
+`scripts/gen-favicon.cjs` builds the whole favicon set from
+`public/images/logo-favicon-source.png`: it detects the content bounding box,
+pads it to a square, masks it with an anti-aliased circle, then writes the 32,
+180 and 192 pixel versions.
+
+```bash
+npm i -D sharp && node scripts/gen-favicon.cjs
 ```
-Always use `import.meta.env.BASE_URL` so the path works in both dev (`/tatva-tribe-website/...`) and any future custom-domain build (`/...`).
 
----
+It needs `sharp`, which is not in `package.json` because nothing else uses it.
+The script is currently untracked, recovered from an old worktree. Commit it if
+you want it to survive a fresh clone.
 
-## UI primitives
+### Adding an image
 
-Small, presentational components in `src/components/ui/`. All are free of business logic — they just render visual patterns.
+Drop the file into `public/images/`, then reference it through the `asset()` helper at the top of the data file:
 
-| Primitive | What it does | Used in |
-|---|---|---|
-| `<BrandMark />` | Renders the round "T" emblem + bold-italic "TheTatvaTribe" text wordmark. Emblem image falls back to the gold "T" if missing. | Navbar, Footer |
-| `<EyebrowPill>` | Gold-on-translucent pill above hero headings. | Every page hero |
-| `<ExternalLink>` | Outbound `<a>` with `target="_blank"`, `rel="noopener noreferrer"`, an external-link icon, and a screen-reader hint. | Footer (Instagram), About (trainer Instagram) |
-| `<Card>` | Glass-style card with optional hover lift. | Tatva grid (Home), audience types (About), pricing tiers (Pricing) |
-| `<Button>` | Variant-based button. **Currently unused** — pages use the `.btn` utility instead. Kept for future migration. | (none) |
+```js
+const asset = (path) => `${import.meta.env.BASE_URL}${path}`;
+// ...
+image: asset('images/tatvas/your-file.png'),
+```
 
-When in doubt, **add a primitive** rather than copy-pasting a 100-character Tailwind class string into the third place.
+Always go through `asset()` or `import.meta.env.BASE_URL`. A hard-coded `/images/...` happens to work today because `base` is `/`, but it would break silently if the site ever moved back to a subpath.
 
 ---
 
 ## Styling system
 
-### Brand tokens
-Defined in `tailwind.config.js`:
-- **forest** (50–900): brand green; `forest-600` (`#1B3022`) is the primary
-- **gold** (50–900): brand gold; `gold-400` (`#D4AF37`) is the primary
-- **cream**: `#F5F5F5` (body text on dark)
-- **dark**: `#0A0A0A` (page background)
+### The import chain
 
-Use these names directly in classes: `bg-forest-600`, `text-gold-400`, `text-cream`, `bg-dark`. Avoid arbitrary hex values — keep the brand consistent.
+`src/index.css` imports nine stylesheets in a deliberate order:
 
-### Custom utility classes
-Defined in `src/index.css` under `@layer components`. Use these instead of repeating long Tailwind chains:
-- `.container` — max-width + horizontal padding
-- `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-lg`
-- `.section` — vertical padding for page sections
-- `.heading-xl`, `.heading-lg`, `.heading-md`, `.heading-sm`
-- `.text-gradient` — gold gradient on text
-- `.card`, `.card-hover`, `.glass`
-- `.input` (for form fields, currently unused outside the embedded Google Form)
+```
+tokens -> base -> layout -> home -> pricing -> about -> pages -> stories -> mobile
+```
 
-### Animations & motion
-Custom keyframes (`fadeIn`, `slideUp`) live in `src/index.css`. Apply via `.animate-fade-in` and `.animate-slide-up`.
+`mobile.css` is last so its rules win ties. Every rule in it is gated to phone widths or coarse pointers, so desktop is untouched. That file is the result of a pass against the Toptal mobile heuristic principles: 44px touch targets, `:active` feedback gated to touch devices, accordions instead of long scrolls, and a visible loading state on the contact form.
 
-A global `@media (prefers-reduced-motion: reduce)` rule collapses every animation/transition to ~0ms, so users who request reduced motion get an instant page (a11y requirement).
+### Tokens
+
+`src/styles/tokens.css` holds every colour, font, easing curve and layout constant as a custom property. Use the token, not a raw hex value.
+
+| Token | Value | Role |
+|---|---|---|
+| `--yellow` | `#D4AF37` | Brand gold |
+| `--green` | `#2D5A3A` | Brand forest green |
+| `--dark` | `#0A0A0A` | Page background |
+| `--cream` | `#F5F5F5` | Body text |
+| `--text-muted` | `#9CA3AF` | Secondary text |
+| `--nav-h` | `68px`, `60px` under 640px | Navbar height |
+| `--shell` | `min(1200px, 90vw)` | Content column width |
+| `--font-serif` | Yatra One | Display |
+| `--font-sans` | Hind | Body |
+| `--font-devan` | Noto Serif Devanagari | Sanskrit |
+
+`--nav-h` is a fixed height in both navbar states. The sticky Tatva cards offset themselves by it, so a navbar that resized on scroll would make them jump. Only the background changes on scroll.
+
+### Motion
+
+`useReveal(rootRef)` adds `.visible` to any `.reveal-up` element once it scrolls into view, then unobserves it and disconnects on unmount.
+
+`useFrameScroll(handler, deps)` batches scroll and resize reads into a single `requestAnimationFrame`, fires once on mount, and cleans up after itself. Use it for anything scroll-linked rather than adding a raw listener.
+
+A global `prefers-reduced-motion` rule collapses animations, and `smoothScrollTo` falls back to an instant jump when that preference is set.
 
 ---
 
-## Routing & GitHub Pages SPA fallback
+## Routing and the GitHub Pages SPA fallback
 
-The site uses **`BrowserRouter`** (clean URLs like `/about`, not `/#/about`). GitHub Pages serves a static 404 page when a deep link is hit on a hard-refresh — which would normally break SPA routing.
+The site uses `BrowserRouter`, so URLs are clean (`/about`, not `/#/about`). GitHub Pages serves static files and knows nothing about client-side routes, so a hard refresh on `/about` would normally 404.
 
-The fix (Rafael Pedicini's `spa-github-pages` technique) lives in two files:
+The fix is Rafael Pedicini's `spa-github-pages` technique, in two halves:
 
-1. **`public/404.html`** — when GitHub Pages serves this, the script encodes the requested path into a query string and redirects to the app shell.
-2. **`index.html`** — a small inline `<script>` in `<head>` runs before React mounts. It reads the encoded query string (if present), restores the real path via `history.replaceState`, then lets React Router take over.
+1. **`public/404.html`** catches the miss, encodes the requested path into a query string, and redirects to the app shell.
+2. **An inline script in `index.html`** runs before React mounts, reads that query string, and restores the real path with `history.replaceState`.
 
-If you change the deploy URL (e.g., move to a custom apex domain), update **`pathSegmentsToKeep`** in `public/404.html`:
-- `1` for a project-page subpath like `/tatva-tribe-website/`
-- `0` for an apex domain like `https://thetatvatribe.in/`
+React Router then boots at the correct route and the user sees a clean URL. Note that the HTTP status for such a deep link is still 404 even though the page renders correctly. That is inherent to the technique, not a bug.
+
+Three settings must agree. If any one of them changes, change all three:
+
+| Setting | Current value | Meaning |
+|---|---|---|
+| `base` in `vite.config.js` | `'/'` | Apex domain, no subpath |
+| `pathSegmentsToKeep` in `public/404.html` | `0` | Apex domain, no subpath |
+| `public/CNAME` | `thetatvatribe.com` | The custom domain itself |
+
+Deleting `CNAME` detaches the custom domain on the next deploy. Setting `base` to a subpath while `pathSegmentsToKeep` stays `0` breaks every deep link, and every asset URL along with it.
+
+`ROUTER_BASENAME` in `App.jsx` derives the router basename from `import.meta.env.BASE_URL`, so the router follows `base` automatically and needs no separate edit.
 
 ---
 
-## Deploy pipeline
+## Deploy
 
-`.github/workflows/deploy.yml` runs on every push to `main`:
+`.github/workflows/deploy.yml` runs on every push to `main`, and can also be triggered manually from the Actions tab.
 
 ```
-push to main → checkout → install (npm ci) → build (npm run build)
-             → upload dist/ as a Pages artifact → deploy to github-pages env
+push to main -> checkout -> setup Node 20 -> npm ci -> npm run build
+             -> upload dist/ as a Pages artifact -> deploy to the github-pages environment
 ```
 
-Pages takes ~1–2 minutes to surface the new build. There is **no preview environment** for PRs — review by running `npm run dev` or `npm run build && npm run preview` locally.
+Pages usually surfaces a new build in one to two minutes. There is no preview environment for pull requests, so review locally with `npm run dev`, or with `npm run build && npm run preview` to check the real bundle.
 
-### Custom domain (when ready)
+### DNS
 
-1. Add `public/CNAME` containing your domain on a single line (e.g. `thetatvatribe.in`).
-2. Set `base: '/'` in `vite.config.js`.
-3. Set `pathSegmentsToKeep = 0` in `public/404.html`.
-4. Configure DNS at your registrar:
-   - Apex (`thetatvatribe.in`): four `A` records pointing to GitHub Pages IPs (`185.199.108.153` / `.109.153` / `.110.153` / `.111.153`)
-   - `www`: `CNAME` to `thetatvatribe.github.io`
-5. In repo Settings → Pages, enter the custom domain and tick **"Enforce HTTPS"** once DNS resolves.
+The apex domain points at the four GitHub Pages A records (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`). Verify with:
+
+```bash
+dig thetatvatribe.com +short
+```
+
+The custom domain and "Enforce HTTPS" are set in Settings, then Pages.
 
 ---
 
 ## Conventions
 
-### Branch naming
-- Feature/copy work: `claude/<short-description>` (used by the AI workflow)
-- Manual work: `feat/<description>` or `fix/<description>` is fine
+**Branches.** `claude/<description>` for AI-assisted work, `feat/<description>` or `fix/<description>` otherwise. Branch from `main`.
 
-### Commit style
-- Present tense, imperative mood: *"Add X"*, *"Fix Y"*, *"Refactor Z"*
-- First line is the subject (≤72 chars), blank line, then a short body explaining **why**
-- Recent history shows the pattern — see `git log --oneline -20`
+**Commits.** Imperative subject under 72 characters, blank line, then a body explaining why rather than what.
 
-### PR flow
-1. Branch off `main` → make your changes
-2. Run `npm run lint` and `npm run build` locally
-3. Open PR with a Summary + Test plan
-4. Squash-merge or merge-commit; the workflow auto-deploys
+**Code style.**
 
-### Code style
-- 4-space indent (existing convention)
-- Functional React components only
+- Two-space indent, single quotes, semicolons
+- Function components only
 - One file per route in `src/pages/`
-- Reusable JSX with no business logic → `src/components/ui/`
-- Reusable JSX **with** logic → `src/components/`
-- Static data shared across components → `src/content/`
+- A section that Home composes goes in `src/components/home/` or `src/components/pricing/`
+- Anything shared across pages goes directly in `src/components/`
+- Content goes in `src/data/`, never inline in JSX
+- Comments explain *why*, especially where a rule looks odd. Several rules in this codebase are load-bearing and non-obvious, and the comments are the only thing protecting them
 
 ---
 
-## Common gotchas
+## Gotchas
 
-| Gotcha | What to do |
-|---|---|
-| Image path doesn't load on production | Use `${import.meta.env.BASE_URL}images/...`, never a leading `/images/...` |
-| Mobile menu doesn't close after navigation | The `useEffect` on `location.pathname` in Navbar handles this; check it wasn't accidentally removed |
-| Carousel autoplay won't pause | Verify the `Pause` button toggles `isPaused`, and that the parent `<div>` still has `onMouseEnter` / `onFocusCapture` |
-| New route added but Navbar doesn't show it | Add the route to `src/content/navigation.js`, not to `Navbar.jsx` directly |
-| Custom domain still routes to old GH Pages URL | DNS propagation — wait up to a few hours; verify with `dig thetatvatribe.in +short` |
-| Bundle bigger than expected | Confirm the `lazy()` imports in `App.jsx` weren't accidentally converted back to static imports — that would re-merge every page into the main chunk |
-| Lint fails after copy edits | Most likely a stray apostrophe in JSX text — wrap the string in `{"..."}` or use `&apos;` |
+**`npm run lint` suddenly reports hundreds of errors in files you did not write.** ESLint walks `.claude/worktrees/`, and an agent worktree there can hold a built bundle. `.gitignore` does not apply, because it is not an ESLint config. This happened once already and was cleared by removing the stale worktrees. If it returns, either remove them with `git worktree remove`, or make it permanent:
 
----
+```js
+globalIgnores(['dist', '.claude'])
+```
 
-## Known limitations / roadmap
+**Do not add `scroll-behavior: smooth` to `html` or `:root`.** It was there once and caused a reported bug where scrolling stopped partway. It makes *every* programmatic scroll animate, including the route-change reset, so a navigation would fight whatever scroll the user had already started. `src/utils/scroll.js` is the only place that decides: `smoothScrollTo` animates deliberate jumps, `jumpTo` is instant and is what route changes use.
 
-These were flagged in a senior-engineer review pass. They each ship independently — pick one when you have a free session.
+**Sticky sections need `--nav-h` to stay constant.** The Hero and the Tatva stack position themselves against it. Making the navbar shrink on scroll would make both jump.
 
-- [ ] **Page-level content extraction** — pull `tatvas`, `plans`, `tribeCode`, etc. into `src/content/` modules. Most copy edits become one-line changes to a JS object instead of touching React.
-- [ ] **`<Img>` primitive** — replace the DOM-manipulation image-fallback pattern (5 instances across the codebase) with a single React-state-based component.
-- [ ] **Route-level code splitting** — `React.lazy` + `Suspense` per route. A user landing on `/contact` would download ~80 KB instead of the full 270 KB.
-- [ ] **Error boundary** — wrap `App.jsx` so a render error shows a friendly fallback instead of going blank.
-- [ ] **Analytics** — GA4 + Microsoft Clarity (or Plausible / Cloudflare Web Analytics for a privacy-first stack). SPA pageviews need a small `useEffect` on `location.pathname`.
-- [ ] **TypeScript** — half-day migration; biggest payoff on the content schemas.
-- [ ] **Tests** — at minimum a smoke test that every route renders without crashing (Vitest + React Testing Library).
+**`aspect-ratio` on a carousel slide needs the image absolutely positioned.** Flex `align-items: stretch` on the track, and the intrinsic height of an eagerly-loaded image, will both override it. `src/styles/about.css` sets `align-items: flex-start` on the track and pins the slide contents with `position: absolute; inset: 0` for exactly this reason.
+
+**New route not appearing in the navigation.** Add it to `src/App.jsx` for the route, then to the link lists in both `Navbar.jsx` and `Footer.jsx`. There is no shared navigation config file at the moment.
+
+**Bundle suddenly much larger.** Check that the `lazy()` imports at the top of `App.jsx` were not converted back to static imports, which would fold every page into the main chunk.
 
 ---
 
-## License
+## Open items
 
-All rights reserved © The Tatva Tribe.
+Known, deliberate, and unfinished. None of them break the live site.
+
+- **Around 2.5 MB of unreferenced images ship in the build.** `public/images/logo.png` (1.8 MB), `wordmark-gold.png`, `wordmark-white.png` and `public/vite.svg` are not referenced by any source file. They are Pages-hosted static files, so they cost transfer only if requested directly, but they should be removed or put to use. Note that `logo-favicon-source.png` looks unreferenced too but is not: it is the input to `scripts/gen-favicon.cjs`. Keep it.
+- **No `og:image` or `twitter:card`.** Shared links show a title and description with no preview image.
+- **`BUILT_BY.linkedin` is empty**, so that link does not render.
+- **No tests.** A smoke test asserting every route renders would be the highest-value first one.
+- **No error boundary.** A render error currently produces a blank page.
+- **No analytics.**
+
+---
+
+© The Tatva Tribe. All rights reserved.

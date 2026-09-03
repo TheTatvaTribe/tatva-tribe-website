@@ -335,7 +335,16 @@
 }
 
 /* ── Trainer ──────────────────────────────────────────────── */
-.about-trainer { padding: clamp(3.5rem, 7vw, 6rem) 0; }
+/* The decorative ring below is a square that spins. At 45 degrees its bounding
+   box is sqrt(2) times its width, which periodically pushed the page about
+   30px wider at phone widths, so horizontal scroll came and went over the
+   animation's 40s cycle. Clipping contains the swept box; the visible circle
+   sits well inside it and is untouched. `clip` rather than `hidden` so this
+   never becomes a scroll container. */
+.about-trainer {
+  padding: clamp(3.5rem, 7vw, 6rem) 0;
+  overflow-x: clip;
+}
 .about-trainer-grid {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -465,14 +474,29 @@
   border-radius: 20px;
   padding: clamp(1.75rem, 4vw, 2.75rem);
   text-align: center;
+  /* The philosophy line below is sized in cqi so it tracks this card's
+     content box rather than the viewport. Sizing it in vw meant the card
+     padding was subtracted from the space available but never from the
+     font, so the line outgrew the card on narrow screens. */
+  container-type: inline-size;
 }
 .about-solution p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem; }
 .about-solution strong { color: var(--cream); }
 .about-solution .accent { color: var(--yellow); font-weight: 600; }
+/* Centred with auto margins rather than as an inline-block inside a
+   text-align:center parent. An inline-block that outgrows its line box is
+   flushed to the start edge instead of being centred, which is what pushed
+   this card 40px past the right edge of .about-solution on a 375px screen.
+   max-width keeps it inside the card even if the line ever outgrows it. */
 .about-philosophy {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 1.1rem 2rem;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 1rem auto 0;
+  /* Fluid rather than a hard jump at a breakpoint. A step change in padding
+     while the font below keeps scaling with vw left almost no slack just
+     above the old 480px cutoff. */
+  padding: clamp(.85rem, 2.5vw, 1.1rem) clamp(.9rem, 4vw, 2rem);
   border-radius: 16px;
   border: 1px solid var(--yellow-dim);
   background: linear-gradient(135deg, rgba(212, 175, 55, .14), rgba(212, 175, 55, .06));
@@ -493,8 +517,9 @@
   gap: .5rem;
   margin: 0;
   font-family: var(--font-serif);
-  /* sized so the whole phrase holds one line down to 320px */
-  font-size: clamp(1rem, 5.2vw, 1.9rem);
+  /* cqi = 1% of .about-solution's content box, so this keeps the phrase on
+     one line at every width without per-breakpoint tuning. */
+  font-size: clamp(.85rem, 5.8cqi, 1.9rem);
   line-height: 1.35;
   white-space: nowrap;
   color: var(--cream);
@@ -542,5 +567,6 @@
 @media (max-width: 480px) {
   .about-hero { padding: 2.5rem 0 1.5rem; }
   .about-card-body { padding: 1.25rem 1.1rem; }
-  .about-philosophy { padding: 1rem 1.25rem; }
+  /* Trimmed to buy the philosophy line room to stay on one line. */
+  .about-solution { padding: 1.5rem 1.15rem; }
 }

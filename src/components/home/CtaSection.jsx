@@ -24,8 +24,8 @@ const CtaSection = () => {
           Transformation?
         </h2>
         <p className="cta-sub">
-          Book a <strong>FREE consultation</strong>, or DM <strong>&quot;TATVA&quot;</strong> on
-          Instagram, and take the first step towards a healthier, stronger you.
+          Book a <strong>FREE consultation</strong> and take the first step towards a
+          healthier, stronger you.
         </p>
         <div className="cta-actions">
           <Link to="/contact" className="btn btn-primary ripple-btn" onClick={addRipple}>

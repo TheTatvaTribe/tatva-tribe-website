@@ -61,8 +61,7 @@ const Contact = () => {
           <div className="contact-card">
             <h3>Prefer to talk first?</h3>
             <p>
-              DM <strong>&quot;TATVA&quot;</strong> on Instagram, or drop us an email. A real
-              person replies.
+              Message us on Instagram, or drop us an email. A real person replies.
             </p>
             <p>
               <a

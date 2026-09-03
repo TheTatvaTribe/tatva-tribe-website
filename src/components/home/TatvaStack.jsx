@@ -6,7 +6,7 @@ import { tatvas } from '../../data/site';
  * Deck-of-cards scroll: each Tatva sticks under the navbar while the next
  * one rises over it, and buried cards scale down and dim.
  *
- * The step size is read off the first card's real height rather than
+ * The step size is measured off the cards themselves rather than
  * `window.innerHeight - navH`. The cards are sized in `svh`, which does
  * not equal `innerHeight` on mobile once the browser chrome collapses —
  * that mismatch used to drift the active card out of sync and clip the
@@ -17,6 +17,7 @@ const TatvaStack = () => {
   const barRef = useRef(null);
   const cardsRef = useRef(null);
   const navHRef = useRef(68);
+  const stepRef = useRef(0);
   const [activeIdx, setActiveIdx] = useState(0);
   const [inStack, setInStack] = useState(false);
   const [failedIcons, setFailedIcons] = useState({});
@@ -34,6 +35,16 @@ const TatvaStack = () => {
         getComputedStyle(document.documentElement).getPropertyValue('--nav-h'),
         10
       ) || 68;
+      // One slot is the card plus the dwell margin beneath it. Measured
+      // once here because getComputedStyle forces a style recalc and this
+      // only changes on resize. Note offsetTop is unusable for this: a
+      // stuck sticky card reports its shifted position, so the moment the
+      // deck starts stacking every card returns the same offsetTop and the
+      // gap between two of them reads 0.
+      const first = cardsRef.current[0];
+      stepRef.current = first
+        ? first.offsetHeight + (parseFloat(getComputedStyle(first).marginBottom) || 0)
+        : 0;
     }
     const cards = cardsRef.current;
     if (!cards.length) return;
@@ -41,7 +52,7 @@ const TatvaStack = () => {
 
     const rect = stack.getBoundingClientRect();
     const scrolled = Math.max(0, navH - rect.top);
-    const step = cards[0].offsetHeight || (window.innerHeight - navH);
+    const step = stepRef.current || cards[0].offsetHeight || (window.innerHeight - navH);
     const idx = Math.min(Math.floor(scrolled / step), cards.length - 1);
 
     // These change a handful of times across the whole stack, so React

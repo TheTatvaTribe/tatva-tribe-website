@@ -142,7 +142,21 @@ button.nav-link,
     overflow-y: auto;
   }
   .nav-links.open { display: flex; }
-  .nav-link { padding: .85rem 1rem; width: 100%; border-radius: 6px; }
+  /* The drawer mixes <button> section links with <a> route links. A button is
+     inline-block, but an anchor is inline, so its vertical padding painted
+     over the neighbouring rows instead of adding any height: the three <a>
+     rows collapsed to their text line and each overlapped the next by ~23px.
+     Making the row a flex box gives the padding effect, and is also what the
+     width:100% here and the justify-content on .nav-cta below have always
+     assumed. min-height keeps the 44px touch target if the text ever shrinks. */
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: .85rem 1rem;
+    width: 100%;
+    border-radius: 6px;
+  }
   .nav-link::after { left: 1rem; transform: none; }
   .nav-link:hover::after,
   .nav-link.is-active::after { width: 28px; }

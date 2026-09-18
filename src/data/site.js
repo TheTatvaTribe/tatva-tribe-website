@@ -4,9 +4,14 @@ export const INSTAGRAM_URL = 'https://www.instagram.com/thetatvatribe._/';
 export const EMAIL = 'thetatvatribe@gmail.com';
 export const DESIGNER_URL = 'https://www.instagram.com/advayshidhaye/';
 
-/* Credit for whoever built the site, shown as its own quiet line in the
-   footer. Any entry left empty simply is not rendered, so it is safe to
-   ship with `linkedin` blank until the URL is filled in. */
+/* Credits, shown as one quiet line at the foot of the page:
+   "Designed by Manasi · Site built by Rahul Patil", each name linking out.
+   `linkedin` is optional and is only rendered once it is filled in. */
+export const DESIGNED_BY = {
+  name: 'Manasi',
+  url: 'http://www.manasikulkarni.com/',
+};
+
 export const BUILT_BY = {
   name: 'Rahul Patil',
   github: 'https://github.com/rahulpatil25',

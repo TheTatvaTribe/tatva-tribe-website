@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSectionNav } from '../hooks/useSectionNav';
-import { BUILT_BY, EMAIL, INSTAGRAM_URL } from '../data/site';
+import { BUILT_BY, DESIGNED_BY, EMAIL, INSTAGRAM_URL } from '../data/site';
 
 const InstagramIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -76,18 +76,18 @@ const Footer = () => {
         <p>© {year} The Tatva Tribe. All rights reserved.</p>
       </div>
 
-      {/* Build credit. Links render only when a URL is present, so an
-          unfilled entry never ships as a dead link. */}
+      {/* Credits. The names are the links. LinkedIn renders only once a URL
+          is filled in, so an empty entry never ships as a dead link. */}
       <p className="footer-built-by">
-        Site built by {BUILT_BY.name}
-        {BUILT_BY.github ? (
-          <>
-            {' · '}
-            <a href={BUILT_BY.github} target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-          </>
-        ) : null}
+        Designed by{' '}
+        <a href={DESIGNED_BY.url} target="_blank" rel="noopener noreferrer">
+          {DESIGNED_BY.name}
+        </a>
+        {' · '}
+        Site built by{' '}
+        <a href={BUILT_BY.github} target="_blank" rel="noopener noreferrer">
+          {BUILT_BY.name}
+        </a>
         {BUILT_BY.linkedin ? (
           <>
             {' · '}

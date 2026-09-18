@@ -229,7 +229,9 @@ Answers are members' own words. The file header records that the only edits made
 
 ### Contact details, socials, build credit
 
-Top of `src/data/site.js`: `INSTAGRAM_URL`, `EMAIL`, `DESIGNER_URL`, `BUILT_BY`. The footer renders each `BUILT_BY` link only when it is a non-empty string, so leaving one blank hides it rather than producing a dead link.
+Top of `src/data/site.js`: `INSTAGRAM_URL`, `EMAIL`, `DESIGNER_URL`, `DESIGNED_BY`, `BUILT_BY`. The footer's credit line reads "Designed by Manasi · Site built by Rahul Patil", and each name is a link: `DESIGNED_BY.url` and `BUILT_BY.github`. `BUILT_BY.linkedin` is optional and only renders once filled in, so leaving it blank never produces a dead link.
+
+Note that `DESIGNER_URL` is not the designer's link, despite the name. It is the Master Trainer's Instagram, used by the "Connect on Instagram" button on the About page.
 
 ### About page photos
 

@@ -276,6 +276,10 @@ button.nav-link,
 @media (max-width: 640px) {
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: .5rem; text-align: center; }
+  /* Clear the fixed scroll-to-top button, which on phones sits 1rem up and
+     is 46px tall (see home.css). Scrolled to the bottom, the credit line
+     landed in that band and the button covered "Rahul Patil" at 320px. */
+  .footer-built-by { padding-bottom: calc(1rem + 46px + .75rem); }
 }
 
 /* ── SCROLL TO TOP ───────────────────────────────────────── */
